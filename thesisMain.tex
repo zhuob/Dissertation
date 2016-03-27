@@ -1,0 +1,103 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Honors College Thesis Template
+% LaTeX Template
+% Version 1.1 (2/6/2016)
+%
+% Original author:
+% Keith Lippincott
+%
+% Instructions for using this template:
+% Define the necessary information under the heading 
+% "Thesis Pre-text Info". Thesis template will create
+% a properly formatted OSU honors thesis.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt]{article}
+
+%Margin control
+\usepackage{geometry}
+\geometry{textheight=8.5in, textwidth=6in}
+
+%Line Spacing
+\usepackage{setspace}
+\linespread{1} %change to two for double-spacing
+
+%Copyright symbol
+\usepackage{textcomp}
+
+%Honors College Formatting
+\usepackage{OSUHonorsThesis}
+
+
+%  Packages used for main body (modified by Bin Zhuo)
+\usepackage{graphicx}
+\usepackage{amsmath,bm}
+\usepackage{natbib}
+\usepackage[utf8]{inputenc}  
+\usepackage[usenames,dvipsnames]{xcolor}
+
+%-------------------------------------------------------
+%	Thesis Pre-Text Info:
+%-------------------------------------------------------
+    %%Student Information:
+    \def\StudentName{Bin Zhuo}
+    \def\Degree{Science} %Science, Arts or Fine Arts
+    \def\Major{Statistics}
+    \def\HonorsType{Scholar} %Scholar or Associate
+    \def\StudentEmail{zhuob@oregonstate.edu}
+    \def\CommencementMonth{June 2016}
+    
+     %%Thesis Information
+    \def\ThesisTitle{Title of Your Thesis}
+    \def\DatePresented{Month dd, yyyy}
+    \def\keywords{keyword1, keyword2, keyword3} %Up to five keywords
+
+    %%The committee
+    \def\Mentor{Yanming Di}
+    \def\MentorDept{Department of Statistics}
+    \def\CommitteeOne{Committee Member Name}
+    \def\CommitteeOneDept{Committee Member Department}
+    \def\CommitteeTwo{Committee Member Name}
+    \def\CommitteeTwoDept{Committee Member Department}
+    
+    %%Un-comment and use any of the following that apply to you
+    %%------------------------------
+    %%Second Major:
+	%\def\SecondMajor{Mathematics}
+    
+    %%Second Degree:
+    %\def\SecondDegree{Science} %Science, Arts or Fine Arts
+    %\def\SecondMajor{Mathematics}
+    
+    %%International Degree: 
+    %\def\SecondDegree{Arts}
+    %\def\SecondMajor{International Studies}
+    %%-------------------------
+  
+ % this does not work for numbering pages !!   
+ %  \pagenumbering{arabic}
+
+%-------------------------------------------------------
+%	THESIS DOCUMENT
+%-------------------------------------------------------
+\begin{document}  
+  %Begin Thesis Pre-text
+  \ThesisTitlePage
+  \FlyLeaf
+  \ThesisAbstractPage{\input{abstract.tex}}
+  \ThesisCopyrightPage
+  \ThesisTitlePage
+  \ThesisApprovalPage
+  %End Thesis Pre-text
+
+  %Reset page numbering to one
+  \setcounter{page}{1}
+
+  %Begin Thesis Body
+  \input{thesisText.tex}
+  %End Thesis Body
+
+
+  \FlyLeaf
+\end{document}

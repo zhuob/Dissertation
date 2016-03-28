@@ -95,8 +95,19 @@
   \setcounter{page}{1}
 
   %Begin Thesis Body
-  \input{thesisText.tex}
+  \tableofcontents
+  \newpage
+  \input{introduction.tex}
+  \input{chap1.tex}
+  \input{chap2.tex}
+  \input{chap3.tex}
+%  \input{thesisText.tex}
   %End Thesis Body
+
+
+\newpage
+\bibliographystyle{apalike}
+\bibliography{thesis}
 
 
   \FlyLeaf

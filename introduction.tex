@@ -5,64 +5,105 @@
 	Some biology here.
 	
 	
-\subsection{Generalized Linear Mixed Models}\label{subsec:glmm}
-	\subsubsection{Classical Linear Models}
-	In a classical linear model, a vector $\bm y$ of $n$ observations is assumed to be a realization of random variable $\bm Y$ whose components are identically distributed with mean $\bm \mu$. The systematic part of this model is a specification of the mean $\mu$ over a few unknown parameters \citep{mccullagh1989generalized}. In the context of classical linear model, the mean is a function of $p$ covariates $\bm X_1, \ldots, \bm X_p$
-	\begin{equation}\label{q1}
-	\bm \mu =\beta_0 + \sum_{i=1}^p\beta_i \bm X_i
-	\end{equation}	
-	where $\beta$'s are unknown parameters and need to be estimated from data.  For $j$th\footnote{Unless specified otherwise, we assume there are $n$ observations, i.e. $j=1, \ldots ,n$} component $ Y_j$ with a random term allowing for measurement error $\epsilon$ , the model can be expressed as 
-	\begin{equation}\label{q2}
-	Y_j= \beta_0 + \beta_1x_{1j} + \ldots + \beta_p x_{pj} + \epsilon_j
-	\end{equation}
-	It is often required that $\epsilon_i$'s meet Gauss-Markov assumption, i.e, $E(\epsilon_i)=0$, Var$[\epsilon_i]=
-	\sigma^2<\infty$ and Cov$[\epsilon_i, \epsilon_j]=0, \forall i \neq j$. In practice, the error term is frequently, if not always, assumed to be normally distributed, i.e.  $\bm \epsilon \sim N(0, \sigma^2 \bm I)$. \\
-	
-	\subsubsection{Linear Mixed Models}
-	The Gauss-Markov assumption is vulnerable in real-world problems, for example, nonconstant variance, or correlated data where Cov$[\epsilon_i, \epsilon_j]\neq 0$. Without loss of generality, ~\ref{q2} in either case can be expressed as
-	\begin{equation}\label{lm}
-	\bm Y = \bm {X\beta} + \bm \epsilon,  E[\bm \epsilon] = \bm 0, \text{Cov}[\bm\epsilon] = \sigma^2 \bm V
-	\end{equation}
-	where $\bm V$ is a known positive definite matrix. Let $\bm Y^{\ast} = \bm V^{-1/2}\bm Y = \bm V^{-1/2}\bm {X\beta} + \bm V^{-1/2}\bm \epsilon$. It follows that Cov$(\bm Y^{\ast})= \sigma^2 \bm I$ and the techniques in classical linear models are readily used to estimate $\bm \beta$. However, this method relies on the assumption that $\bm V$ is known which is rarely, if ever, given. On the other hand, the strucure of $\bm V$, which depends on experiment setup, can often be specified by a few unknown parameters. 
-	
-	Nonindependence can occur in the form of serial correlation or cluster correlation \citep[chapter~17]{rencher2008linear}. Serial correlation is usually seen in experiments where multiple measurements  are taken from a response variable on the same experimental unit (a.k.a. repeated measurements). Several covariance structures are available for implementation, and interested reader is referred to \cite[chapter~5]{littell2006sas} for further information.  Cluster correlation is present when measurements of a response variable are grouped in various ways. In many situations, the covariance of cluster correlated data can be specified using an extension of standard linear model by 
-	\begin{equation}\label{lmm}
-	\bm Y = \bm {X\beta} + \bm {Z_1u_1}+\cdots + \bm {Z_qu_q} + \bm \epsilon	
-	\end{equation}
-	Equation (\ref{lmm}) differs from the matrix form of ~(\ref{q2}) only in the $\bm {Z_iu_i}$ terms, which is the key part of linear mixed models.  The $\bm Z_i$  are known $n\times p_i$ full rank matrices, usually used to specify membership of predictors in various subgroups. The most important innovation in this model is that instead of estimating $\bm u_i$'s as fixed parameters, they are assumed to be unknown random quantities. Similar to the property of  $\bm \epsilon$, we assume $E[\bm u_i]=0$, Cov$[\bm u_i]= \sigma_i^2 \bm I_{p_i}$ for $i=1, \ldots, q$. It is in many cases reasonable to  require that $\bm u_i$ are mutually independent, and that $\bm u_i$ is independent of $\bm \epsilon$ for $i=1, \ldots, q$. If we further impose normal distribution on the random terms and errors, then (\ref{lmm}) can be casted in a Bayesian framework.
-	\begin{equation}\label{lmmGuass}
-	\begin{split}
-	\bm y|\bm u_1, \ldots, \bm u_q   & \sim  N_n(\bm {X\beta} + \sum_{i=1}^q \bm {Z_iu_i}, \sigma^2\bm I_n),  \\
-	\bm u_i &\sim N_{p_i}(0, \sigma_i^2 \bm I_{p_i})
-	\end{split}
-	\end{equation}
-	The modeling issues are: (a) estimation of variance components $\sigma_i^2$ and $\sigma^2$; (b) estimation of random effects $u_i$ if needed. For the variance component estimation, there are primarily three approaches: (i) procedures based on expected mean squares from analysis of variance (ANOVA); (ii) maximum likelihood (ML); and (iii) restricted/residual maximum likelihood (REML). For more details, see \cite[Chapter 1]{littell2006sas}
-	
-	\subsubsection{Generalized Linear Mixed Models}
-	Another perspective of classical linear models is that they can be arranged into three parts \citep[Chapter 2]{mccullagh1989generalized} .
-	\begin{enumerate}
-		\item the \textit{random component} $\bm Y$ have certain distribution (usually Gaussian) with $E[\bm Y]= \bm \mu$.
-		\item the \textit{systematic component}. The linear predictor $\bm \eta$ is formed by covariates $\bm x_1,\ldots, \bm x_p$ 
-		\begin{equation}\label{q3}
-		\bm \eta = \sum_{i=1}^p\beta_i\bm x_i=\bm {X\beta}
+\subsection{Generalized linear mixed models}\label{subsec:glmm}
+	In this section, we will first describe the formulation of generalized linear mixed models (GLMMs), and then discuss common methods for parameter estimation. 
+	\subsubsection{Statistical framework}\label{subsubsec:intro-stat-framework}
+	GLMMs are a natural generalization of classical linear models. To illustrate this point, we will begin with classical linear models, and discuss how to generalize them to linear mixed models and then to GLMMs by relaxing different layers of assumptions. 
+		\paragraph{Classical linear models}
+		In a classical linear model, a vector $\bm y$ of $n$ observations is assumed to be a realization of random variable $\bm Y$ whose components are identically distributed with mean $\bm \mu$. The systematic part of this model is a specification of the mean $\bm\mu$ over a few unknown parameters \citep{mccullagh1989generalized}. In the context of classical linear model, the mean is a function of $p$ covariates $\bm X_1, \ldots, \bm X_p$
+		\begin{equation}\label{eq:clm}
+		\bm \mu =\beta_0 + \sum_{i=1}^p\beta_i \bm X_i
+		\end{equation}	
+		where $\beta$'s are unknown parameters and need to be estimated from data. For $j$th\footnote{Unless specified otherwise, we assume there are $n$ observations (i.e. $j=1, \ldots ,n$).} component $Y_j$, we specify $\epsilon_j$, a random term, to allow for measurement error. Assuming a linear relationship between response $Y_j$ and predictors $(x_{1j}, \ldots, x_{pj})$, we present the linear model 
+		\begin{equation}\label{eq:clm2}
+		Y_j= \beta_0 + \beta_1x_{1j} + \ldots + \beta_p x_{pj} + \epsilon_j
 		\end{equation}
-		\item the \textit{link} relates the random components and the systematic components by 
-		\begin{equation}\label{q4}
-		\bm \eta = \bm \mu
+		It is often required that $\epsilon_i$'s meet \textit{Gauss-Markov} assumption,
+		\begin{equation}\label{eq:gauss-markov}
+		E(\epsilon_i)=0,~ \var[\epsilon_i]=
+		\sigma^2<\infty, ~\cov[\epsilon_i, \epsilon_j]=0, \forall i \neq j.
 		\end{equation}
-	\end{enumerate}
-	A generalized linear model (GLM) allows two extensions. Firstly, the distribution in part 1 may come from another distribution (for example, Poisson, Gamma or Binomial). Secondly, in (\ref{q4}) $\bm \eta $ can relate to  $\bm\mu$ by a monotonic function $\bm \eta = g(\bm \mu)$. In this setting, classical linear model is a special case since it has normal random variables in part 1 and identity link in (\ref{q4}). 
-	Generalized linear mixed model (GLMM) is a natural generalization of GLM  that further extends (\ref{q3}) to allow random effect, casted in a matrix notation
-	\begin{equation}\label{q5}
-	\bm \eta = \bm {X\beta} + \sum_{i=1}^q\bm {Z_iu_i} + \bm \epsilon
+		In practice, the error term is frequently, if not always, assumed to be normally distributed, 
+		  \begin{equation}\label{eq:normalassumption}
+		 \bm \epsilon \sim N(0, \sigma^2 \bm I).
+		  \end{equation}
+
+		\paragraph{Linear mixed models}
+		The Gauss-Markov assumption in Equation (\ref{eq:gauss-markov}) is vulnerable in practice, for example, nonconstant variance, or correlated data where Cov$[\epsilon_i, \epsilon_j]\neq 0$. Equation (~\ref{eq:clm2}) in either case, without loss of generality, can be expressed in matrix form as
+		\begin{equation}\label{eq:clm3}
+		\bm Y = \bm {X\beta} + \bm \epsilon, ~ E[\bm \epsilon] = \bm 0, ~\cov[\bm\epsilon] = \bm V
+		\end{equation}
+		where $\bm V$ is a known positive definite matrix. Let $\bm Y^{\ast} = \bm V^{-1/2}\bm Y = \bm V^{-1/2}\bm {X\beta} + \bm V^{-1/2}\bm \epsilon$. It follows that Cov$(\bm Y^{\ast})= \bm I$ and the techniques in classical linear models are readily applicable to estimate $\bm \beta$. However, this method relies on the assumption that $\bm V$ is known which is rarely, if ever, given. On the other hand, the structure of $\bm V$, which depends on experiment setup, can often be specified by a few unknown parameters. 
+		
+		Nonindependence can occur in the form of serial correlation or cluster correlation \citep[chapter~17]{rencher2008linear}. Serial correlation usually exists in experiments with repeated measurements---multiple measurements taken from a response variable on the same experimental unit. Several covariance structures are available for implementation (for more details, see \citealt[chapter~5]{littell2006sas}).  Cluster correlation is present when measurements of a response variable are grouped in some way. In many situations, the covariance of cluster correlated data can be specified using an extension of standard linear model by 
+		\begin{equation}\label{eq:lmm}
+		\bm Y = \bm {X\beta} + \bm {Z_1u_1}+\cdots + \bm {Z_qu_q} + \bm \epsilon	
+		\end{equation}
+		Equation (\ref{eq:lmm}) differs from Equation~(\ref{eq:clm3}) only in the $\bm {Z_iu_i}$ terms, which is the key part of \textit{linear mixed models}.  The $\bm Z_i$  are known $n\times p_i$ full rank matrices, usually used to specify membership of predictors in various subgroups. The most important innovation in this model is that instead of estimating $\bm u_i$'s as fixed parameters, we assume them to be unknown random quantities, and $E[\bm u_i]=0$, $\cov[\bm u_i]= \sigma_i^2 \bm I_{p_i}$ for $i=1, \ldots, q$. It is, in many cases, reasonable to require that $\bm u_i$ are mutually independent, and that $\bm u_i$ is independent of $\bm \epsilon$ for $i=1, \ldots, q$. If we further impose normal distribution on the random terms and errors, then Equation (\ref{eq:lmm}) can be casted in a Bayesian framework,
+		\begin{equation}\label{eq:lmmGuass}
+		\begin{split}
+		\bm y|\bm u_1, \ldots, \bm u_q   & \sim  N_n(\bm {X\beta} + \sum_{i=1}^q \bm {Z_iu_i}, \sigma^2\bm I_n),  \\
+		\bm u_i &\sim N_{p_i}(0, \sigma_i^2 \bm I_{p_i}).
+		\end{split}
+		\end{equation}
+		The modeling issues are: (a) estimation of variance components $\sigma_i^2$ and $\sigma^2$; (b) estimation of random effects $u_i$ if needed. For the variance component estimation, there are primarily three approaches: (i) procedures based on expected mean squares from analysis of variance (ANOVA); (ii) maximum likelihood (ML); and (iii) restricted/residual maximum likelihood (REML). For more details, see \citealt[Chapter 1]{littell2006sas}.
+		
+		
+		\paragraph{Generalized linear models}
+		
+				We can take a different perspective of classical linear models by arranging Equation (\ref{eq:clm})--(\ref{eq:gauss-markov}) into the following three parts \citep[Chapter 2]{mccullagh1989generalized}, 
+				\begin{enumerate}
+					\item[(i)] the \textit{random component} $Y_j$ has constant variance $\sigma^2$ and
+				%	\begin{equation}\label{eq:part1}
+					$E[ Y_j]= \mu_j$.
+			%		\end{equation}
+					\item[(ii)] the \textit{systematic component}---the linear predictor $\eta_j$ is modeled by covariates $\bm x_j =: x_{1j},\ldots, x_{pj}$, 
+					\begin{equation}\label{eq:part2}
+					\eta_j = \sum_{i=1}^p\beta_i x_{ij}=\bm {x_j\beta}.
+					\end{equation}
+					\item[(iii)] the \textit{link function} relates the random components and the systematic components by 
+					\begin{equation}\label{eq:part3}
+					\eta_j = g(\mu_j).
+					\end{equation}
+					\end{enumerate}
+		The classical linear models fits within this framework if we assume the random component $Y_j$'s are independent and normally distributed, and that the link function is identity (i.e., $g(\mu_j)= \mu_j$).
+		
+		 We can extend part (i)---by allowing $Y_j$ to come from an exponential family (e.g., Poisson, Gamma or Binomial distribution), and part (iii)--- by requiring the link function to be monotonic differentiable (e.g., $g(\mu_j)= \log \mu_j$). These two extensions result in the \textit{generalized linear models} (GLMs), a framework that is especially suitable when the response can be no longer assumed to come from a normal distribution.
+		
+		
+		\paragraph{Generalized linear mixed models}
+		Generalized linear mixed models (GLMMs) is a further extension of GLMs that incorporates random components into part (ii), represented in a matrix notation
+		\begin{equation}\label{eq:q5}
+		\bm \eta = \bm {X\beta} + \sum_{i=1}^q\bm {Z_iu_i}
+		\end{equation}
+		where  $\bm Z_i$ and $\bm u_i$ are specified in Equation (\ref{eq:lmm}). 
+		
+		To formally present GLMMs, we start with the conditional distribution of $\bm y$ given $\bm u$. It is typical to assume that vector $\bm y$ consists of conditionally independent elements, each coming from the exponential family (or similar to the exponential family), 
+		\begin{equation}\label{eq:glmm}
+		\begin{split}
+		   y_j|\bm u & \sim \text{~indep.~} f_{Y_j |\bm u} (y_j|\bm u) \\
+		   	f_{Y_j|u}(y_j; \theta, \phi|\bm u) &= \exp \left[ \frac{y_j\theta_j	 -b(\theta_j)}{a_j(\phi)} + c(y_i, \phi)\right]
+		\end{split}
+		\end{equation}	
+		It can be verified that the conditional mean of $y_j$ is related to $\theta_j$ in Equation (\ref{eq:glmm}) by the identity $\mu_j = \partial b(\theta_j)/\partial \theta_j$. The transformation of the mean allows us to model the fixed and the random factors by a linear model
+		\begin{equation}\label{eq:glmm2}
+		\begin{split}
+		  E[y_j|\bm u] &= \mu_j\\
+		  g(\mu_j) = \eta_j &= \bm X_j\bm \beta + \bm Z_j\bm u.
+		\end{split}
+		\end{equation}
+		Finally, we assign a distribution to the random effects
+		\begin{equation}
+		\bm U \sim f_{\bm U}(\bm u),
+		\end{equation}
+		which completes the specification of GLMMs. It is often, if not always, assumed that $\bm u$ come from a normal distribution.
+
+	\paragraph{An example of GLMM---Poisson log-linear mixed-effect model}\label{poisson} 
+	We will illustrate one specific type of GLMM---Poisson log-linear mixed-effect model using data from RNA-sequencing experiments. Suppose we have RNA-Seq expression profiles (in the form of counts) randomly selected from three experiments, with two treatments nested in each experiment and two replicates for each treatment. We are not interested in the specific levels of treatment, and focus more on the overall variation of treatments. In this sense, the treatment effects are also considered as random. For a single gene, let $Y_{jkl}\sim \text{Poisson}(\mu_{jkl})$ be the read count for $j$th observation unit from $k$th treatment of $l$th experiment. The link function $\eta_{jkl} = \log (\mu_{jkl})$ relates mean $\mu_{jkl}$ to linear predictors by Equation (\ref{eq:glmm2}),  
+	\begin{equation}\label{eq:example}
+	\log (\mu_{jkl}) = \log (N_{jkl}R_{jkl}) + \xi + a_{j} + b_{k(j)} + \epsilon_{jkl}
 	\end{equation}
-	where  $\bm Z_i, \bm u_i$ and $\bm \epsilon$ are specified in  (\ref{lmm}). \\
-	\subsection{An example of Poisson Regression with Random Effects}\label{poisson}
-	As an example, suppose now we have RNA-Seq gene expression data from 3 randomly selected experiments, with 2 random treatments nested in each experiment and 2 replicates in each treatment. For a single gene, let $Y_{jkl}\sim \text{Poisson}(\mu_{jkl})$ be the read count for $j$th lab $k$th treatment and $l$th observation unit. The linear predictor $\eta_{jkl}$ relates mean $\mu_{jkl}$ by (\ref{q5}).  
-	\begin{equation}\label{q6}
-	\eta_{jkl} = \beta_0 + a_{j} + b_{k(j)} + \epsilon_{jkl}
-	\end{equation}
-	where $j=1, \ldots,  3$, $k=1, 2$ and $l=1, 2$; $a_j \sim N(0, \sigma_1^2), b_{k(j)}\sim N(0, \sigma_2^2)$ and $\epsilon_{jkl}\sim N(0, \sigma_0^2)$ are mutually independent random effects. If the data are sorted by experiment and treatment nested in experiment, then the model can be casted in the form of Equation~\ref{q5} with
+	where $N_{jkl}R_{jkl}$ are normalized library sizes (total number of read counts mapped to the genome),  $j=1, \ldots,  3$, $k=1, 2$ and $l=1, 2$; $a_j \sim N(0, \sigma_1^2), b_{k(j)}\sim N(0, \sigma_2^2)$ and $\epsilon_{jkl}\sim N(0, \sigma_0^2)$ are mutually independent random effects. If the observations are sorted by experiment and by treatment nested in experiment, then we can present the model in the form of Equation~(\ref{eq:q5}), with  $\bm \beta = (\log [N_{111}R_{111}]  + \xi,\ldots, \log [N_{223}R_{223}]  + \xi), ~\bm u = (\bm a, \bm b, \bm \epsilon)$ and 
 	\[
 	q = 2,  \bm X = \left[
 	\begin{array}{c}
@@ -111,9 +152,9 @@
 	0 & 0 & 0  & 0 & 0  &1\\
 	0 & 0 & 0  & 0 & 0  &1\\
 	\end{array}
-	\right]
+	\right], \bm Z_3 = \bm I_{12}.
 	\]
-	Then 
+	Then it follows that 
 	\[\bm\Sigma = \sigma_1^2\bm{Z_1Z_1'} + \sigma_2^2\bm{Z_2Z_2'} + \sigma_0^2\bm I_{12}=
 	\left[
 	\begin{array}{ccc}
@@ -121,7 +162,7 @@
 	\bm O & \bm\Sigma_d  & \bm O \\
 	\bm O  &\bm O   & \bm\Sigma_d\\
 	\end{array}
-	\right]\]
+	\right],\]
 	where $\bm O$ is a $4\times 4$ matrix of 0 and 
 	\[
 	\bm \Sigma_d = \left[
@@ -134,248 +175,202 @@
 	\right]
 	\]
 	%What is different between LMM and GLMM is that the response variable can come from other distributions besides gaussian.
-	The challenge due to the complexity of GLMM is the estimation of parameters. Next section summarizes current available methods in estimating variance components.
+	The challenge due to the complexity of GLMM is the estimation of parameters. In the next section, we will summarize current available methods for estimating parameters and variance components.
 	
-	\subsection{Estimation}	
-	There are three general approaches for estimating parameters under GLMM settings \citep[Chapter 7]{myers2012generalized}: (i) using numerical method to approximate the integrals for the likelihood functions and obtaining the estimating equations; (ii) linearization of the conditional mean and then iteratively applying linear mixed model techniques to the approximated model; (iii) Bayesian approach. \\
-	
-	
+	\subsubsection{Estimation}	
+	There are three general approaches for estimating parameters under GLMM settings \citep[Chapter 7]{myers2012generalized}: (i) using numerical method to approximate the integrals for the likelihood functions and obtaining the estimating equations; (ii) linearization of the conditional mean and then iteratively applying linear mixed model techniques to the approximated model; (iii) Bayesian approach.  
 	%There are several methods: Maximum Likelihood,  Generalized estimating equations, penalized quasi-likelihood \citep{breslow1993approximate}, conditional likelihood...  etc. see \cite[Chapter 8]{mcculloch2001generalized} In this chapter, we mainly discuss the first approach, in that (ii) is found to be biased especially when sample size is small \citep[Chapter 7]{myers2012generalized} and (iii) is computationally intensive.
 	
-	In the following discussion, we assume conditional distribution of $\bm  Y$ given $\bm u$ is  $f_{Y}(\bm y|\bm \beta, \bm u)$,  the link function is $\bm \eta = g(\bm \mu)$, and $\bm \eta$ relates the covariates by (\ref{q5}). We also assume random effect $\bm u$ to have some distribution $\bm u \sim \phi(\bm u|\bm \Sigma)$. 
-	
-	\subsubsection{Likelihood Function Approach}
-	It is straightforward  to write down the likelihood function of $\bm Y$.
-	\begin{equation}\label{eq1}
-	L(\bm Y|\bm\beta, \bm \Sigma) = \int f(\bm y|\bm \beta, \bm u)\phi(\bm u|\bm \Sigma)d \bm u
+	In the following discussion, we assume conditional distribution of $\bm  Y$ given $\bm u$ is  $f_{Y}(\bm y|\bm \beta, \bm u)$,  the link function is $\bm \eta = g(\bm \mu)$, and $\bm \eta$ relates the covariates by Equation (\ref{eq:glmm2}). We also assume the random term $\bm u$ to have some distribution $\bm u \sim \phi(\bm u|\bm \Sigma)$. 	
+
+		\paragraph{Likelihood function approach}
+		It is straightforward  to write down the likelihood function of $\bm Y$ by first obtaining the joint likelihood of $(\bm Y, \bm u)$ and then integrating out the random term $\bm u$,
+		\begin{equation}\label{eq:joint-likelihood}
+		L(\bm Y|\bm\beta, \bm \Sigma) = \int f(\bm y|\bm \beta, \bm u)\phi(\bm u|\bm \Sigma)d \bm u
+		\end{equation}
+		A major challenge in estimating GLMMs is the integration of Equation (\ref{eq:joint-likelihood}) over the $n$-dimensional distribution of $\bm u$. Numerical approximation are usually used in evaluating the integral. In this part we will only discuss the \textit{Gauss-Hermite} (GH) quadrature that is recognized as a higher order Laplace approximation \citep{liu1994note}.
+		Gauss-Hermite quadrature is defined for integral taking the form 
+		\begin{equation}\label{eq:gh}
+		\int_{-\infty}^{\infty}f(x) e^{-x^2}dx
+		\end{equation}
+		The integral of (\ref{eq:gh}) is approximated by a weighted sum of  $f(x)$, 
+		\begin{equation}\label{eq:gh2}
+		\int_{-\infty}^{\infty}f(x) e^{-x^2}dx \approx \sum_{i=1}^m w_if(x_i)
+		\end{equation}
+		where $x_i$ are the zeros of $m$th order Hermite polynomial and $w_i$ are the corresponding weights. Equation (\ref{eq:gh2}) gives the exact numerical value for all polynomials up to degree of $2m-1$. For a Hermite polynomial of degree $n$, $x_i$ and $w_i$ can be calculated as 	
+		\begin{equation}\label{eq:gh3}
+		x_i = i\text{th zero of } H_n(x),~~  w_i = \frac{2^{n-1}n!\sqrt{\pi}}{n^2[H_{n-1}(x_i)]^2}. 
+		\end{equation}
+		An improved version of the regular Gauss-Hermite quadrature is to center and scale the quadrature points  by the empirical Bayes estimate of the random effects and the Hessian matrix from the Bayes estimate suboptimization \citep{liu1994note}. This procedure is called \textit{Adaptive Gauss-Hermite} (AGH) quadrature \citep{pinheiro1995approximations}. %We illustrate AGH by the example of RNA-Seq study mentioned in \textbf{section \ref{poisson}}.\\
+		
+		%Let $f(\bm Y|\bm \beta, \bm u)=\text{Pois} (\bm \eta)$ where $\bm \eta$ is defined by (\ref{q5}) and  $\phi(\bm u|\bm \Sigma)=N(\bm 0, \bm \Sigma)$.  
+		The AGH quadrature starts by maximizing the integrand $h(\bm u|\bm y, \bm \beta, \bm \Sigma)= f(\bm y|\bm \beta, \bm u)\phi(\bm u|\bm \Sigma)$ in Equation (\ref{eq:joint-likelihood}) with respect to random effects $\bm u$. The resulting estimate $\hat{\bm u}^{(n)}$ is the joint posterior modes for the random effects. Because $\bm \beta$ and $\bm \Sigma$ are unknown, they are replaced by the current estimates $\hat{\bm \beta}^{(n)}$ and $\hat{\bm \Sigma}^{(n)}$ at iteration $n$. The Hessian matrix $\hat{\bm H}^{(n)}$ can be obtained by evaluating the second order partial derivatives of $\log(h(\bm u|\bm y, \hat{\bm \beta}^{(n)}, \hat{\bm \Sigma}^{(n)}))$ at $\hat{\bm u}^{(n)}$. Consequently, $\hat{\bm \Omega}^{(n)} =-\hat{\bm H}^{(n)} $ is the estimated covariance matrix for the random effects posterior modes. It follows from equation (\ref{eq:joint-likelihood}) that for the $i$th cluster 
+		\begin{equation}\label{eeq:clm.3.1}
+		L( \bm Y_i|\bm \beta, \bm \Sigma) = \int f(\bm y_i|\bm \beta, \bm u )\phi(\bm u|\bm\Sigma)d\bm u = 
+		\int \frac{f(\bm y_i|\bm \beta, \bm u )\phi(\bm u|\bm\Sigma)}{\phi(\bm u|\hat{\bm u}^{(n)},\hat{\bm \Omega}^{(n)} )}\phi(\bm u|\hat{\bm u}^{(n)},\hat{\bm \Omega}^{(n)} )d\bm u
+		\end{equation}
+		[copied from SAS help] Let $m$ be the number of quadrature points in each dimension (for each random effect) and $Q$ the number of random effects. If $\bm x = (x_1, \ldots, x_m)$ are the nodes for standard Gauss-Hermite quadrature, and $\bm x^{\ast}_j=(x_{j_1}, \ldots, x_{j_Q}) $ is a point on the $Q$ dimensional quadrature grid, then the centered and scaled nodes are 
+		\begin{equation}\label{1.3.2}
+		\bm  a_j^{\ast} = \hat{\bm u}^{(n)} + \sqrt{2} [\hat{\bm \Omega}^{(n)} ]^{1/2}\bm x^{\ast}_j
+		\end{equation}
+		The centered and scaled nodes, along with the Gauss-Hermite quadrature weights $\bm w = (w_1, \ldots, w_m)$ are used to construct the $Q$ dimensional integral (\ref{eeq:clm.3.1}), approximated by 
+		\begin{equation}\label{eeq:clm.5}
+		\begin{aligned}
+		L(\bm y_i|\bm\beta, \bm \Sigma) &\approx\sum_{j_1=1}^m\cdots \sum_{j_Q=1}^m\frac{f(\bm y_i|\bm \beta, \bm  a_j^{\ast})\phi(\bm  a_j^{\ast}|\bm\Sigma)}{\phi(\bm  a_j^{\ast}|\hat{\bm u}^{(n)},\hat{\bm \Omega}^{(n)} )}w_{j_1}\cdots w_{j_Q}\\
+		& = (2)^{Q/2}|\hat{\bm \Omega}^{(n)}|^{1/2}\sum_{j_1=1}^m\cdots \sum_{j_Q=1}^m\left[ f(\bm y_i|\bm \beta, \bm  a_j^{\ast} )\phi(\bm  a_j^{\ast}|\bm\Sigma) \prod_{k=1}^Qw_{jk}\exp(x_{jk}^2)\right]
+		\end{aligned}
+		\end{equation}
+		Thus the multidimensional unbounded integrals are approximated by a finite summations. Now that the likelihood has the form of (\ref{eeq:clm.5}), a number of methods (e.g. Newton-Raphson or Fisher's scoring) can be used to estimate $(\bm \beta,  \bm \Sigma)$. 
+		
+		It should be noted, however, as the number of dimension $Q$ increases, the computation for (\ref{eeq:clm.5}) grows exponentially since the total number of nodes is $m^Q$.  Therefore it is difficult to implement AGH procedure with more than three random effects \citep{bolker2009generalized}.
+
+		
+		\paragraph{Estimation based on linearization}
+		%\url{http://support.sas.com/documentation/cdl/en/statug/63033/HTML/default/viewer.htm#statug_glimmix_a0000001425.htm}
+		
+		Linearization methods employ expansions to approximate the model by one based on pseudo-data with fewer nonlinear components. The generalized linear mixed model is approximated by a linear mixed model based on current values of the covariance parameter estimates. The resulting linear mixed model is then fit, which is itself an iterative process. The process of computing the linear approximation must be repeated several times until some criterion stabilizes.  On convergence, the new parameter estimates are used to update the linearization, which results in a new linear mixed model. 
+		
+		Under GLMM framework, we have some conditional distribution of $\bm Y$ given $\bm u$. Without loss of generality, we assume
+		\begin{equation}\label{se1}
+		\begin{aligned}
+		E[\bm Y|\bm u] = \bm \mu &= g^{-1}(\bm \eta) = g^{-1}(\bm{X\beta} + \bm {Zu}), \\
+		\text{Var}[\bm Y|\bm u]  & = \bm S
+		\end{aligned}
+		\end{equation}
+		where $\bm u \sim N(\bm 0, \bm D)$.  The linearization  is done by Taylor expansion of (\ref{se1}) about estimates $\bm \eta$. The \textit{Penalized Quasi-likelihood } (PQL) or \textit{Marginal Quasi-likelihood} (MQL) estimate procedure developed by \cite{breslow1993approximate} may be used for this purpose. 
+		
+		\paragraph{Penalized Quasi-likelihood}
+		The PQL procedure uses a first order Taylor expansion of $\bm \beta$ and $\bm u$, at $\tilde{\bm \beta} $ and $ \tilde{\bm u} $, respectively
+		\begin{equation}\label{se2}
+		g^{-1}(\bm\eta) \approx g^{-1}(\hat{\bm \eta}) + \tilde{\bm \Omega}_P(\bm \eta-\tilde{\bm \eta})
+		\end{equation} 
+		where $\tilde{\bm \Omega}_P$ is an $n\times n$ diagonal matrix whose $(i, i)$ entry is  $\partial {g^{-1}(\bm \eta_i)}/\partial \bm \eta_i $ evaluated at $\tilde{\bm \eta}= \bm X\tilde{\bm \beta} + \bm Z\tilde{\bm u}$. Multiplying both sides by $\bm \tilde{\Omega}_P^{-1}$ and (\ref{se2}) can be rearranged as 
+		\begin{equation}\label{se3}
+		\bm {X\beta} + \bm {Zu} \approx \tilde{\bm \Omega}_P^{-1}[g^{-1}(\bm\eta)- g^{-1}(\tilde{\bm \eta})]  + \bm{X}\tilde{\bm \beta} + \bm Z\tilde{\bm u}
+		\end{equation}
+		Note that the right hand side of (\ref{se3}) is just the expected value, given $\tilde{\bm \beta}, \tilde{\bm u}$, of	 pseudo-response 
+		\begin{equation}\label{se4}
+		\tilde{\bm Y }=\tilde{\bm \Omega}_P^{-1}[\bm Y- g^{-1}(\tilde{\bm \eta})]  + \bm{X}\tilde{\bm \beta} + \bm Z\tilde{\bm u}
+		\end{equation}
+		whose variance-covariance matrix given $\bm u$ is 
+		\begin{equation}\label{se5}
+		\text{Var}[\tilde{\bm Y }|\bm u] =\tilde{\bm \Omega}_P^{-1} \text{Var}[\bm Y|\bm u]\tilde{\bm \Omega}_P^{-1} = 
+		\tilde{\bm \Omega}_P^{-1} \bm S \tilde{\bm \Omega}_P^{-1}
+		\end{equation}
+		Then we can consider the model 
+		\begin{equation}\label{se6}
+		\tilde{\bm Y } = \bm{X\beta} + \bm {Zu}  + \bm \epsilon
+		\end{equation}
+		which is a linear mixed model with pseudo response $\tilde{\bm Y }$ with covariance matrix 
+		\begin{equation}
+		\bm W = \text{Var}[ \tilde{\bm Y } |\bm u] = \bm{ZDZ'} + \tilde{\bm \Omega}_P^{-1} \bm S \tilde{\bm \Omega}_P^{-1}.
+		\end{equation}
+		Model (\ref{se6})  has exactly the same form as linear mixed model, except that an estimate of $(\bm\beta, \bm u)$  is needed for calculating pseudo-response $\tilde{\bm Y }$. An iterative procedure can be used to estimate(\ref{se6}) by substituting raw data $\bm y$ for $\tilde{\bm y}$  and identity matrix $\bm I$ for $\bm S$ as starting values. Techniques for fitting LMM such as \textit{restricted maximum likelihood} (REML) can be readily applied to estimate variance components $\bm D$, upon which $\hat{W}$ is calculated. The estimate for $\bm \beta$ is given by
+		\begin{equation}
+		\hat{\bm\beta} = (\bm X^T\hat{\bm W}^{-1} \bm X)^{-1}\bm X^T\hat{\bm W}^{-1}\bm X \tilde{\bm y},
+		\end{equation}
+		and the estimate for random effect is 
+		\begin{equation}\label{se7}
+		\hat{\bm u} = \hat{\bm DZ} \hat{\bm W}^{-1} (\tilde{\bm y}-\bm {X} \hat{\bm \beta})
+		\end{equation}
+		Then the pseudo-response is updated and the procedure is repeated until convergence is reached for fixed effects and variance components.  Note that (\ref{se7}) estimates a vector of random effect. For this reason, PQL is also referred to as \textit{subject-specific} estimate procedure. 
+		
+		\paragraph{Marginal Quasi-likelihood} 
+		One of the motivation for MQL is that usually one is more interested in estimating the marginal mean of the response than estimating the conditional mean as was done by (\ref{se7}) in PQL. Since $E[\bm \eta|\bm u]= \bm {X\beta} + \bm {Zu}$, the unconditional mean is $E[\bm \eta] = E[E(\bm \eta|\bm u)]= \bm {X\beta}$. A first-order Taylor expansion of $E[\bm Y|\bm u]$ about $\bm X \bm\beta$ is given by 
+		\begin{equation}\label{se8}
+		E[\bm Y|\bm u] = g^{-1}(\bm \eta) \approx g^{-1} (\bm{X\beta}) + \tilde{\bm \Omega}_{M} (\bm \eta - \bm X\bm \beta)
+		\end{equation}
+		where $\tilde{\bm \Omega}_{M}$ is evaluated at $\bm {X\beta}$ (recall that for PQL, $\tilde{\bm \Omega}_P$ is evaluated at $\bm {X\beta} + \bm {Zu}$). The unconditional expected value of  $\bm Y$ is approximately $g^{-1}(\bm {X\beta})$ by (\ref{se8}). The variance of $\bm Y$ can then be derived from the relation $\text{Var}(\bm Y)= E[\text{Var}(\bm Y|\bm u)] + \text{Var}[E(\bm Y| \bm u)]$, which yields
+		\begin{equation}\label{se9}
+		\text{Var}[\bm Y] = \tilde{\bm \Omega}_P \bm {ZDZ'}\tilde{\bm \Omega}'_P + S_{\bm \eta_0}
+		\end{equation}
+		A linearization is performed at $\bm \eta_0= \bm X \bm \beta_0$, 
+		\[ g^{-1}(\bm \eta) \approx g^{-1} (\bm{X\beta_0}) + \tilde{\bm \Omega}_{M} (\bm \eta - \bm X\bm \beta_0)\]
+		Multiplying both sides by $\tilde{\bm \Omega}_{M} ^{-1}$, it then can be arranged to 
+		\[\bm {X\beta} + \bm {Zu} \approx \tilde{\bm \Omega}_M^{-1}[g^{-1}(\bm\eta)- g^{-1}(\bm \eta_0)]  + \bm{X}\bm \beta_0 \]
+		The pseudo-response is defined as 
+		\begin{equation}\label{se10}
+		\tilde{\bm Y}_M =  \tilde{\bm \Omega}_M^{-1}[\bm Y- g^{-1}(\bm \eta_0)]  + \bm{X}\bm \beta_0 
+		\end{equation}
+		
+		Next we consider the linear mixed model 
+		\[ \tilde{\bm Y}_M  = \bm {X\beta}+ \bm {Zu}  + \bm \epsilon\] 
+		where $\text{Var}(\bm \epsilon) $ is given by (\ref{se9}).  The estimate for fixed effect parameters $\bm \beta$ and variance components is the same as those in PQL. 
+		
+		Note that the pseudo-response is not a function of $\bm u$ any more, so updating this quantity does not require calculating the random effects $\bm u$. MQL is also referred to as \textit{population-averaged} estimate approach. \\
+		
+		\cite{pinheiro2006efficient} and \cite{breslow1995bias} showed that PQL approach may lead to asymptotically biased estimates and hence to inconsistency. It is not recommended to use simple PQL method in practice. 
+		
+		
+		\paragraph{Bayes approach}
+		As discussed earlier, for models with higher dimensional integrals, it is not practical to evaluate the likelihood function by AGH procedure. 
+		Here we will describe the MCEM algorithm for 
+		For mixed models, a typical strategy is to treat the random effects to be missing data. Following this rationale, the the problem of estimating variance components associated with random effects can be simplified. Denote the \textit{complete data} as $\bm v = (\bm y, \bm u)$, the log-likelihood of $\bm v$ can be expressed as 
+		\begin{equation}\label{eq2.3.1}
+		\log \pi(\bm \beta , \bm \Sigma|\bm v) = \log f(\bm y|\bm \beta, \bm u) + \log \phi(\bm u|\bm \Sigma)
+		\end{equation}  
+		The optimal solution in (\ref{eq2.3.1}) can be obtained by \textit{Expectation-Maximization} (EM) algorithm that can be readily implemented as follows:\\
+		\textbf{E-Step}. At $(k+1)$th iteration with $\bm \beta^{(k)}$ and $\bm\Sigma^{(k)}$   calculate 
+		\begin{equation}\label{eq2.3.2}
+		\begin{aligned}
+		E_{\bm \beta^{(k)}}[\log f(\bm \beta , \bm \Sigma|\bm v)|\bm y]= Q_1(\bm \beta, \bm \beta^{(k)}), \\
+		E_{\bm \Sigma^{(k)}}[\log \phi(\bm \Sigma|\bm v)|\bm y]= Q_2(\bm \Sigma, \bm \Sigma^{(k)})
+		\end{aligned}
+		\end{equation}
+		\textbf{M-Step}.  Maximize $Q_1$ and $Q_2$ to update  $\bm \beta^{(k+1)}$ and $\bm\Sigma^{(k+1)}$. \\
+		The \textbf{E} and \textbf{M} steps are alternated until convergence. Unfortunately, the expectations in (\ref{eq2.3.2}) cannot be computed in closed form for GLMMs. However, they may be approximated by Markov chain Monte Carlo (MCMC). In light of this, \cite{mcculloch1997maximum} developed a Monte Carlo EM (MCEM) algorithm. The Metropolis-Hastings algorithm is used for drawing samples from difficult-to-calculate density functions. \\
+		
+		To illustrate Metropolis algorithm, a proposal distribution $g(\bm u)$ is selected, from which an initial value of $\bm u$ is drawn. The new candidate value $\bm u' = (u_1, u_2, \ldots,u_{k-1}, u_k', u_{k+1}, \ldots, u_Q)$, which has all elements the same as previous values expect the $k$th,   is accepted (as opposed to keeping the previous value) with probability
+		\begin{equation}\label{eq2.3.3}
+		A_k(\bm u', \bm u) = \min \left\{1, \frac{f(\bm u'|\bm y, \bm \beta, \bm \Sigma)g(\bm u)}{f(\bm u|\bm y, \bm \beta, \bm \Sigma)g(\bm u')}\right\}
+		\end{equation}
+		
+		If we choose $g(\bm u) = \phi (\bm u|\bm\Sigma)$, then the ratio term in (\ref{eq2.3.3}) can be simplified to 
+		\begin{equation}\label{eq2.3.4}
+		\begin{aligned}
+		& ~~~~\frac{f(\bm u'|\bm y, \bm \beta, \bm \Sigma)g(\bm u)}{f(\bm u|\bm y, \bm \beta, \bm \Sigma)g(\bm u')} \\
+		& = \left[\frac{f(\bm u', \bm y| \bm \beta, \bm \Sigma)}{f(\bm y| \bm \beta, \bm \Sigma)}\phi (\bm u|\bm\Sigma)\right]/\left[
+		\frac{f(\bm u, \bm y|\bm \beta, \bm \Sigma)}{f(\bm y|\bm \beta, \bm \Sigma)}\phi (\bm u'|\bm\Sigma)\right]\\
+		& = \frac{f(\bm y|\bm u', \bm \beta, \bm \Sigma)\phi (\bm u'|\bm\Sigma)\phi (\bm u|\bm\Sigma)}{f(\bm y|\bm u, \bm \beta, \bm \Sigma)\phi (\bm u|\bm\Sigma)\phi (\bm u'|\bm\Sigma)}\\
+		& = \frac{f(\bm y|\bm u', \bm \beta, \bm \Sigma)}{f(\bm y|\bm u, \bm \beta, \bm \Sigma)}
+		\end{aligned}
+		\end{equation}
+		The MCEM procedure combines the EM steps and Metropolis algorithm in estimating the fixed parameters and variance components as follows:
+		\begin{enumerate}
+			\item[\textit{step 1}] Choose the starting value of $\bm \beta^{(0)}, \bm \Sigma^{(0)}$. Set $b= 0$
+			\item[\textit{step 2}] Generate the sequence $\bm u^{(1)}, \bm u^{(2)}, \ldots, \bm u^{(B)}$ from the conditional distribution of $\bm u$ given $y$ with Metropolis algorithm.
+			\item[\textit{step 3}] Maximize $\sum_{b=1}^B \log f(\bm y|\bm u^{(b)}, \bm\beta)/B$ and $\sum_{b=1}^B\log\phi(\bm u^{(b)}|\bm \Sigma)/B$ to obtain $\bm \beta^{(m+1)}$ and $\bm\Sigma^{(m+1)}$
+			\item[\textit{step 4}] Iterate between step 2 and step 3 until convergence is reached.
+		\end{enumerate}
+		This method can be easily extended to allow for multiple random effects. But the advantage comes at a price. A major drawback of MCEM is the computational intensity.  First, the convergence of $EM$ algorithm is usually very slow, especially at the neighborhood of maximum of marginal likelihood. Second, the chain in Metropolis algorithm has to run long enough for reliable estimation. \\
+		
+		In the Bayes framework, there are some alternatives for estimation \textit{Monte Carlo Newton-Raphson} (\textit{MCNR} of \citealt{mcculloch1997maximum}, \textit{MCMC} of \citealt{hadfield2010mcmc}).
+
+	\paragraph{Example of estimating parameters}
+	We will demonstrate the estimating procedure with the Poisson log-linear mixed-effect model discussed in Section \ref{subsubsec:intro-stat-framework}.
+	The estimation procedure starts from the joint density function of $\bm Y=(Y_{jkl})'$ given $\bm \mu= (\mu_{jkl})'$,
+	\begin{equation}\label{eq:poisdens}
+	f(\bm Y|\bm \mu )=\prod_{ j, k,l}f(y_{jkl}|\mu_{jkl})=\prod_{j,k,l}\frac{[\mu_{jkl}]^{y_{jkl}}\exp(-\mu_{jkl})}{y_{jkl}!}
 	\end{equation}
-	A major challenge in estimating GLMM models is the integration of (\ref{eq1}) over the $n$-dimensional distribution of $\bm u$. Numerical approximation are usually used in evaluating the integral. In this part we will only discuss the \textit{Gauss-Hermite} (GH) quadrature that is recognized as a higher order Laplace approximation \citep{liu1994note}.
-	
-	Gauss-Hermite quadrature is defined in terms of integral of the form 
-	\begin{equation}\label{eq1.1}
-	\int_{-\infty}^{\infty}f(x) e^{-x^2}dx
+	A re-expression of  (\ref{eq:example}) in matrix form gives 
+	\[\log\bm \mu= \bm {X\beta} + \bm {Z_1 a} + \bm{Z_2b} + \bm I_{12}\bm \epsilon \]
+%	where $\bm \xi = \bm 1\cdot\xi$ and $\bm 1$ is a vector of 1s, $\bm Z_1$ is the design matrix for random effects $\bm \alpha=(\alpha_l)$, and $\bm Z_2$ is the design matrix for random effects $\bm \beta $. 
+	Therefore  $\bm\mu  \sim \log N(\bm \mu_0, \bm \Sigma)$ where $\bm \mu_0 =\bm\xi + \log(\bm {NR})$ and $\bm \Sigma = \sigma_1^2\bm {Z_1Z_1'} + \sigma_2^2\bm {Z_2 Z_2'} +\sigma_0^2 \bm I_{12}$.
+%	and $\bm I$ is an identity matrix of dimension $Q$ where $Q$ is the total number of biological samples. 
+	The density function of $\bm \mu$ is then
+	\begin{equation}\label{eq:poisConddens}
+	f(\bm \mu |\bm \mu_0, \bm \Sigma)=\prod_{j,k,l} \mu_{jkl}^{-1}\cdot \frac{1}{ \sqrt{(2\pi)^{12}|\bm\Sigma|}}\exp[-\frac{1}{2} {(\log\bm \mu - \bm \mu_0)^T\bm \Sigma^{-1}(\log\bm \mu - \bm \mu_0)}]
 	\end{equation}
-	The integral  (\ref{eq1.1}) is approximated by a weighted sum of  $f(x)$ 
-	\begin{equation}\label{eq1.2}
-	\int_{-\infty}^{\infty}f(x) e^{-x^2}dx \approx \sum_{i=1}^m w_if(x_i)
+	Since $Y_{jkl}\sim \pois (\mu_{jkl})$, by combining Equation (\ref{eq:poisdens}) and (\ref{eq:poisConddens}), we obtain the joint distribution of $\bm Y$ and $\bm \mu$,
+	\[f(\bm Y, \bm \mu |\bm \mu_0, \bm \Sigma) =\frac{1}{\sqrt{(2\pi)^{12}|\bm \Sigma|}}\exp[-\bm 1^T\bm \mu - -\frac{1}{2} {(\log\bm \mu - \bm \mu_0)^T\bm \Sigma^{-1}(\log\bm \mu - \bm \mu_0)}]\prod_{jkl}\frac{[\mu_{jkl}]^{y_{jkl}-1}}{y_{jkl}!}\]
+	Therefore we can obtain the likelihood function of or the marginal distribution of $\bm Y$ by integrating out the random components $\bm u$,
+	\begin{equation}\label{eq:likelihood}
+	L(\xi, \sigma_1^2, \sigma_2^2, \sigma_0^2|\bm Y)=f(\bm Y|\bm \xi, \bm \Sigma)= \int_{\bm{a,b,\epsilon}} f(\bm Y, \bm a, \bm b, \bm \epsilon |\bm \mu_0, \bm \Sigma)d\bm a d \bm b d\bm \epsilon 
 	\end{equation}
-	where $x_i$ are the zeros of $m$th order Hermite polynomial and $w_i$ are corresponding weights.  (\ref{eq1.2}) gives the exact numerical value for all polynomials up to degree of $2m-1$. For a Hermite polynomial of degree $n$, $x_i$ and $w_i$ can be calculated as 	
-	\begin{equation}\label{eq1.3}
-	x_i = i\text{th zero of } H_n(x),~~  w_i = \frac{2^{n-1}n!\sqrt{\pi}}{n^2[H_{n-1}(x_i)]^2} 
-	\end{equation}
+	The integral in (\ref{eq:likelihood}) can be approximated by Gaussian-Hermite (GH) quadrature. The estimate of $\bm\theta = (\xi, \sigma_0^2, \sigma_1^2, \sigma_2^2)'$ is obtained by maximizing the log-likelihood after GH approximation. R package \verb"lme4" (\cite{bates2012lme4}, version 1.1.7) has an inbuilt function \verb"glmer()" for this procedure.
+
 	
-	An improved version of the regular Gauss-Hermite quadrature is to center and scale the quadrature points  by the empirical Bayes estimate of the random effects and the Hessian matrix from the Bayes estimate suboptimization \citep{liu1994note}. This procedure is called \textit{Adaptive Gauss-Hermite} (AGH) quadrature \citep{pinheiro1995approximations}. %We illustrate AGH by the example of RNA-Seq study mentioned in \textbf{section \ref{poisson}}.\\
-	
-	%Let $f(\bm Y|\bm \beta, \bm u)=\text{Pois} (\bm \eta)$ where $\bm \eta$ is defined by (\ref{q5}) and  $\phi(\bm u|\bm \Sigma)=N(\bm 0, \bm \Sigma)$.  
-	The AGH quadrature starts by maximizing the integrand $h(\bm u|\bm y, \bm \beta, \bm \Sigma)= f(\bm y|\bm \beta, \bm u)\phi(\bm u|\bm \Sigma)$ in equation (\ref{eq1}) with respect to random effects $\bm u$. The resulting estimate $\hat{\bm u}^{(n)}$ is the joint posterior modes for the random effects. Because $\bm \beta$ and $\bm \Sigma$ are unknown, they are replaced by the current estimates $\hat{\bm \beta}^{(n)}$ and $\hat{\bm \Sigma}^{(n)}$ at iteration $n$. The Hessian matrix $\hat{\bm H}^{(n)}$ can be obtained by evaluating the second order partial derivatives of $\log(h(\bm u|\bm y, \hat{\bm \beta}^{(n)}, \hat{\bm \Sigma}^{(n)}))$ at $\hat{\bm u}^{(n)}$.  Consequently, $\hat{\bm \Omega}^{(n)} =-\hat{\bm H}^{(n)} $ is the estimated covariance matrix for the random effects posterior modes. It follows from equation (\ref{eq1}) that for the $i$th cluster 
-	\begin{equation}\label{eq1.3.1}
-	L( \bm Y_i|\bm \beta, \bm \Sigma) = \int f(\bm y_i|\bm \beta, \bm u )\phi(\bm u|\bm\Sigma)d\bm u = 
-	\int \frac{f(\bm y_i|\bm \beta, \bm u )\phi(\bm u|\bm\Sigma)}{\phi(\bm u|\hat{\bm u}^{(n)},\hat{\bm \Omega}^{(n)} )}\phi(\bm u|\hat{\bm u}^{(n)},\hat{\bm \Omega}^{(n)} )d\bm u
-	\end{equation}
-	[copied from SAS help] Let $m$ be the number of quadrature points in each dimension (for each random effect) and $Q$ the number of random effects. If $\bm x = (x_1, \ldots, x_m)$ are the nodes for standard Gauss-Hermite quadrature, and $\bm x^{\ast}_j=(x_{j_1}, \ldots, x_{j_Q}) $ is a point on the $Q$ dimensional quadrature grid, then the centered and scaled nodes are 
-	\begin{equation}\label{1.3.2}
-	\bm  a_j^{\ast} = \hat{\bm u}^{(n)} + \sqrt{2} [\hat{\bm \Omega}^{(n)} ]^{1/2}\bm x^{\ast}_j
-	\end{equation}
-	The centered and scaled nodes, along with the Gauss-Hermite quadrature weights $\bm w = (w_1, \ldots, w_m)$ are used to construct the $Q$ dimensional integral (\ref{eq1.3.1}), approximated by 
-	\begin{equation}\label{eq1.5}
-	\begin{aligned}
-	L(\bm y_i|\bm\beta, \bm \Sigma) &\approx\sum_{j_1=1}^m\cdots \sum_{j_Q=1}^m\frac{f(\bm y_i|\bm \beta, \bm  a_j^{\ast})\phi(\bm  a_j^{\ast}|\bm\Sigma)}{\phi(\bm  a_j^{\ast}|\hat{\bm u}^{(n)},\hat{\bm \Omega}^{(n)} )}w_{j_1}\cdots w_{j_Q}\\
-	& = (2)^{Q/2}|\hat{\bm \Omega}^{(n)}|^{1/2}\sum_{j_1=1}^m\cdots \sum_{j_Q=1}^m\left[ f(\bm y_i|\bm \beta, \bm  a_j^{\ast} )\phi(\bm  a_j^{\ast}|\bm\Sigma) \prod_{k=1}^Qw_{jk}\exp(x_{jk}^2)\right]
-	\end{aligned}
-	\end{equation}
-	Thus the multidimensional unbounded integrals are approximated by a finite summations. Now that the likelihood has the form of (\ref{eq1.5}), a number of methods (e.g. Newton-Raphson or Fisher's scoring) can be used to estimate $(\bm \beta,  \bm \Sigma)$. 
-	
-	It should be noted, however, as the number of dimension $Q$ increases, the computation for (\ref{eq1.5}) grows exponentially since the total number of nodes is $m^Q$.  Therefore it is difficult to implement AGH procedure with more than three random effects \citep{bolker2009generalized}.
-	
-	%
-	%In this chapter, we will illustrate an example where the density function $f_{Y}(y_i|\bm u)$ has the \textit{canonical form}
-	%\begin{equation}\label{eq2}
-	%f_{Y_j|u}(y_j; \theta, \phi|\bm u) = \exp \left[ \frac{y_j\theta_j	 -b(\theta_j)}{a_j(\phi)} + c(y_i, \phi)\right]
-	%\end{equation}
-	%Here $\theta_j$ and $\phi$ are parameters and $a_j(\phi)$, $b(\theta_j)$ and $c(y_j, \phi)$ are known functions. It is easily shown that
-	%\begin{equation}
-	%\begin{aligned}\label{eq3}
-	%E[Y_j]=\mu_j =\frac{\partial b(\theta_j)}{\partial \theta_j}=b'(\theta_j),   \\
-	%Var[Y_j] = \sigma^2_j = b''(\theta_j)a_j(\phi)
-	%\end{aligned}
-	%\end{equation} 
-	%
-	%\subsubsection{Fixed Effect Parameters}
-	%The log likelihood of ~\ref{eq1} in vector form gives
-	%\begin{equation}\label{eq6}
-	%l = \log f_{\bm Y}(\bm y) = \log \int f_{\bm Y|\bm U}(\bm y|\bm u)f_{\bm U}(\bm u)d \bm u
-	%\end{equation}
-	%therefore 
-	%\begin{equation}\label{eq7}
-	%\begin{aligned}
-	%\frac{\partial l}{\partial \bm \beta}  & = \frac{\partial }{\partial \bm \beta} \log f_{\bm Y}(\bm y)\\
-	% & = \frac{1}{f_{\bm Y}(\bm y)}\int [\frac{\partial}{\partial \bm \beta}f_{\bm Y|\bm U}(\bm y|\bm u)]f_{\bm U}(\bm u) d\bm u \\
-	%\end{aligned}
-	%\end{equation}
-	%Note that $f(\bm u)$ does not involve $\bm \beta$ and 
-	%\begin{equation}\label{eq8}
-	%\frac{\partial}{\partial \bm \beta}f_{\bm Y|\bm U}(\bm y|\bm u)= \frac{\partial \log f_{\bm Y|\bm U}(\bm y|\bm u)}{\partial \bm \beta}f_{\bm Y|\bm U}(\bm y|\bm u)
-	%\end{equation}
-	%Therefore ~\ref{eq7} can be rewritten as 
-	%\begin{equation}\label{eq9}
-	%\begin{aligned}
-	%\frac{\partial l}{\partial \bm \beta} &= \int  \frac{\partial \log f_{\bm Y|\bm U}(\bm y|\bm u)}{\partial \bm \beta}f_{\bm Y|\bm U}(\bm y|\bm u) f_{\bm U}(\bm u)d\bm u/f_{\bm Y}(\bm y)\\
-	% & = \int \frac{\partial \log f_{\bm Y|\bm U}(\bm y|\bm u)}{\partial \bm \beta} f_{\bm U|\bm Y}(\bm u|\bm y)d\bm u
-	%\end{aligned}
-	%\end{equation} 
-	%Note that from (\ref{eq3})
-	%\begin{equation}\label{eq10}
-	%\frac{\partial \theta_i}{\partial \mu_i} = \left(\frac{\partial \mu_i}{\partial \theta_i}\right)^{-1} = \left(\frac{\partial^2 b(\theta_i)}{\partial \theta_i}\right)^{-1}=\frac{1}{b''(\theta)}
-	%\end{equation}
-	%and by (\ref{eq10}) we have 
-	%\begin{equation}\label{eq11}
-	%\begin{aligned}
-	%\frac{\partial \log f_{ Y_i|\bm U}(y_i|\bm u)}{\partial \bm \beta}  & = \frac{1}{a_i(\phi)}\left[y_i\frac{\partial \theta_i}{\partial \bm \beta}-\frac{\partial b(\theta_i)}{\partial \theta_i}\frac{\partial \theta_i}{\partial \bm \beta}\right] \\
-	% & =\frac{1}{a_i(\phi)}[y_i-\mu_i] \frac{\partial \theta_i}{\partial \mu_i}\frac{\partial \mu_i}{\partial \eta_i}\frac{\partial \eta_i}{\partial \bm \beta} \\
-	% & = \frac{(y_i-\mu_i)\bm x_i}{a_i(\phi)g'(\mu_i)b''(\theta_i)}
-	%\end{aligned}
-	%\end{equation}
-	%Denote $\bm W= \left\{[a_i(\phi)b''(\theta_i)g'(\mu_i)]^{-1}\right\}$ then 
-	%\begin{equation}\label{eq12}
-	%\frac{\partial l}{\partial \bm \beta}=\int \bm X' \bm W (\bm y-\bm \mu)f_{\bm U|\bm Y}(\bm u|\bm y)d\bm u = \bm X' E[\bm W|\bm y]-\bm X' E[\bm W\bm \mu |\bm y]
-	%\end{equation}
-	%Therefore the estimate for $\bm \beta$ is the solution to the likelihood equation
-	%\begin{equation}\label{eq13}
-	%\bm X' E[\bm W|\bm y] = \bm X' E[\bm W\bm \mu |\bm y]
-	%\end{equation}
-	%\subsubsection{Random Effect Parameters}
-	%Similar to ~\ref{eq9} we can derive the likelihood equation for the parameters $\bm \sigma$ in the random part $f(\bm u)$. 
-	%\begin{equation}\label{eq14}
-	%\frac{\partial l}{\partial \bm \sigma}= \int \frac{\partial \log f_{\bm U}(\bm u)}{\partial \bm \sigma} f_{\bm U|\bm Y}(\bm u|\bm y)d\bm u
-	%=E[\frac{\partial \log f_{\bm U}(\bm u)}{\partial \bm \sigma} |\bm y]
-	%\end{equation}
-	%There is no further simplifications unless the distribution form of random effect is specified.
-	%
-	
-	\subsubsection{Estimation based on Linearization}
-	%\url{http://support.sas.com/documentation/cdl/en/statug/63033/HTML/default/viewer.htm#statug_glimmix_a0000001425.htm}
-	
-	Linearization methods employ expansions to approximate the model by one based on pseudo-data with fewer nonlinear components. The generalized linear mixed model is approximated by a linear mixed model based on current values of the covariance parameter estimates. The resulting linear mixed model is then fit, which is itself an iterative process. The process of computing the linear approximation must be repeated several times until some criterion stabilizes.  On convergence, the new parameter estimates are used to update the linearization, which results in a new linear mixed model. 
-	
-	Under GLMM framework, we have some conditional distribution of $\bm Y$ given $\bm u$. Without loss of generality, we assume
-	\begin{equation}\label{se1}
-	\begin{aligned}
-	E[\bm Y|\bm u] = \bm \mu &= g^{-1}(\bm \eta) = g^{-1}(\bm{X\beta} + \bm {Zu}), \\
-	\text{Var}[\bm Y|\bm u]  & = \bm S
-	\end{aligned}
-	\end{equation}
-	where $\bm u \sim N(\bm 0, \bm D)$.  The linearization  is done by Taylor expansion of (\ref{se1}) about estimates $\bm \eta$. The \textit{Penalized Quasi-likelihood } (PQL) or \textit{Marginal Quasi-likelihood} (MQL) estimate procedure developed by \cite{breslow1993approximate} may be used for this purpose. 
-	
-	\subsubsection{Penalized Quasi-likelihood}
-	The PQL procedure uses a first order Taylor expansion of $\bm \beta$ and $\bm u$, at $\tilde{\bm \beta} $ and $ \tilde{\bm u} $, respectively
-	\begin{equation}\label{se2}
-	g^{-1}(\bm\eta) \approx g^{-1}(\hat{\bm \eta}) + \tilde{\bm \Omega}_P(\bm \eta-\tilde{\bm \eta})
-	\end{equation} 
-	where $\tilde{\bm \Omega}_P$ is an $n\times n$ diagonal matrix whose $(i, i)$ entry is  $\partial {g^{-1}(\bm \eta_i)}/\partial \bm \eta_i $ evaluated at $\tilde{\bm \eta}= \bm X\tilde{\bm \beta} + \bm Z\tilde{\bm u}$. Multiplying both sides by $\bm \tilde{\Omega}_P^{-1}$ and (\ref{se2}) can be rearranged as 
-	\begin{equation}\label{se3}
-	\bm {X\beta} + \bm {Zu} \approx \tilde{\bm \Omega}_P^{-1}[g^{-1}(\bm\eta)- g^{-1}(\tilde{\bm \eta})]  + \bm{X}\tilde{\bm \beta} + \bm Z\tilde{\bm u}
-	\end{equation}
-	Note that the right hand side of (\ref{se3}) is just the expected value, given $\tilde{\bm \beta}, \tilde{\bm u}$, of	 pseudo-response 
-	\begin{equation}\label{se4}
-	\tilde{\bm Y }=\tilde{\bm \Omega}_P^{-1}[\bm Y- g^{-1}(\tilde{\bm \eta})]  + \bm{X}\tilde{\bm \beta} + \bm Z\tilde{\bm u}
-	\end{equation}
-	whose variance-covariance matrix given $\bm u$ is 
-	\begin{equation}\label{se5}
-	\text{Var}[\tilde{\bm Y }|\bm u] =\tilde{\bm \Omega}_P^{-1} \text{Var}[\bm Y|\bm u]\tilde{\bm \Omega}_P^{-1} = 
-	\tilde{\bm \Omega}_P^{-1} \bm S \tilde{\bm \Omega}_P^{-1}
-	\end{equation}
-	Then we can consider the model 
-	\begin{equation}\label{se6}
-	\tilde{\bm Y } = \bm{X\beta} + \bm {Zu}  + \bm \epsilon
-	\end{equation}
-	which is a linear mixed model with pseudo response $\tilde{\bm Y }$ with covariance matrix 
-	\begin{equation}
-	\bm W = \text{Var}[ \tilde{\bm Y } |\bm u] = \bm{ZDZ'} + \tilde{\bm \Omega}_P^{-1} \bm S \tilde{\bm \Omega}_P^{-1}.
-	\end{equation}
-	Model (\ref{se6})  has exactly the same form as linear mixed model, except that an estimate of $(\bm\beta, \bm u)$  is needed for calculating pseudo-response $\tilde{\bm Y }$. An iterative procedure can be used to estimate(\ref{se6}) by substituting raw data $\bm y$ for $\tilde{\bm y}$  and identity matrix $\bm I$ for $\bm S$ as starting values. Techniques for fitting LMM such as \textit{restricted maximum likelihood} (REML) can be readily applied to estimate variance components $\bm D$, upon which $\hat{W}$ is calculated. The estimate for $\bm \beta$ is given by
-	\begin{equation}
-	\hat{\bm\beta} = (\bm X^T\hat{\bm W}^{-1} \bm X)^{-1}\bm X^T\hat{\bm W}^{-1}\bm X \tilde{\bm y},
-	\end{equation}
-	and the estimate for random effect is 
-	\begin{equation}\label{se7}
-	\hat{\bm u} = \hat{\bm DZ} \hat{\bm W}^{-1} (\tilde{\bm y}-\bm {X} \hat{\bm \beta})
-	\end{equation}
-	Then the pseudo-response is updated and the procedure is repeated until convergence is reached for fixed effects and variance components.  Note that (\ref{se7}) estimates a vector of random effect. For this reason, PQL is also referred to as \textit{subject-specific} estimate procedure. 
-	
-	\subsubsection{Marginal Quasi-likelihood} 
-	One of the motivation for MQL is that usually one is more interested in estimating the marginal mean of the response than estimating the conditional mean as was done by (\ref{se7}) in PQL. Since $E[\bm \eta|\bm u]= \bm {X\beta} + \bm {Zu}$, the unconditional mean is $E[\bm \eta] = E[E(\bm \eta|\bm u)]= \bm {X\beta}$. A first-order Taylor expansion of $E[\bm Y|\bm u]$ about $\bm X \bm\beta$ is given by 
-	\begin{equation}\label{se8}
-	E[\bm Y|\bm u] = g^{-1}(\bm \eta) \approx g^{-1} (\bm{X\beta}) + \tilde{\bm \Omega}_{M} (\bm \eta - \bm X\bm \beta)
-	\end{equation}
-	where $\tilde{\bm \Omega}_{M}$ is evaluated at $\bm {X\beta}$ (recall that for PQL, $\tilde{\bm \Omega}_P$ is evaluated at $\bm {X\beta} + \bm {Zu}$). The unconditional expected value of  $\bm Y$ is approximately $g^{-1}(\bm {X\beta})$ by (\ref{se8}). The variance of $\bm Y$ can then be derived from the relation $\text{Var}(\bm Y)= E[\text{Var}(\bm Y|\bm u)] + \text{Var}[E(\bm Y| \bm u)]$, which yields
-	\begin{equation}\label{se9}
-	\text{Var}[\bm Y] = \tilde{\bm \Omega}_P \bm {ZDZ'}\tilde{\bm \Omega}'_P + S_{\bm \eta_0}
-	\end{equation}
-	A linearization is performed at $\bm \eta_0= \bm X \bm \beta_0$, 
-	\[ g^{-1}(\bm \eta) \approx g^{-1} (\bm{X\beta_0}) + \tilde{\bm \Omega}_{M} (\bm \eta - \bm X\bm \beta_0)\]
-	Multiplying both sides by $\tilde{\bm \Omega}_{M} ^{-1}$, it then can be arranged to 
-	\[\bm {X\beta} + \bm {Zu} \approx \tilde{\bm \Omega}_M^{-1}[g^{-1}(\bm\eta)- g^{-1}(\bm \eta_0)]  + \bm{X}\bm \beta_0 \]
-	The pseudo-response is defined as 
-	\begin{equation}\label{se10}
-	\tilde{\bm Y}_M =  \tilde{\bm \Omega}_M^{-1}[\bm Y- g^{-1}(\bm \eta_0)]  + \bm{X}\bm \beta_0 
-	\end{equation}
-	
-	Next we consider the linear mixed model 
-	\[ \tilde{\bm Y}_M  = \bm {X\beta}+ \bm {Zu}  + \bm \epsilon\] 
-	where $\text{Var}(\bm \epsilon) $ is given by (\ref{se9}).  The estimate for fixed effect parameters $\bm \beta$ and variance components is the same as those in PQL. 
-	
-	Note that the pseudo-response is not a function of $\bm u$ any more, so updating this quantity does not require calculating the random effects $\bm u$. MQL is also referred to as \textit{population-averaged} estimate approach. \\
-	
-	\cite{pinheiro2006efficient} and \cite{breslow1995bias} showed that PQL approach may lead to asymptotically biased estimates and hence to inconsistency. It is not recommended to use simple PQL method in practice. 
-	
-	
-	\subsubsection{Bayes Approach}
-	As discussed earlier, for models with higher dimensional integrals, it is not practical to evaluate the likelihood function by AGH procedure. 
-	Here we will describe the MCEM algorithm for 
-	For mixed models, a typical strategy is to treat the random effects to be missing data. Following this rationale, the the problem of estimating variance components associated with random effects can be simplified. Denote the \textit{complete data} as $\bm v = (\bm y, \bm u)$, the log-likelihood of $\bm v$ can be expressed as 
-	\begin{equation}\label{eq2.3.1}
-	\log \pi(\bm \beta , \bm \Sigma|\bm v) = \log f(\bm y|\bm \beta, \bm u) + \log \phi(\bm u|\bm \Sigma)
-	\end{equation}  
-	The optimal solution in (\ref{eq2.3.1}) can be obtained by \textit{Expectation-Maximization} (EM) algorithm that can be readily implemented as follows:\\
-	\textbf{E-Step}. At $(k+1)$th iteration with $\bm \beta^{(k)}$ and $\bm\Sigma^{(k)}$   calculate 
-	\begin{equation}\label{eq2.3.2}
-	\begin{aligned}
-	E_{\bm \beta^{(k)}}[\log f(\bm \beta , \bm \Sigma|\bm v)|\bm y]= Q_1(\bm \beta, \bm \beta^{(k)}), \\
-	E_{\bm \Sigma^{(k)}}[\log \phi(\bm \Sigma|\bm v)|\bm y]= Q_2(\bm \Sigma, \bm \Sigma^{(k)})
-	\end{aligned}
-	\end{equation}
-	\textbf{M-Step}.  Maximize $Q_1$ and $Q_2$ to update  $\bm \beta^{(k+1)}$ and $\bm\Sigma^{(k+1)}$. \\
-	The \textbf{E} and \textbf{M} steps are alternated until convergence. Unfortunately, the expectations in (\ref{eq2.3.2}) cannot be computed in closed form for GLMMs. However, they may be approximated by Markov chain Monte Carlo (MCMC). In light of this, \cite{mcculloch1997maximum} developed a Monte Carlo EM (MCEM) algorithm. The Metropolis-Hastings algorithm is used for drawing samples from difficult-to-calculate density functions. \\
-	
-	To illustrate Metropolis algorithm, a proposal distribution $g(\bm u)$ is selected, from which an initial value of $\bm u$ is drawn. The new candidate value $\bm u' = (u_1, u_2, \ldots,u_{k-1}, u_k', u_{k+1}, \ldots, u_Q)$, which has all elements the same as previous values expect the $k$th,   is accepted (as opposed to keeping the previous value) with probability
-	\begin{equation}\label{eq2.3.3}
-	A_k(\bm u', \bm u) = \min \left\{1, \frac{f(\bm u'|\bm y, \bm \beta, \bm \Sigma)g(\bm u)}{f(\bm u|\bm y, \bm \beta, \bm \Sigma)g(\bm u')}\right\}
-	\end{equation}
-	
-	If we choose $g(\bm u) = \phi (\bm u|\bm\Sigma)$, then the ratio term in (\ref{eq2.3.3}) can be simplified to 
-	\begin{equation}\label{eq2.3.4}
-	\begin{aligned}
-	& ~~~~\frac{f(\bm u'|\bm y, \bm \beta, \bm \Sigma)g(\bm u)}{f(\bm u|\bm y, \bm \beta, \bm \Sigma)g(\bm u')} \\
-	& = \left[\frac{f(\bm u', \bm y| \bm \beta, \bm \Sigma)}{f(\bm y| \bm \beta, \bm \Sigma)}\phi (\bm u|\bm\Sigma)\right]/\left[
-	\frac{f(\bm u, \bm y|\bm \beta, \bm \Sigma)}{f(\bm y|\bm \beta, \bm \Sigma)}\phi (\bm u'|\bm\Sigma)\right]\\
-	& = \frac{f(\bm y|\bm u', \bm \beta, \bm \Sigma)\phi (\bm u'|\bm\Sigma)\phi (\bm u|\bm\Sigma)}{f(\bm y|\bm u, \bm \beta, \bm \Sigma)\phi (\bm u|\bm\Sigma)\phi (\bm u'|\bm\Sigma)}\\
-	& = \frac{f(\bm y|\bm u', \bm \beta, \bm \Sigma)}{f(\bm y|\bm u, \bm \beta, \bm \Sigma)}
-	\end{aligned}
-	\end{equation}
-	The MCEM procedure combines the EM steps and Metropolis algorithm in estimating the fixed parameters and variance components as follows:
-	\begin{enumerate}
-		\item[\textit{step 1}] Choose the starting value of $\bm \beta^{(0)}, \bm \Sigma^{(0)}$. Set $b= 0$
-		\item[\textit{step 2}] Generate the sequence $\bm u^{(1)}, \bm u^{(2)}, \ldots, \bm u^{(B)}$ from the conditional distribution of $\bm u$ given $y$ with Metropolis algorithm.
-		\item[\textit{step 3}] Maximize $\sum_{b=1}^B \log f(\bm y|\bm u^{(b)}, \bm\beta)/B$ and $\sum_{b=1}^B\log\phi(\bm u^{(b)}|\bm \Sigma)/B$ to obtain $\bm \beta^{(m+1)}$ and $\bm\Sigma^{(m+1)}$
-		\item[\textit{step 4}] Iterate between step 2 and step 3 until convergence is reached.
-	\end{enumerate}
-	This method can be easily extended to allow for multiple random effects. But the advantage comes at a price. A major drawback of MCEM is the computational intensity.  First, the convergence of $EM$ algorithm is usually very slow, especially at the neighborhood of maximum of marginal likelihood. Second, the chain in Metropolis algorithm has to run long enough for reliable estimation. \\
-	
-	
-	In the Bayes framework, there are some alternatives for estimation. Interested readers are referred to \textit{Monte Carlo Newton-Raphson} (MCNR, \cite{mcculloch1997maximum}), \textit{MCMC} \citep{hadfield2010mcmc}.
-	
-	
-	\subsection{Multiple Hypothesis Testing}
+	\subsection{Multiple hypothesis testing}
 	Multiple hypothesis testing procedures deal with type I error rates in a family of tests. The problems arise when we consider a set of statistical inference simultaneously.  For each of the individual tests or confidence intervals, there is a type I error which can be controlled by the experimenter.  If the family of tests contains one or more true null hypotheses, the probability of rejecting one or more of these true null increases. 
 	
 	While traditional multiple testing procedures focus on modest number of tests, a different set of techniques are needed for large-scale inference, in which tens or even hundreds of thousands of tests are performed simultaneously. For example, in genomics study, expression levels of 50,000 genes for each of 100 individuals can be measured using modern technologies such as microarray or RNA-Sequencing. In testing differential expression (DE), 50,000 tests need to be conducted against the null that there is no DE between treatment/control. This has brought new challenge to the field of multiple hypothesis testing. \cite{benjamini1995controlling} points out that the control of familywise error rate (FWER), i.e. the probability of making one or more false discovery in a set of tests, tends to have substantially less power. 

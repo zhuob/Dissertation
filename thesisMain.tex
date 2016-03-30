@@ -36,7 +36,19 @@
 \usepackage{natbib}
 \usepackage[utf8]{inputenc}  
 \usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{titlesec}  %extra level of \subsubsection
 
+
+% New command (modified  by Bin Zhuo)
+\newcommand{\cov}{\text{Cov}}
+\newcommand{\var}{\text{Var}}
+\newcommand{\pois}{\text{Poisson}}
+
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
 %-------------------------------------------------------
 %	Thesis Pre-Text Info:
 %-------------------------------------------------------
@@ -60,6 +72,8 @@
     \def\CommitteeOneDept{Committee Member Department}
     \def\CommitteeTwo{Committee Member Name}
     \def\CommitteeTwoDept{Committee Member Department}
+    
+    
     
     %%Un-comment and use any of the following that apply to you
     %%------------------------------
@@ -93,6 +107,7 @@
 
   %Reset page numbering to one
   \setcounter{page}{1}
+ % \setcounter{secnumdepth}{4}
 
   %Begin Thesis Body
   \tableofcontents

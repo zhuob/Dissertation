@@ -16,6 +16,13 @@
 	 % imaging, amplification, probe hybridization or sequencing-based detection methods .
 	 Among them, RNA-seq is rapidly becoming technology of choice for transcriptome profiling over the past few years. The standard procedure of an RNA-Seq experiment runs as follows  \citep{finotello2015measuring}: first, the RNAs in the biological sample are fragmented and reverse-transcribed into cDNAs; second, cDNA fragments are amplified and sequenced in a high-throughput sequencing platform (e.g., Illumina 3000, \url{http://www. illumina.com}) to generate tens of millions of short reads; third, those short reads are mapped to a reference genome, and the number of reads aligned to each gene---referred to as ``read count"---quantifies the gene expression level in the sample under study.  
 	 
+	 	\textbf{What is the tool for gene expression analysis? RNA-Seq technology}\\
+	 	RNA-Sequencing (RNA-Seq), also known as \textit{whole transcriptome shotgun sequencing} \citep{morin2008profiling}, is a next-generation sequencing (NGS) technology used to uncover the presence and quality of RNA in a biological sample. Over the past few years, RNA-seq has become the technology of choice for transcriptome profiling  at the nucleotide level.  
+	 	
+	 	
+	 	
+	 	
+	 
 	 \textbf{pros and cons about RNA-Seq}\\
 	 RNA-Seq technology offers several key advantages over other methods \citep{wang2009rna}, the most important of which are that it does not require prior knowledge of an organism for detecting transcripts,  and that it is sensitive to genes expressed at either low or higher levels and thus provides higher dynamic range. The sequencing of RNA allows researchers to study the entire transcriptome of a species using only small amount of RNA. It has been demonstrated that a coordinated effort between RNA-Seq and real time PCR (RT-PCR) is one of the most effective ways to identify new exons \citep{howald2012combining}. However, one major challenge of this technique is data processing: RNA-Seq experiment produces a huge amount of sequencing data and processing them requires fast alignment algorithms as well as a lot of computing resource \citep{langmead2009ultrafast,li2010fast}.
 	
@@ -28,30 +35,43 @@
 	\subsubsection{Statistical issues}
 	The statistical analysis beginning from the read count matrix consists of three major parts: 1) normalization---adjusting for sources of bias between samples; 2) differential expression (DE) analysis---whether a gene is expressed at different levels between two or more sample groups; and 3) gene set test---a type of downstream analysis in which a $p$-value is assigned to a set of genes as a unit.
 	
-	\textbf{normalization}\\
+	\paragraph*{Normalization}
+		Despite the optimistic claim that RNA-Seq does not need sophisticated normalization \citep{wang2009rna}, many works have shown that normalization of count data is highly desirable before accessing differential expression to account for various sources of bias between samples \citep{robinson2010scaling, anders2010differential, risso2011gc, risso2014nat,hansen2012removing, dillies2013comprehensive}. Normalization is needed for adjusting differences in sequencing depths or library sizes (total number of mapped reads for each biological sample) due to chance variation in sample preparation. In DE analysis, gene expression levels are often estimated from relative read frequencies. Therefore, normalization is also needed to account for the apparent reduction or increase in relative read frequencies of non-differentially expressed genes simply to accommodate the increased or decreased relative frequencies of truly DE genes. Currently there are many normalization methods, such as the Trimmed mean of M-values (TMM, \citealt{robinson2010scaling}), the DESeq normalization \citep{anders2010differential}, and remove unwanted variation (RUV, \citealt{risso2014nat}). 
 	
-	
-	\textbf{DE analysis}\\
-		The key task of many biological studies is to detect DE genes. For example, to understand the effect of a drug, one might ask which genes are \textit{up-regulated} (increased expression level) or \textit{down-regulated} (decreased expression) between treatment and control groups? Prior to DE analysis, \textit{normalization} is needed to adjust for sources of bias (explained later). Depending on the question of interest, downstream analysis such as enrichment test of gene set or gene network analysis may also be performed. 
+	\paragraph*{DE analysis}
+		Identification of DE genes is the key task in many biological studies. DE analysis uncovers the association between genes and responses/covariates of interest. The covariates could either be categorical (e.g., treatment/control status, cell types), or continuous (e.g., reagent concentration, time). For example, to understand the effect of a drug, one might ask which genes are \textit{up-regulated} (increased expression level) or \textit{down-regulated} (decreased expression) between treatment and control groups? Finding these genes will help researchers to understand the cause of a disease. In recent years, many statistical tools have been developed for DE detection ( methods review can be found in \cite{rapaport2013comprehensive, soneson2013comparison, seyednasrollah2015comparison}). 
+		In principle, most of those approaches are based on Poisson \citep{marioni2008rna, wang2010degseq} or Negative Binomial (NB) distribution \citep{robinson2007moderated, anders2010differential,di2011nbp,oberg2012technical, wu2013new} because RNA-Seq expression data are present in the form of counts. %In practice, Poisson models are used when there are only technical replicates while NB models are more suitable when there are biological replicates.
+		 The NB distribution based models are more popular for their flexibility to deal with  over-dispersion (a.k.a. extra-Poisson variation) that are often observed in RNA-Seq expression data. 
 		
+		%Prior to DE analysis, \textit{normalization} is needed to adjust for sources of bias (explained later). Depending on the question of interest, downstream analysis such as enrichment test of gene set or gene network analysis may also be performed. 
+	\paragraph*{Gene set test}
+		 DE analysis evaluates each individual gene separately, but it fails to provide insights into biological mechanisms since genes may be correlated and function together. Gene set test assesses the association between a set of DE genes, which are significantly correlated with treatment or experimental design variables, and a prior set of genes, which are biologically related.  Gene set test helps researchers better understand the underlying biological processes. Depending on the definition of the null hypothesis, there are two types of gene set test: the \textit{self-contained} test and the \textit{competitive} test \citep{goeman2007analyzing}. A self-contained test examines a set of genes by a fixed standard without reference to other genes in the genome (see, for example, \cite{goeman2004global,goeman2005testing, tsai2009multivariate, wu2010roast, huang2013gene}). A competitive test compares DE
+		 genes in the test set to those not in the test set \citep{tian2005discovering, wu2012camera, yaari2013quantitative}. The competitive gene set test is much more popular among genomic literatures \citep{goeman2007analyzing, gatti2010heading}.  
+		 
 	
-	\textbf{What do people do in gene expression analysis?}
-	 One common theme in various experiments is to detect differential expression (DE):  whether a gene is expressed at different levels between two or more sample groups? 
+	
 
+	\subsubsection{Questions for this thesis}
+	 In this thesis, we focus on three aspects of gene expression analysis: identifying stably expressed genes (Chapter \ref{chap1}); estimating correlations between test statistics via sample correlations (Chapter \ref{chap2}); and adjusting for correlations in competitive gene set test (Chapter \ref{chap3}).
 	
-	\textbf{What is the tool for gene expression analysis? RNA-Seq technology}\\
-	RNA-Sequencing (RNA-Seq), also known as \textit{whole transcriptome shotgun sequencing} \citep{morin2008profiling}, is a next-generation sequencing (NGS) technology used to uncover the presence and quality of RNA in a biological sample. Over the past few years, RNA-seq has become the technology of choice for transcriptome profiling  at the nucleotide level.  
-		
+	\paragraph{Identifying stably expressed genes}
+	\textbf{Motivation} \\
+	Many of the current normalization methods, for example, TMM \citep{robinson2010scaling} and DESeq \citep{anders2010differential} normalizations, assume that the majority of genes are not DE within the experiment under investigation. However, this assumption can be violated for some experiments, where over $50\%$ of the genes' expression levels are affected by the treatments \citep{loven2012revisiting, wu2013use}. The consequence with such assumption can be alleviated if one could identify a set of stably expressed genes whose expression levels are stable across different experimental conditions. This motivates us to identify such a set of genes by exploring a large number of existing RNA-Seq data sets.
 	
-	\paragraph{Stably expressed genes}
+	In microarray studies, there have been many attempts to find reference genes for normalization. Traditionally, the \textit{housekeeping genes}  are used as reference for count normalization. However, a number of works have shown that housekeeping genes are not necessarily stably expressed according to numerical stability measure (see, for example, \cite{huggett2005real, czechowski2005genome}). Another choice, the \textit{spike-in genes}, is not reliable for normalization due to the same issue \citep{risso2014nat}. A popular approach has been to search from large sets of experiments for reference genes.   
 	
-	\paragraph{correlation among gene expression profiles}
+	\textit{spike-in genes}  
+	stably expressed genes by screening existing data sets. 
 	
-	\paragraph{Enrichment analysis}
+	Identifying stably expressed genes not only helps count normalization, 
+	\paragraph{Estimating correlations of test statistics}
+	
+	\paragraph{Adjusting for correlations in competitive gene set test}
 	
 	
 \subsection{Statistical Methods}\label{subsec:glmm}
-	In this section, we will first describe the formulation of generalized linear mixed models (GLMMs), and then discuss common methods for parameter estimation. 
+	In this section, we will first describe the formulation of generalized linear mixed models (GLMMs), and then discuss common methods for parameter estimation.
+	
 	\subsubsection{Generalized linear mixed models}\label{subsubsec:intro-stat-framework}
 	GLMMs are a natural generalization of classical linear models. To illustrate this point, we will begin with classical linear models, and discuss how to generalize them to linear mixed models and then to GLMMs by relaxing different layers of assumptions. 
 		\paragraph{Classical linear models}\label{para:clm}

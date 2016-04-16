@@ -38,16 +38,39 @@
 \usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{amsmath,bm}
-\usepackage{natbib}
+\usepackage[numbers]{natbib}
 \usepackage[utf8]{inputenc}  
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{titlesec}  %extra level of \subsubsection
+
+
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+\captionsetup[table]{labelfont=bf}
 
 
 % New command (modified  by Bin Zhuo)
 \newcommand{\cov}{\text{Cov}}
 \newcommand{\var}{\text{Var}}
 \newcommand{\pois}{\text{Poisson}}
+\newcommand{\OurMethod}{MEQLEA}
+\newcommand{\HowmanyTest}{six}
+\newcommand{\aaCase}{a}
+\newcommand{\aCase}{c}
+\newcommand{\cCase}{b}
+\newcommand{\eCase}{d}
+\newcommand{\fCase}{e}
+\newcommand{\CMR}{CAMERA-rank}
+\newcommand{\CMT}{CAMERA-modt}
+\newcommand{\gent}{SigPathway}
+\newcommand{\gen}{geneSetTest}
+\newcommand{\genr}{MRSGE}
+\newcommand{\thepapertobefinished}{Zhuo and Di, unpublished work}
+\newcommand{\HowmanySimu}{$10,000$}
+\newcommand{\FDR}{Benjamini-Hochberg}
+\newcommand{\FDRabb}{BH}
+
+
 
 
 %  the following command is about tables of contents and structure of the thesis
@@ -147,7 +170,7 @@
     \def\CommencementMonth{June 2016}
     
      %%Thesis Information
-    \def\ThesisTitle{Title of Your Thesis}
+    \def\ThesisTitle{Global (Collective) analysis of RNA-Seq experiment: multiple data sets \&  multiple genes}
     \def\DatePresented{Month dd, yyyy}
     \def\keywords{keyword1, keyword2, keyword3} %Up to five keywords
 
@@ -211,7 +234,10 @@
 
 
 \newpage
-\bibliographystyle{apalike}
+
+%\bibliographystyle{apalike}
+%\bibliographystyle{plainnat}
+\bibliographystyle{abbrv}
 \bibliography{thesis}
 
 

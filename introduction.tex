@@ -4,15 +4,17 @@
 
 \subsubsection{Background}
 %	\textbf{What is gene expression}\\
-Gene expression is the process by which genes are used to synthesize functional gene products.
-A gene is considered to be expressed in a cell or group of cells when a gene product is detected.
+
+Gene is a piece of DNA that encodes a functional RNA or protein product, and is the basic physical and functional unit of heredity. The process by which genes are used to synthesize functional gene products is called \textit{gene expression}.  A gene is considered to be expressed in a cell or group of cells when a gene product is detected.
 These products can be transcribed messenger RNA (mRNA) and proteins for protein coding genes, or
 functional RNA species such as transfer RNA (tRNA) or small nuclear RNA (snRNA) for non-protein
 coding genes.
-In molecular biology, the central dogma has been described as ``DNA makes RNA and RNA makes
-protein" \citep{leavitt2004deciphering}. The information encoded in a gene is first transcribed into
-RNA molecules, which is then used to make functional gene products. Therefore, the RNAs transcribed
+Since the information encoded in a gene is first transcribed into RNA molecules, which is then used to make functional gene products, the RNAs transcribed
 in a certain condition reflects the current state of the cell.
+
+% In molecular biology, the central dogma has been described as ``DNA makes RNA and RNA makes
+%protein" \citep{leavitt2004deciphering}. 
+
 
 % In RNA-Seq experiment, the expression
 %level of a gene is reflected by the relative abundance of the corresponding transcriptome, which is
@@ -45,10 +47,9 @@ for transcriptome profiling over the past few years.
 The standard procedure of an RNA-Seq experiment runs as follows 
 \citep{finotello2015measuring}: first, the RNAs in the biological sample are fragmented and
 reverse-transcribed into cDNAs; second, the cDNA fragments are amplified and sequenced in a
-high-throughput sequencing platform (e.g., Illumina 3000, \url{http://www. illumina.com}) to
+high-throughput sequencing platform (e.g., Illumine 3000, \url{http://www. illumina.com}) to
 generate tens of millions of reads (DESCRIBE IT); third, those reads are mapped to a reference genome
-or
-a reference transcriptome.
+or a reference transcriptome.
 It is the number of reads aligned to each gene (referred to as ``read count") on the reference
 genome/transcriptome that quantifies the genes' expression profiles.  
 
@@ -219,7 +220,7 @@ test procedure \citep{wu2012camera,yaari2013quantitative}. CAMERA \citep{wu2012c
 	inflation factor} (VIF) from sample correlation (after the treatment effect removed), and then
 includes it in its gene set test statistic. The same VIF has also been used by QuSAGE
 \cite{yaari2013quantitative} 
-to adjust for inter-gene correlation. However, the accurate estimation of VIF relies on
+to adjust for inter-gene correlation. However, accurate estimation of VIF relies on
 the assumption that correlation between any two gene-level statistics are almost the same as
 correlation between their corresponding expression profiles. In Chapter \ref{chap2}, we will
 demonstrate that this assumption is easily violated when differentially expressed genes are present,

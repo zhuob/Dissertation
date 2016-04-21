@@ -35,14 +35,14 @@
 
 
 %  Packages used for main body
+\usepackage[square,numbers]{natbib}
 \usepackage{hyperref}
 \usepackage{graphicx}
-\usepackage{amsmath,bm}
-\usepackage[numbers]{natbib}
 \usepackage[utf8]{inputenc}  
-\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{amsmath,bm}
+%\usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{titlesec}  %extra level of \subsubsection
-
+%\usepackage{notoccite}
 
 \usepackage{caption}
 \captionsetup[figure]{labelfont=bf}
@@ -235,9 +235,12 @@
 
 \newpage
 
-%\bibliographystyle{apalike}
+\bibliographystyle{apalike}
+%\bibliographystyle{ama}
+%\bibliographystyle{abbrvnat}
+%\bibliographystyle{unsrtnat}
 %\bibliographystyle{plainnat}
-\bibliographystyle{abbrv}
+%\bibliographystyle{abbrv}
 \bibliography{thesis}
 
 

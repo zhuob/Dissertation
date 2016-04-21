@@ -5,11 +5,15 @@
 \subsubsection{Background}
 %	\textbf{What is gene expression}\\
 
-Gene is a piece of DNA that encodes a functional RNA or protein product, and is the basic physical and functional unit of heredity. The process by which genes are used to synthesize functional gene products is called \textit{gene expression}.  A gene is considered to be expressed in a cell or group of cells when a gene product is detected.
+Gene is a piece of DNA that encodes a functional RNA or protein product, and is the basic physical
+and functional unit of heredity. The process by which genes are used to synthesize functional gene
+products is called \textit{gene expression}.  A gene is considered to be expressed in a cell or
+group of cells when a gene product is detected.
 These products can be transcribed messenger RNA (mRNA) and proteins for protein coding genes, or
 functional RNA species such as transfer RNA (tRNA) or small nuclear RNA (snRNA) for non-protein
 coding genes.
-Since the information encoded in a gene is first transcribed into RNA molecules, which is then used to make functional gene products, the RNAs transcribed
+Since the information encoded in a gene is first transcribed into RNA molecules, which is then used
+to make functional gene products, the RNAs transcribed
 in a certain condition reflects the current state of the cell.
 
 % In molecular biology, the central dogma has been described as ``DNA makes RNA and RNA makes
@@ -48,7 +52,8 @@ The standard procedure of an RNA-Seq experiment runs as follows
 \citep{finotello2015measuring}: first, the RNAs in the biological sample are fragmented and
 reverse-transcribed into cDNAs; second, the cDNA fragments are amplified and sequenced in a
 high-throughput sequencing platform (e.g., Illumine 3000, \url{http://www. illumina.com}) to
-generate tens of millions of reads (DESCRIBE IT); third, those reads are mapped to a reference genome
+generate tens of millions of reads (DESCRIBE IT); third, those reads are mapped to a reference
+genome
 or a reference transcriptome.
 It is the number of reads aligned to each gene (referred to as ``read count") on the reference
 genome/transcriptome that quantifies the genes' expression profiles.  
@@ -70,15 +75,39 @@ as a lot of computing resource
 
 
 \textbf{A workflow of pre-processing RNA-Seq data}\\
-Preprocessing RNA-Seq data consists of two main steps: 1) mapping reads to the reference genome/transcriptome, and 2) summarizing read counts at given genomic feature (e.g., exon, gene or transcript) level. Read mapping is the first computational, and usually, the most time-consuming step in RNA-Seq data analysis. Currently, there are many alignment tools available, for example, Bowtie \citep{langmead2012fast,langmead2009ultrafast}, BWA \citep{li2013aligning,li2009fast}, Subread \citep{shi2013subread} and STAR \citep{dobin2013star}. In all situations, an index of either the reference genome or the reads are built at the beginning using hash tables or Burrows-Wheeler transform (BWT) \citep{burrows1994block}. The index allows fast retrieval of the set of positions in the reference sequence where the reads are more likely to align. Once those positions are decided, alignment is performed in the candidate regions. The precision and speed of the alignment is mainly determined by the algorithm used in the alignment tool (see \citep{hatem2013benchmarking} or \cite{li2010survey} for a review). Once the reads have been aligned, the numbers of reads mapped to each unit of a specified genomic feature are counted, giving the estimate of the corresponding expression profiles. This can be done using HTSeq \cite{anders2010htseq} or featureCounts \citep{liao2013featurecounts}, among other options. After the two steps, a read count matrix is obtained in which each row represents a feature unit and each column corresponds to a biological sample. 
+Preprocessing RNA-Seq data consists of two main steps: 1) mapping reads to the reference
+genome/transcriptome, and 2) summarizing read counts at given genomic feature (e.g., exon, gene or
+transcript) level. Read mapping is the first computational, and usually, the most time-consuming
+step in RNA-Seq data analysis. Currently, there are many alignment tools available, for example,
+Bowtie \citep{langmead2012fast,langmead2009ultrafast}, BWA \citep{li2013aligning,li2009fast},
+Subread \citep{shi2013subread} and STAR \citep{dobin2013star}. In all situations, an index of either
+the reference genome or the reads are built at the beginning using hash tables or Burrows-Wheeler
+transform (BWT) \citep{burrows1994block}. The index allows fast retrieval of the set of positions in
+the reference sequence where the reads are more likely to align. Once those positions are decided,
+alignment is performed in the candidate regions. The precision and speed of the alignment is mainly
+determined by the algorithm used in the alignment tool (see \citep{hatem2013benchmarking} or
+\cite{li2010survey} for a review). After the reads have been aligned, the numbers of reads mapped to
+each unit of a specified genomic feature are counted, giving the estimate of the corresponding
+expression profiles. This can be done using HTSeq \cite{anders2010htseq} or featureCounts
+\citep{liao2013featurecounts}, among other options. Finally, a read count matrix is
+obtained with each row representing a genomic feature unit and each column corresponding to a biological
+sample. 
 
-We assembled an in-house pipeline to process RNA-Seq data sets based on the R \citep{Rpackage} platform.
- This pipeline, modified from a standard procedure \citep{anders2013count},   is designed to work for sequencing data available at the \textit{National Center for Biotechnology Information} (NCBI, \url{http://www.ncbi.nlm.nih.gov/}). It uses SRA (Sequence Read Archive) Toolkit \citep{leinonen2010sequence} to convert SRA files to FASTQ files,  and then Subread aligner \citep{liao2013subread} to map reads and featureCounts \citep{liao2013featurecounts} to summarize counts (see Figure \ref{fig:flowchart} for the work flow). We will use it to process multiple RNA-Seq data sets in Chapter \ref{chap1}.
+We assembled an in-house pipeline to process RNA-Seq data sets based on the R \citep{Rpackage}
+platform.
+This pipeline, modified from a standard procedure given by \citet{anders2013count},   is designed to work
+for sequencing data available at the \textit{National Center for Biotechnology Information} (NCBI,
+\url{http://www.ncbi.nlm.nih.gov/}). It uses SRA (Sequence Read Archive) Toolkit
+\citep{leinonen2010sequence} to convert SRA files to FASTQ files,  and then Subread aligner
+\citep{liao2013subread} to map reads and featureCounts \citep{liao2013featurecounts} to summarize
+counts (see Figure \ref{fig:flowchart} for the work flow). We will use it to process multiple
+RNA-Seq data sets in Chapter \ref{chap1}.
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Figures/flowchart.pdf}
 	\caption{Work flow of data preprocessing: from raw reads sequencing data to read counts. Raw data
-		in this workflow are retrieved from the NCBI. Data processing is based on two softwares SRA Toolkit
+		in this workflow are retrieved from the NCBI. Data processing is based on two softwares SRA
+		Toolkit
 		\citep{leinonen2010sequence} 
 		and Rsubread aligner \citep{liao2013subread}).}
 	\label{fig:flowchart}
@@ -104,19 +133,19 @@ variation in sample preparation. In DE analysis, gene expression levels are ofte
 relative read frequencies. Therefore, normalization is also needed to account for the apparent
 reduction or increase in relative read frequencies of non-differentially expressed genes simply to
 accommodate the increased or decreased relative frequencies of truly DE genes. Currently there are
-many normalization methods, such as the Trimmed mean of M-values (TMM \citep{robinson2010scaling}),
-the DESeq normalization \citep{anders2010differential}, and remove unwanted variation (RUV,
-\citep{risso2014nat}). 
+many normalization methods, such as the trimmed mean of M-values (TMM) \citep{robinson2010scaling},
+the DESeq normalization \citep{anders2010differential}, and remove unwanted variation (RUV)
+\citep{risso2014nat}. 
 
 \paragraph*{DE analysis}
 Identification of DE genes is the key task in many biological studies. DE analysis uncovers the
 association between genes and responses/covariates of interest. The covariates could either be
 categorical (e.g., treatment/control status, cell types), or continuous (e.g., reagent
 concentration, time). For example, to understand the effect of a drug, one might ask which genes are
-\textit{up-regulated} (increased expression level) or \textit{down-regulated} (decreased expression)
+\textit{up-regulated} (increased expression profile) or \textit{down-regulated} (decreased expression profile)
 between treatment and control groups? Finding these genes will help researchers to understand the
-cause of a disease and develop effective medicine. In recent years, many statistical tools have been developed for DE detection (
-methods review can be found in \cite{rapaport2013comprehensive,seyednasrollah2015comparison,
+cause of a disease and to develop effective medicine. In recent years, many statistical tools have been
+developed for DE detection (methods review can be found in \cite{rapaport2013comprehensive,seyednasrollah2015comparison,
 	soneson2013comparison}). 
 In principle, most of those approaches are based on Poisson \citep{marioni2008rna, wang2010degseq}
 or Negative Binomial (NB) distribution
@@ -125,7 +154,7 @@ RNA-Seq expression data are present in the form of counts. %In practice, Poisson
 %when there are only technical replicates while NB models are more suitable when there are
 %biological replicates.
 The NB distribution based models are more popular for their flexibility to deal with 
-over-dispersion (a.k.a. extra-Poisson variation) that are often observed in RNA-Seq expression data.
+\textit{over-dispersion} (a.k.a. extra-Poisson variation) that are often observed in RNA-Seq expression data.
 
 
 %Prior to DE analysis, \textit{normalization} is needed to adjust for sources of bias (explained
@@ -133,11 +162,13 @@ over-dispersion (a.k.a. extra-Poisson variation) that are often observed in RNA-
 %set or gene network analysis may also be performed. 
 \paragraph*{Gene set test}
 DE analysis evaluates each individual gene separately, but it fails to provide insights into
-biological mechanisms since genes may be correlated and function together.  Gene set test enables
-researchers examine genes at set level and thus improves interpretability of DE results. Gene set
-test assesses the association between a set of DE genes, which are significantly correlated with
+biological mechanisms since genes may be correlated and function together.  A typical strategy is to
+perform gene set test---the assessment of
+the association between a set of DE genes, which are significantly correlated with
 treatment or experimental design variables, and a prior set of genes, which are biologically
-related. Depending on the definition of the null hypothesis, there are two types of gene set test:
+related. Gene set test enables
+researchers to examine an ensemble of genes simultaneously and thus improves interpretability of DE
+results. Depending on the definition of the null hypothesis, there are two types of gene set test:
 the \textit{self-contained} test and the \textit{competitive} test \citep{goeman2007analyzing}. A
 self-contained test examines a set of genes by a fixed standard without reference to other genes in
 the genome (see, for example, \cite{goeman2004global,goeman2005testing, huang2013gene,
@@ -167,8 +198,8 @@ different experimental conditions. This motivates us to identify such a set of g
 large number of existing RNA-Seq data sets.
 
 In microarray studies, there have been many attempts to find reference genes for normalization.
-Traditionally, the \textit{housekeeping genes}  are used as reference for count normalization.
-However, a number of works have shown that housekeeping genes are not necessarily stably expressed
+Traditionally, the \textit{house-keeping genes}  are used as reference for count normalization.
+However, a number of works have shown that house-keeping genes are not necessarily stably expressed
 according to numerical stability measure (see, for example,
 \cite{czechowski2005genome,huggett2005real}). Another choice, the \textit{spike-in genes}, is not
 reliable for normalization due to the same issue \citep{risso2014nat}. A popular approach has been
@@ -184,8 +215,8 @@ Identifying stably expressed genes not only helps count normalization, but also 
 interpretability and comparability of RNA-Seq experiments in integrative analysis. Since genes are
 measured by relative frequencies, we argue that DE is a relative concept: when a normalization
 procedure is applied to a single data set, it effectively uses an implicit reference set fo genes.
-Furthermore, often times biologists compare results from one experiment to ones that are publicly
-available. Making the reference set explicit will be beneficial during DE analysis. 
+Furthermore, making the reference set explicit will be beneficial during DE analysis, because often times biologists compare results from one experiment to ones that are publicly
+available. 
 
 \paragraph{Estimating correlations of test statistics}
 
@@ -197,21 +228,22 @@ statistical methodologies have been developed for this purpose (literature revie
 competitive gene set tests fall into two categories based on whether they assume independence of
 expression profiles among genes. In earlier literatures, the inter-gene correlations were not taken
 care of in the enrichment analysis procedure, for example, \gent~\citep{tian2005discovering}, PAGE
-\citep{kim2005page} \genr~\citep{michaud2008integrative} or the $2\times 2$ contingency-table-based
+\citep{kim2005page}, \genr~\citep{michaud2008integrative} or the $2\times 2$ contingency-table-based
 tests \cite{alexa2010topgo, huang2007david,ye2006wego}. However, it has been argued that such test
 procedures will result in inflated type I error \citep{efron2007testing,goeman2007analyzing,
 	gatti2010heading,wu2012camera,yaari2013quantitative}, as genes within a gene set are often
 co-expressed and function together.
 
-Several approaches have been proposed to address inter-gene correlation problems in gene set test.
-One attempt is to evaluate the significance of the test set by permuting sample labels
+Several approaches have been proposed to address inter-gene correlation problems in competitive gene
+set test. One attempt is to evaluate the significance of the test set by permuting sample labels
 \citep{efron2007testing,gatti2010heading,subramanian2005gene}. Sample permutation does not require
 an explicit understanding of the underlying correlation structure among genes, and is therefore
 supposed to protect the test against such correlations. One very famous example of this kind is the
 \textit{gene set enrichment analysis} (GSEA) procedure \citep{subramanian2005gene}. Yet, sample
 permutation method has been criticized for several reasons: first, it cannot be applied to
 experiments having small
-number of biological replicates; second, it is computationally intensive; third, and most
+number of biological replicates (e.g., three samples each for a two-group comparison experiment);
+second, it is computationally intensive; third, and most
 importantly, it implicitly alters the null hypothesis being tested and makes the null and
 alternative difficult to be characterized \citep{goeman2007analyzing, khatri2012ten, wu2012camera}.
 Another attempt has been to incorporate the inter-gene correlations into the formulation of gene set
@@ -220,15 +252,17 @@ test procedure \citep{wu2012camera,yaari2013quantitative}. CAMERA \citep{wu2012c
 	inflation factor} (VIF) from sample correlation (after the treatment effect removed), and then
 includes it in its gene set test statistic. The same VIF has also been used by QuSAGE
 \cite{yaari2013quantitative} 
-to adjust for inter-gene correlation. However, accurate estimation of VIF relies on
+to adjust for inter-gene correlations. However, accurate estimation of VIF relies on
 the assumption that correlation between any two gene-level statistics are almost the same as
 correlation between their corresponding expression profiles. In Chapter \ref{chap2}, we will
 demonstrate that this assumption is easily violated when differentially expressed genes are present,
-and will propose a new gene set test procedure in Chapter \ref{chap3}.  
+and as a remedy, we will propose a new gene set test procedure in Chapter \ref{chap3}.  
 
 \subsection{Statistical Methods}\label{subsec:glmm}
+We have mentioned earlier that RNA-Seq data are essentially present in the form of count matrices. Therefore it might not be appropriate to impose normal distribution on gene expression profiles, especially when the sample size is small. Generalized regression models are a natural choice for 
+analyzing RNA-Seq data.
 In this section, we will first describe the formulation of generalized linear mixed models (GLMMs),
-and then discuss common methods for parameter estimation.
+and then review common methods for parameter estimation.
 
 \subsubsection{Generalized linear mixed models}\label{subsubsec:intro-stat-framework}
 GLMMs are a natural generalization of classical linear models. To illustrate this point, we will
@@ -241,7 +275,7 @@ systematic part of this model is a specification of the mean $\bm\mu$ over a few
 \citep{mccullagh1989generalized}. In the context of classical linear model, the mean is a function
 of $p$ covariates $\bm X_1, \ldots, \bm X_p$
 \begin{equation}\label{eq:clm}
-\bm \mu =\beta_0 + \sum_{i=1}^p\beta_i \bm X_i
+	\bm \mu =\beta_0 + \sum_{i=1}^p\beta_i \bm X_i
 \end{equation}	
 where $\beta$'s are unknown parameters and need to be estimated from data. For
 $j$th\footnote{Unless specified otherwise, we assume there are $n$ observations (i.e. $j=1, \ldots
@@ -249,16 +283,16 @@ $j$th\footnote{Unless specified otherwise, we assume there are $n$ observations 
 Assuming a linear relationship between response $Y_j$ and predictors $(x_{1j}, \ldots, x_{pj})$, we
 present the linear model 
 \begin{equation}\label{eq:clm2}
-Y_j= \beta_0 + \beta_1x_{1j} + \ldots + \beta_p x_{pj} + \epsilon_j
+	Y_j= \beta_0 + \beta_1x_{1j} + \ldots + \beta_p x_{pj} + \epsilon_j
 \end{equation}
 It is often required that $\epsilon_i$'s meet \textit{Gauss-Markov} assumption,
 \begin{equation}\label{eq:gauss-markov}
-E(\epsilon_i)=0,~ \var[\epsilon_i]=
-\sigma^2<\infty, ~\cov[\epsilon_i, \epsilon_j]=0, \forall i \neq j.
+	E(\epsilon_i)=0,~ \var[\epsilon_i]=
+	\sigma^2<\infty, ~\cov[\epsilon_i, \epsilon_j]=0, \forall i \neq j.
 \end{equation}
 In practice, the error term is frequently, if not always, assumed to be normally distributed, 
 \begin{equation}\label{eq:normalassumption}
-\bm \epsilon \sim N(0, \sigma^2 \bm I).
+	\bm \epsilon \sim N(0, \sigma^2 \bm I).
 \end{equation}
 
 \paragraph{Linear mixed models}\label{para:lmm}
@@ -267,7 +301,7 @@ example, nonconstant variance, or correlated data where Cov$[\epsilon_i, \epsilo
 Equation (~\ref{eq:clm2}) in either case, without loss of generality, can be expressed in matrix
 form as
 \begin{equation}\label{eq:clm3}
-\bm Y = \bm {X\beta} + \bm \epsilon, ~ E[\bm \epsilon] = \bm 0, ~\cov[\bm\epsilon] = \bm V
+	\bm Y = \bm {X\beta} + \bm \epsilon, ~ E[\bm \epsilon] = \bm 0, ~\cov[\bm\epsilon] = \bm V
 \end{equation}
 where $\bm V$ is a known positive definite matrix. Let $\bm Y^{\ast} = \bm V^{-1/2}\bm Y = \bm
 V^{-1/2}\bm {X\beta} + \bm V^{-1/2}\bm \epsilon$. It follows that Cov$(\bm Y^{\ast})= \bm I$ and the
@@ -280,11 +314,11 @@ Nonindependence can occur in the form of serial correlation or cluster correlati
 \citep[chapter~17]{rencher2008linear}. Serial correlation usually exists in experiments with
 repeated measurements---multiple measurements taken from a response variable on the same
 experimental unit. Several covariance structures are available for implementation (for more details,
-see \citealt[chapter~5]{littell2006sas}).  Cluster correlation is present when measurements of a
+see \citet[chapter~5]{littell2006sas}).  Cluster correlation is present when measurements of a
 response variable are grouped in some way. In many situations, the covariance of cluster correlated
 data can be specified using an extension of standard linear model by 
 \begin{equation}\label{eq:lmm}
-\bm Y = \bm {X\beta} + \bm {Z_1u_1}+\cdots + \bm {Z_qu_q} + \bm \epsilon	
+	\bm Y = \bm {X\beta} + \bm {Z_1u_1}+\cdots + \bm {Z_qu_q} + \bm \epsilon	
 \end{equation}
 Equation (\ref{eq:lmm}) differs from Equation~(\ref{eq:clm3}) only in the $\bm {Z_iu_i}$ terms,
 which is the key part of \textit{linear mixed models}.  The $\bm Z_i$  are known $n\times p_i$ full
@@ -296,17 +330,17 @@ mutually independent, and that $\bm u_i$ is independent of $\bm \epsilon$ for $i
 we further impose normal distribution on the random terms and errors, then Equation (\ref{eq:lmm})
 can be casted in a Bayesian framework,
 \begin{equation}\label{eq:lmmGuass}
-\begin{split}
-\bm y|\bm u_1, \ldots, \bm u_q   & \sim  N_n(\bm {X\beta} + \sum_{i=1}^q \bm {Z_iu_i}, \sigma^2\bm
-I_n),  \\
-\bm u_i &\sim N_{p_i}(0, \sigma_i^2 \bm I_{p_i}).
-\end{split}
+	\begin{split}
+		\bm y|\bm u_1, \ldots, \bm u_q   & \sim  N_n(\bm {X\beta} + \sum_{i=1}^q \bm {Z_iu_i}, \sigma^2\bm
+		I_n),  \\
+		\bm u_i &\sim N_{p_i}(0, \sigma_i^2 \bm I_{p_i}).
+	\end{split}
 \end{equation}
 The modeling issues are: (a) estimation of variance components $\sigma_i^2$ and $\sigma^2$; (b)
 estimation of random effects $u_i$ if needed. For the variance component estimation, there are
 primarily three approaches: (i) procedures based on expected mean squares from analysis of variance
 (ANOVA); (ii) maximum likelihood (ML); and (iii) restricted/residual maximum likelihood (REML). For
-more details, see \citealt[Chapter 1]{littell2006sas}.
+more details, see \citet[Chapter 1]{littell2006sas}.
 
 
 \paragraph{Generalized linear models}\label{para:glm}
@@ -322,12 +356,12 @@ We can take a different perspective of classical linear models by arranging Equa
 	\item[(ii)] the \textit{systematic component}---the linear predictor $\eta_j$ is modeled by
 	covariates $\bm x_j =: x_{1j},\ldots, x_{pj}$, 
 	\begin{equation}\label{eq:part2}
-	\eta_j = \sum_{i=1}^p\beta_i x_{ij}=\bm {x_j\beta}.
+		\eta_j = \sum_{i=1}^p\beta_i x_{ij}=\bm {x_j\beta}.
 	\end{equation}
 	\item[(iii)] the \textit{link function} relates the random components and the systematic
 	components by 
 	\begin{equation}\label{eq:part3}
-	\eta_j = g(\mu_j).
+		\eta_j = g(\mu_j).
 	\end{equation}
 \end{enumerate}
 The classical linear models fits within this framework if we assume the random component $Y_j$'s
@@ -345,7 +379,7 @@ can be no longer assumed to come from a normal distribution.
 Generalized linear mixed models (GLMMs) is a further extension of GLMs that incorporates random
 components into part (ii), represented in a matrix notation
 \begin{equation}\label{eq:q5}
-\bm \eta = \bm {X\beta} + \sum_{i=1}^q\bm {Z_iu_i}
+	\bm \eta = \bm {X\beta} + \sum_{i=1}^q\bm {Z_iu_i}
 \end{equation}
 where  $\bm Z_i$ and $\bm u_i$ are specified in Equation (\ref{eq:lmm}). 
 
@@ -353,24 +387,24 @@ To formally present GLMMs, we start with the conditional distribution of $\bm y$
 is typical to assume that vector $\bm y$ consists of conditionally independent elements, each coming
 from the exponential family (or similar to the exponential family), 
 \begin{equation}\label{eq:glmm}
-\begin{split}
-y_j|\bm u & \sim \text{~indep.~} f_{Y_j |\bm u} (y_j|\bm u) \\
-f_{Y_j|u}(y_j; \theta, \phi|\bm u) &= \exp \left[ \frac{y_j\theta_j	 -b(\theta_j)}{a_j(\phi)}
-+ c(y_i, \phi)\right]
-\end{split}
+	\begin{split}
+		y_j|\bm u & \sim \text{~indep.~} f_{Y_j |\bm u} (y_j|\bm u) \\
+		f_{Y_j|u}(y_j; \theta, \phi|\bm u) &= \exp \left[ \frac{y_j\theta_j	 -b(\theta_j)}{a_j(\phi)}
+		+ c(y_i, \phi)\right]
+	\end{split}
 \end{equation}	
 It can be verified that the conditional mean of $y_j$ is related to $\theta_j$ in Equation
 (\ref{eq:glmm}) by the identity $\mu_j = \partial b(\theta_j)/\partial \theta_j$. The transformation
 of the mean allows us to model the fixed and the random factors by a linear model
 \begin{equation}\label{eq:glmm2}
-\begin{split}
-E[y_j|\bm u] &= \mu_j\\
-g(\mu_j) = \eta_j &= \bm X_j\bm \beta + \bm Z_j\bm u.
-\end{split}
+	\begin{split}
+		E[y_j|\bm u] &= \mu_j\\
+		g(\mu_j) = \eta_j &= \bm X_j\bm \beta + \bm Z_j\bm u.
+	\end{split}
 \end{equation}
 Finally, we assign a distribution to the random effects
 \begin{equation}
-\bm U \sim \phi_{\bm U}(\bm u),
+	\bm U \sim \phi_{\bm U}(\bm u),
 \end{equation}
 which completes the specification of GLMMs. It is often, if not always, assumed that $\bm u$ come
 from a normal distribution.
@@ -386,7 +420,7 @@ count for $j$th observation unit from $k$th treatment of $l$th experiment. The l
 $\eta_{jkl} = \log (\mu_{jkl})$ relates mean $\mu_{jkl}$ to linear predictors by Equation
 (\ref{eq:glmm2}),  
 \begin{equation}\label{eq:example}
-\log (\mu_{jkl}) = \log (N_{jkl}R_{jkl}) + \xi + a_{j} + b_{k(j)} + \epsilon_{jkl}
+	\log (\mu_{jkl}) = \log (N_{jkl}R_{jkl}) + \xi + a_{j} + b_{k(j)} + \epsilon_{jkl}
 \end{equation}
 where $N_{jkl}R_{jkl}$ are normalized library sizes (total number of read counts mapped to the
 genome),  $j=1, \ldots,  3$, $k=1, 2$ and $l=1, 2$; $a_j \sim N(0, \sigma_1^2), b_{k(j)}\sim N(0,
@@ -490,7 +524,7 @@ some distribution $\bm U \sim \phi_{\bm U}(\bm u|\bm \Sigma)$.
 It is straightforward  to write down the likelihood function of $\bm Y$ by first obtaining the
 joint likelihood of $(\bm Y, \bm u)$ and then integrating out the random term $\bm u$,
 \begin{equation}\label{eq:joint-likelihood}
-L(\bm Y|\bm\beta, \bm \Sigma) = \int f(\bm y|\bm \beta, \bm u)\phi(\bm u|\bm \Sigma)d \bm u
+	L(\bm Y|\bm\beta, \bm \Sigma) = \int f(\bm y|\bm \beta, \bm u)\phi(\bm u|\bm \Sigma)d \bm u
 \end{equation}
 A major challenge in estimating GLMMs is the integration in Equation (\ref{eq:joint-likelihood})
 over the $n$-dimensional distribution of $\bm u$. Numerical approximation are usually used in
@@ -499,14 +533,14 @@ which is recognized as a higher order Laplace approximation \citep{liu1994note}.
 Gauss-Hermite quadrature is used for integrals of the form 
 $\int_{-\infty}^{\infty}f(x) e^{-x^2}dx$, which can be approximated by a weighted sum of  $f(x)$:
 \begin{equation}\label{eq:gh2}
-\int_{-\infty}^{\infty}f(x) e^{-x^2}dx \approx \sum_{i=1}^m w_if(x_i)
+	\int_{-\infty}^{\infty}f(x) e^{-x^2}dx \approx \sum_{i=1}^m w_if(x_i)
 \end{equation}
 In Equation (\ref{eq:gh2}), $x_i$'s are the zeros of $m$th order Hermite polynomial 
 \[H_m(x) = (-1)^m\exp(\dfrac{x^2}{2})\frac{d^m}{dx^m}\exp(-\dfrac{x^2}{2})\]
 and $w_i$ are the corresponding weights. For a Hermite polynomial of degree $m$, $x_i$ and $w_i$
 can be calculated as 	
 \begin{equation}\label{eq:gh3}
-x_i = i\text{th zero of } H_m(x),~~  w_i = \frac{2^{m-1}m!\sqrt{\pi}}{m^2[H_{m-1}(x_i)]^2}. 
+	x_i = i\text{th zero of } H_m(x),~~  w_i = \frac{2^{m-1}m!\sqrt{\pi}}{m^2[H_{m-1}(x_i)]^2}. 
 \end{equation}
 Equation (\ref{eq:gh2}) gives the exact numerical value for all polynomials up to degree of
 $2m-1$. 
@@ -529,9 +563,9 @@ derivatives of $\log(h(\bm u|\bm y, \hat{\bm \beta}^{(n)}, \hat{\bm \Sigma}^{(n)
 matrix for the random effects posterior modes. It follows from Equation (\ref{eq:joint-likelihood})
 that for the $i$th cluster 
 \begin{equation}\label{eeq:clm.3.1}
-L( \bm Y_i|\bm \beta, \bm \Sigma) = \int f(\bm y_i|\bm \beta, \bm u )\phi(\bm u|\bm\Sigma)d\bm u =
-\int \frac{f(\bm y_i|\bm \beta, \bm u )\phi(\bm u|\bm\Sigma)}{\phi(\bm u|\hat{\bm
-		u}^{(n)},\hat{\bm \Omega}^{(n)} )}\phi(\bm u|\hat{\bm u}^{(n)},\hat{\bm \Omega}^{(n)} )d\bm u
+	L( \bm Y_i|\bm \beta, \bm \Sigma) = \int f(\bm y_i|\bm \beta, \bm u )\phi(\bm u|\bm\Sigma)d\bm u =
+	\int \frac{f(\bm y_i|\bm \beta, \bm u )\phi(\bm u|\bm\Sigma)}{\phi(\bm u|\hat{\bm
+			u}^{(n)},\hat{\bm \Omega}^{(n)} )}\phi(\bm u|\hat{\bm u}^{(n)},\hat{\bm \Omega}^{(n)} )d\bm u
 \end{equation}
 [copied from SAS help] Let $m$ be the number of quadrature points (i.e., the order of the Hermite
 polynomial) in each dimension for each random effect term. Let also $Q$ be the number of random
@@ -539,19 +573,19 @@ effects. If $\bm x = (x_1, \ldots, x_m)$ are the nodes for standard Gauss-Hermit
 $\bm x^{\ast}_j=(x_{j_1}, \ldots, x_{j_Q}) $ is a point on the $Q$ dimensional quadrature grid, then
 the centered and scaled nodes are 
 \begin{equation}\label{1.3.2}
-\bm  a_j^{\ast} = \hat{\bm u}^{(n)} + \sqrt{2} [\hat{\bm \Omega}^{(n)} ]^{1/2}\bm x^{\ast}_j
+	\bm  a_j^{\ast} = \hat{\bm u}^{(n)} + \sqrt{2} [\hat{\bm \Omega}^{(n)} ]^{1/2}\bm x^{\ast}_j
 \end{equation}
 The centered and scaled nodes, along with the Gauss-Hermite quadrature weights $\bm w = (w_1,
 \ldots, w_m)$ are used to construct the $Q$ dimensional integral of Equation (\ref{eeq:clm.3.1}),
 approximated by 
 \begin{equation}\label{eq:gh-approx}
-\begin{aligned}
-L(\bm y_i|\bm\beta, \bm \Sigma) &\approx\sum_{j_1=1}^m\cdots \sum_{j_Q=1}^m\frac{f(\bm y_i|\bm
-	\beta, \bm  a_j^{\ast})\phi(\bm  a_j^{\ast}|\bm\Sigma)}{\phi(\bm  a_j^{\ast}|\hat{\bm
-		u}^{(n)},\hat{\bm \Omega}^{(n)} )}w_{j_1}\cdots w_{j_Q}\\
-& = (2)^{Q/2}|\hat{\bm \Omega}^{(n)}|^{1/2}\sum_{j_1=1}^m\cdots \sum_{j_Q=1}^m\left[ f(\bm y_i|\bm
-\beta, \bm  a_j^{\ast} )\phi(\bm  a_j^{\ast}|\bm\Sigma) \prod_{k=1}^Qw_{jk}\exp(x_{jk}^2)\right]
-\end{aligned}
+	\begin{aligned}
+		L(\bm y_i|\bm\beta, \bm \Sigma) &\approx\sum_{j_1=1}^m\cdots \sum_{j_Q=1}^m\frac{f(\bm y_i|\bm
+			\beta, \bm  a_j^{\ast})\phi(\bm  a_j^{\ast}|\bm\Sigma)}{\phi(\bm  a_j^{\ast}|\hat{\bm
+				u}^{(n)},\hat{\bm \Omega}^{(n)} )}w_{j_1}\cdots w_{j_Q}\\
+		& = (2)^{Q/2}|\hat{\bm \Omega}^{(n)}|^{1/2}\sum_{j_1=1}^m\cdots \sum_{j_Q=1}^m\left[ f(\bm y_i|\bm
+		\beta, \bm  a_j^{\ast} )\phi(\bm  a_j^{\ast}|\bm\Sigma) \prod_{k=1}^Qw_{jk}\exp(x_{jk}^2)\right]
+	\end{aligned}
 \end{equation}
 Thus the multidimensional unbounded integral is approximated by a finite summations. Now that the
 likelihood has the form of Equation (\ref{eq:gh-approx}), a number of methods (e.g. Newton-Raphson
@@ -577,22 +611,22 @@ Therefore it is difficult to implement AGH procedure with more than three random
 Under GLMM framework, we have some conditional distribution of $\bm Y$ given $\bm u$. Without loss
 of generality, we assume
 \begin{equation}\label{eq:linearization1}
-\begin{aligned}
-E[\bm Y|\bm u] = \bm \mu &= g^{-1}(\bm \eta) = g^{-1}(\bm{X\beta} + \bm {Zu}), \\
-\text{Var}[\bm Y|\bm u]  & = \bm S
-\end{aligned}
+	\begin{aligned}
+		E[\bm Y|\bm u] = \bm \mu &= g^{-1}(\bm \eta) = g^{-1}(\bm{X\beta} + \bm {Zu}), \\
+		\text{Var}[\bm Y|\bm u]  & = \bm S
+	\end{aligned}
 \end{equation}
 where $\bm u \sim N(\bm 0, \bm \Sigma)$.  The linearization is done by Taylor expansion of
-(\ref{eq:linearization1}) about estimates $\bm \eta$. Two approaches \citep{breslow1993approximate},
-\textit{penalized quasi-likelihood } (PQL) and \textit{marginal quasi-likelihood} (MQL), may be used
+(\ref{eq:linearization1}) about estimates $\bm \eta$. Two approaches proposed by \citet{breslow1993approximate}---the
+\textit{penalized quasi-likelihood } (PQL) and the \textit{marginal quasi-likelihood} (MQL)---may be used
 for this purpose. 
 
 \subparagraph*{Penalized Quasi-likelihood}
 The PQL procedure uses a first order Taylor expansion of $\bm \beta$ and $\bm u$, at $\tilde{\bm
 	\beta} $ and $ \tilde{\bm u} $, respectively
 \begin{equation}\label{eq:linearization2}
-g^{-1}(\bm\eta) \approx g^{-1}(\hat{\bm \eta}) + \tilde{\bm \Omega}_{PQL}(\bm \eta-\tilde{\bm
-	\eta})
+	g^{-1}(\bm\eta) \approx g^{-1}(\hat{\bm \eta}) + \tilde{\bm \Omega}_{PQL}(\bm \eta-\tilde{\bm
+		\eta})
 \end{equation} 
 where $\tilde{\bm \Omega}_{PQL}$ is an $n\times n$ diagonal matrix whose $(i, i)$ entry is 
 $\partial {g^{-1}(\bm \eta_i)}/\partial \bm \eta_i $ evaluated at $\tilde{\bm \eta}= \bm X\tilde{\bm
@@ -600,29 +634,29 @@ $\partial {g^{-1}(\bm \eta_i)}/\partial \bm \eta_i $ evaluated at $\tilde{\bm \e
 Equation
 (\ref{eq:linearization2}) can be rearranged as 
 \begin{equation}\label{eq:linearization3}
-\bm {X\beta} + \bm {Zu} \approx \tilde{\bm \Omega}_{PQL}^{-1}[g^{-1}(\bm\eta)- g^{-1}(\tilde{\bm
-	\eta})]  + \bm{X}\tilde{\bm \beta} + \bm Z\tilde{\bm u}
+	\bm {X\beta} + \bm {Zu} \approx \tilde{\bm \Omega}_{PQL}^{-1}[g^{-1}(\bm\eta)- g^{-1}(\tilde{\bm
+		\eta})]  + \bm{X}\tilde{\bm \beta} + \bm Z\tilde{\bm u}
 \end{equation}
 Note that the right hand side of Equation (\ref{eq:linearization3}) is just the expected value,
 given $\tilde{\bm \beta}, \tilde{\bm u}$, of	 pseudo-response 
 \begin{equation}\label{se4}
-\tilde{\bm Y }=\tilde{\bm \Omega}_{PQL}^{-1}[\bm Y- g^{-1}(\tilde{\bm \eta})]  + \bm{X}\tilde{\bm
-	\beta} + \bm Z\tilde{\bm u}
+	\tilde{\bm Y }=\tilde{\bm \Omega}_{PQL}^{-1}[\bm Y- g^{-1}(\tilde{\bm \eta})]  + \bm{X}\tilde{\bm
+		\beta} + \bm Z\tilde{\bm u}
 \end{equation}
 whose variance-covariance matrix given $\bm u$ is 
 \begin{equation}\label{se5}
-\text{Var}[\tilde{\bm Y }|\bm u] =\tilde{\bm \Omega}_{PQL}^{-1} \text{Var}[\bm Y|\bm u]\tilde{\bm
-	\Omega}_{PQL}^{-1} = 
-\tilde{\bm \Omega}_{PQL}^{-1} \bm S \tilde{\bm \Omega}_{PQL}^{-1}
+	\text{Var}[\tilde{\bm Y }|\bm u] =\tilde{\bm \Omega}_{PQL}^{-1} \text{Var}[\bm Y|\bm u]\tilde{\bm
+		\Omega}_{PQL}^{-1} = 
+	\tilde{\bm \Omega}_{PQL}^{-1} \bm S \tilde{\bm \Omega}_{PQL}^{-1}
 \end{equation}
 Then we can consider the model 
 \begin{equation}\label{se6}
-\tilde{\bm Y } = \bm{X\beta} + \bm {Zu}  + \bm \epsilon
+	\tilde{\bm Y } = \bm{X\beta} + \bm {Zu}  + \bm \epsilon
 \end{equation}
 which is a linear mixed model with pseudo response $\tilde{\bm Y }$ with covariance matrix 
 \begin{equation}
-\bm W = \text{Var}[ \tilde{\bm Y } |\bm u] = \bm{Z\Sigma Z'} + \tilde{\bm \Omega}_{PQL}^{-1} \bm S
-\tilde{\bm \Omega}_{PQL}^{-1}.
+	\bm W = \text{Var}[ \tilde{\bm Y } |\bm u] = \bm{Z\Sigma Z'} + \tilde{\bm \Omega}_{PQL}^{-1} \bm S
+	\tilde{\bm \Omega}_{PQL}^{-1}.
 \end{equation}
 Model (\ref{se6})  has exactly the same form as linear mixed model (see Section \ref{para:lmm}),
 except that an estimate of $(\bm\beta, \bm u)$  is needed for calculating pseudo-response
@@ -632,11 +666,11 @@ matrix $\bm I$ for $\bm S$ as starting values. Techniques for fitting LMM such a
 readily applied to estimate variance components $\bm \Sigma$, upon which $\hat{\bm W}$ is
 calculated. The estimate for $\bm \beta$ is given by
 \begin{equation}
-\hat{\bm\beta} = (\bm X^T\hat{\bm W}^{-1} \bm X)^{-1}\bm X^T\hat{\bm W}^{-1}\bm X \tilde{\bm y},
+	\hat{\bm\beta} = (\bm X^T\hat{\bm W}^{-1} \bm X)^{-1}\bm X^T\hat{\bm W}^{-1}\bm X \tilde{\bm y},
 \end{equation}
 and the estimate for random effect is 
 \begin{equation}\label{se7}
-\hat{\bm u} = \hat{\bm\Sigma } \bm Z \hat{\bm W}^{-1} (\tilde{\bm y}-\bm {X} \hat{\bm \beta})
+	\hat{\bm u} = \hat{\bm\Sigma } \bm Z \hat{\bm W}^{-1} (\tilde{\bm y}-\bm {X} \hat{\bm \beta})
 \end{equation}
 Then the pseudo-response is updated and the procedure is repeated until convergence is reached for
 fixed effects and variance components.  Note that Equation (\ref{se7}) estimates a vector of random
@@ -649,8 +683,8 @@ PQL. Since $E[\bm \eta|\bm u]= \bm {X\beta} + \bm {Zu}$, the unconditional mean 
 E[E(\bm \eta|\bm u)]= \bm {X\beta}$. A first-order Taylor expansion of $E[\bm Y|\bm u]$ about $\bm X
 \bm\beta$ is given by 
 \begin{equation}\label{se8}
-E[\bm Y|\bm u] = g^{-1}(\bm \eta) \approx g^{-1} (\bm{X\beta}) + \tilde{\bm \Omega}_{MQL} (\bm
-\eta - \bm X\bm \beta)
+	E[\bm Y|\bm u] = g^{-1}(\bm \eta) \approx g^{-1} (\bm{X\beta}) + \tilde{\bm \Omega}_{MQL} (\bm
+	\eta - \bm X\bm \beta)
 \end{equation}
 where $\tilde{\bm \Omega}_{MQL}$ is evaluated at $\bm {X\beta}$ (recall that for PQL, $\tilde{\bm
 	\Omega}_{PQL}$ is evaluated at $\bm {X\beta} + \bm {Zu}$). The unconditional expected value of 
@@ -659,13 +693,13 @@ Y$ is approximately $g^{-1}(\bm {X\beta})$ by Equation (\ref{se8}). The variance
 be derived from the relation $\text{Var}(\bm Y)= E[\text{Var}(\bm Y|\bm u)] + \text{Var}[E(\bm Y|
 \bm u)]$, which yields
 \begin{equation}\label{se9}
-\text{Var}[\bm Y] = \tilde{\bm \Omega}_{MQL} \bm {Z\Sigma Z'}\tilde{\bm \Omega}'_{MQL} + \bm
-S_{\bm \eta_0}
+	\text{Var}[\bm Y] = \tilde{\bm \Omega}_{MQL} \bm {Z\Sigma Z'}\tilde{\bm \Omega}'_{MQL} + \bm
+	S_{\bm \eta_0}
 \end{equation}
 A linearization is performed at $\bm \eta_0= \bm X \bm \beta_0$, 
 \begin{equation}\label{se9.1}
-g^{-1}(\bm \eta) \approx g^{-1} (\bm{X\beta_0}) + \tilde{\bm \Omega}_{MQL} (\bm \eta - \bm X\bm
-\beta_0)
+	g^{-1}(\bm \eta) \approx g^{-1} (\bm{X\beta_0}) + \tilde{\bm \Omega}_{MQL} (\bm \eta - \bm X\bm
+	\beta_0)
 \end{equation}
 Multiplying both sides by $\tilde{\bm \Omega}_{MQL} ^{-1}$, Equation (\ref{se9.1}) then can be
 arranged to 
@@ -673,8 +707,8 @@ arranged to
 \eta_0)]  + \bm{X}\bm \beta_0 \]
 Defining the pseudo-response $\tilde{\bm Y}_{MQL}$ as
 \begin{equation}\label{se10}
-\tilde{\bm Y}_{MQL} =  \tilde{\bm \Omega}_{MQL}^{-1}[\bm Y- g^{-1}(\bm \eta_0)]  + \bm{X}\bm
-\beta_0 
+	\tilde{\bm Y}_{MQL} =  \tilde{\bm \Omega}_{MQL}^{-1}[\bm Y- g^{-1}(\bm \eta_0)]  + \bm{X}\bm
+	\beta_0 
 \end{equation}
 Next we consider the linear mixed model 
 \[ \tilde{\bm Y}_{MQL}  = \bm {X\beta}+ \bm {Zu}  + \bm \epsilon\] 
@@ -684,7 +718,7 @@ Note that the pseudo-response is not a function of $\bm u$ any more, so updating
 not require calculating the random effects $\bm u$. MQL is also referred to as
 \textit{population-averaged} estimate approach.
 
-\cite{breslow1995bias}  and \cite{pinheiro2006efficient} showed that PQL approach may lead to
+\citet{breslow1995bias}  and \citet{pinheiro2006efficient} showed that PQL approach may lead to
 asymptotically biased estimates and hence to inconsistency. It is not recommended to use simple PQL
 method in practice. 
 
@@ -696,8 +730,8 @@ the random effects to be missing data. Following this idea, the problem of estim
 components associated with random effects can be simplified. Denote the \textit{complete data} as
 $\bm v = (\bm y, \bm u)$, the log-likelihood of $\bm v$ can be expressed as 
 \begin{equation}\label{eq:bayes}
-\log \pi(\bm \beta , \bm \Sigma|\bm v) = \log f(\bm y|\bm \beta, \bm u) + \log \phi(\bm u|\bm
-\Sigma)
+	\log \pi(\bm \beta , \bm \Sigma|\bm v) = \log f(\bm y|\bm \beta, \bm u) + \log \phi(\bm u|\bm
+	\Sigma)
 \end{equation}  
 The optimal solution in Equation (\ref{eq:bayes}) can be obtained by
 \textit{Expectation-Maximization} (EM) algorithm that can be readily implemented as follows:
@@ -705,11 +739,11 @@ The optimal solution in Equation (\ref{eq:bayes}) can be obtained by
 	\item \textbf{E-Step}. At $(k+1)$th iteration with $\bm \beta^{(k)}$ and $\bm\Sigma^{(k)}$  
 	calculate 
 	\begin{equation}\label{eq:bayes-em}
-	\begin{aligned}
-	E_{\bm \beta^{(k)}}[\log f(\bm \beta , \bm \Sigma|\bm v)|\bm y]= Q_1(\bm \beta, \bm \beta^{(k)}),
-	~
-	E_{\bm \Sigma^{(k)}}[\log \phi(\bm \Sigma|\bm v)|\bm y]= Q_2(\bm \Sigma, \bm \Sigma^{(k)})
-	\end{aligned}
+		\begin{aligned}
+			E_{\bm \beta^{(k)}}[\log f(\bm \beta , \bm \Sigma|\bm v)|\bm y]= Q_1(\bm \beta, \bm \beta^{(k)}),
+			~
+			E_{\bm \Sigma^{(k)}}[\log \phi(\bm \Sigma|\bm v)|\bm y]= Q_2(\bm \Sigma, \bm \Sigma^{(k)})
+		\end{aligned}
 	\end{equation}
 	\item \textbf{M-Step}. Maximize $Q_1$ and $Q_2$ to update  $\bm \beta^{(k+1)}$ and
 	$\bm\Sigma^{(k+1)}$.
@@ -717,7 +751,7 @@ The optimal solution in Equation (\ref{eq:bayes}) can be obtained by
 The \textbf{E} and \textbf{M} steps are alternated until convergence. Unfortunately, the
 expectations in Equation (\ref{eq:bayes-em}) cannot be computed in closed form for GLMMs. However,
 they may be approximated by \textit{Markov chain Monte Carlo} (MCMC). In light of this,
-\cite{mcculloch1997maximum} developed a Monte Carlo EM (MCEM) algorithm. The Metropolis-Hastings
+\citet{mcculloch1997maximum} developed a Monte Carlo EM (MCEM) algorithm. The Metropolis-Hastings
 algorithm is used for drawing samples from difficult-to-calculate density functions.
 
 For Metropolis algorithm, a proposal distribution $g(\bm u)$ is selected, from which an initial
@@ -725,23 +759,23 @@ value of $\bm u$ is drawn. The new candidate value $\bm u' = (u_1, u_2, \ldots,u
 u_{k+1}, \ldots, u_Q)$, which has all elements the same as previous values expect the $k$th,   is
 accepted (as opposed to keeping the previous value) with probability
 \begin{equation}\label{eq:metropolis}
-A_k(\bm u', \bm u) = \min \left\{1, ~\frac{f(\bm u'|\bm y, \bm \beta, \bm \Sigma)g(\bm u)}{f(\bm
-	u|\bm y, \bm \beta, \bm \Sigma)g(\bm u')}\right\}
+	A_k(\bm u', \bm u) = \min \left\{1, ~\frac{f(\bm u'|\bm y, \bm \beta, \bm \Sigma)g(\bm u)}{f(\bm
+		u|\bm y, \bm \beta, \bm \Sigma)g(\bm u')}\right\}
 \end{equation}
 If we choose $g(\bm u) = \phi (\bm u|\bm\Sigma)$, the ratio term in Equation (\ref{eq:metropolis})
 can be simplified to 
 \begin{equation}\label{eq2.3.4}
-\begin{aligned}
-& ~~~~\frac{f(\bm u'|\bm y, \bm \beta, \bm \Sigma)g(\bm u)}{f(\bm u|\bm y, \bm \beta, \bm
-	\Sigma)g(\bm u')} \\
-& = \left[\frac{f(\bm u', \bm y| \bm \beta, \bm \Sigma)}{f(\bm y| \bm \beta, \bm \Sigma)}\phi (\bm
-u|\bm\Sigma)\right]/\left[
-\frac{f(\bm u, \bm y|\bm \beta, \bm \Sigma)}{f(\bm y|\bm \beta, \bm \Sigma)}\phi (\bm
-u'|\bm\Sigma)\right]\\
-& = \frac{f(\bm y|\bm u', \bm \beta, \bm \Sigma)\phi (\bm u'|\bm\Sigma)\phi (\bm
-	u|\bm\Sigma)}{f(\bm y|\bm u, \bm \beta, \bm \Sigma)\phi (\bm u|\bm\Sigma)\phi (\bm u'|\bm\Sigma)}\\
-& = \frac{f(\bm y|\bm u', \bm \beta, \bm \Sigma)}{f(\bm y|\bm u, \bm \beta, \bm \Sigma)}
-\end{aligned}
+	\begin{aligned}
+		& ~~~~\frac{f(\bm u'|\bm y, \bm \beta, \bm \Sigma)g(\bm u)}{f(\bm u|\bm y, \bm \beta, \bm
+			\Sigma)g(\bm u')} \\
+		& = \left[\frac{f(\bm u', \bm y| \bm \beta, \bm \Sigma)}{f(\bm y| \bm \beta, \bm \Sigma)}\phi (\bm
+		u|\bm\Sigma)\right]/\left[
+		\frac{f(\bm u, \bm y|\bm \beta, \bm \Sigma)}{f(\bm y|\bm \beta, \bm \Sigma)}\phi (\bm
+		u'|\bm\Sigma)\right]\\
+		& = \frac{f(\bm y|\bm u', \bm \beta, \bm \Sigma)\phi (\bm u'|\bm\Sigma)\phi (\bm
+			u|\bm\Sigma)}{f(\bm y|\bm u, \bm \beta, \bm \Sigma)\phi (\bm u|\bm\Sigma)\phi (\bm u'|\bm\Sigma)}\\
+		& = \frac{f(\bm y|\bm u', \bm \beta, \bm \Sigma)}{f(\bm y|\bm u, \bm \beta, \bm \Sigma)}
+	\end{aligned}
 \end{equation}
 The MCEM procedure combines the EM steps and Metropolis algorithm in estimating the fixed
 parameters and variance components as follows:
@@ -759,8 +793,7 @@ algorithm is usually very slow, especially at the neighborhood of maximum of mar
 Second, the chain in Metropolis algorithm has to run long enough for reliable estimation. 
 
 In the Bayes framework, there are other alternatives to estimate the parameters and variance
-components, for example,  \textit{Monte Carlo Newton-Raphson} (\textit{MCNR},
-\citealt{mcculloch1997maximum}) and \textit{MCMC} \citep{hadfield2010mcmc}.
+components, for example,  \textit{Monte Carlo Newton-Raphson} (MCNR) \citep{mcculloch1997maximum} and  MCMC \citep{hadfield2010mcmc}.
 
 \paragraph{Example of estimating parameters}
 We will demonstrate the estimating procedure with the Poisson log-linear mixed-effect model
@@ -768,8 +801,8 @@ discussed in Section \ref{subsubsec:intro-stat-framework}.
 The estimation procedure starts from the joint density function of $\bm Y=(Y_{jkl})'$ given $\bm
 \mu= (\mu_{jkl})'$,
 \begin{equation}\label{eq:poisdens}
-f(\bm Y|\bm \mu )=\prod_{ j,
-	k,l}f(y_{jkl}|\mu_{jkl})=\prod_{j,k,l}\frac{[\mu_{jkl}]^{y_{jkl}}\exp(-\mu_{jkl})}{y_{jkl}!}
+	f(\bm Y|\bm \mu )=\prod_{ j,
+		k,l}f(y_{jkl}|\mu_{jkl})=\prod_{j,k,l}\frac{[\mu_{jkl}]^{y_{jkl}}\exp(-\mu_{jkl})}{y_{jkl}!}
 \end{equation}
 A re-expression of  (\ref{eq:example}) in matrix form gives 
 \[\log\bm \mu= \bm {X\beta} + \bm {Z_1 a} + \bm{Z_2b} + \bm I_{12}\bm \epsilon \]
@@ -782,9 +815,9 @@ and $\bm \Sigma = \sigma_1^2\bm {Z_1Z_1'} + \sigma_2^2\bm {Z_2 Z_2'} +\sigma_0^2
 %samples. 
 The density function of $\bm \mu$ is then
 \begin{equation}\label{eq:poisConddens}
-f(\bm \mu |\bm \mu_0, \bm \Sigma)=\prod_{j,k,l} \mu_{jkl}^{-1}\cdot \frac{1}{
-	\sqrt{(2\pi)^{12}|\bm\Sigma|}}\exp[-\frac{1}{2} {(\log\bm \mu - \bm \mu_0)^T\bm \Sigma^{-1}(\log\bm
-	\mu - \bm \mu_0)}]
+	f(\bm \mu |\bm \mu_0, \bm \Sigma)=\prod_{j,k,l} \mu_{jkl}^{-1}\cdot \frac{1}{
+		\sqrt{(2\pi)^{12}|\bm\Sigma|}}\exp[-\frac{1}{2} {(\log\bm \mu - \bm \mu_0)^T\bm \Sigma^{-1}(\log\bm
+		\mu - \bm \mu_0)}]
 \end{equation}
 Since $Y_{jkl}\sim \pois (\mu_{jkl})$, by combining Equation (\ref{eq:poisdens}) and
 (\ref{eq:poisConddens}), we obtain the joint distribution of $\bm Y$ and $\bm \mu$,
@@ -794,9 +827,9 @@ Since $Y_{jkl}\sim \pois (\mu_{jkl})$, by combining Equation (\ref{eq:poisdens})
 Therefore we can obtain the likelihood function of or the marginal distribution of $\bm Y$ by
 integrating out the random components $\bm u$,
 \begin{equation}\label{eq:example-likelihood}
-L(\xi, \sigma_1^2, \sigma_2^2, \sigma_0^2|\bm Y)=f(\bm Y|\bm \xi, \bm \Sigma)=
-\int_{\bm{a,b,\epsilon}} f(\bm Y, \bm a, \bm b, \bm \epsilon |\bm \mu_0, \bm \Sigma)d\bm a d \bm b
-d\bm \epsilon 
+	L(\xi, \sigma_1^2, \sigma_2^2, \sigma_0^2|\bm Y)=f(\bm Y|\bm \xi, \bm \Sigma)=
+	\int_{\bm{a,b,\epsilon}} f(\bm Y, \bm a, \bm b, \bm \epsilon |\bm \mu_0, \bm \Sigma)d\bm a d \bm b
+	d\bm \epsilon 
 \end{equation}
 The integral in Equation (\ref{eq:example-likelihood}) can be approximated by adaptive
 Gaussian-Hermite (AGH) quadrature or MCMC. For AGH quadrature, we first approximate the likelihood
@@ -845,6 +878,7 @@ declared as significant. Table (\ref{table1}) shows the  relation among them.
 	The FDR is 
 	
 	\subsection{Disertation Objective}
+	
 	
 	
 	

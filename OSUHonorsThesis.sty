@@ -64,30 +64,30 @@
   \begin{centering}
 
     \ThesisTitle \\[.05\textheight]
-    {By\\ \StudentName}\\[0.167\textheight] 
+    {By \\[.02\textheight]  \StudentName}\\[0.167\textheight] 
 
-    A THESIS \\[.04\textheight]
+    A DISSERTATION \\[.04\textheight]
     submitted to \\[.02\textheight]
     Oregon State University \\[.02\textheight]
-    University Honors College\\[.2\textheight]
+    College of Science\\[.2\textheight]
 
     in partial fulfillment of\\
     the requirements for the\\
     degree of\\[.05\textheight]
 
 	\ifdefined\SecondDegree
-    	Honors Baccalaureate of \Degree\ in \Major \\
-        (Honors \HonorsType)\\[.02\textheight]
+    	 of \Degree\ in \Major \\
+        %(Honors \HonorsType)\\[.02\textheight]
 
-    	Honors Baccalaureate of \SecondDegree\ in \SecondMajor\\
-    	(Honors \HonorsType)
+    abc	Honors Baccalaureate of \SecondDegree\ in \SecondMajor\\
+    %	(Honors \HonorsType)
     \else
     	\ifdefined\SecondMajor
-              Honors Baccalaureate of \Degree\ in \Major\ and \SecondMajor\\
-              (Honors \HonorsType)
+           def   Honors Baccalaureate of \Degree\ in \Major\ and \SecondMajor\\
+     %         (Honors \HonorsType)
         \else
-        	Honors Baccalaureate of \Degree\ in \Major\\
-            (Honors \HonorsType)
+         \Degree\ in \Major\\
+      %      (Honors \HonorsType)
         \fi
    \fi
 
@@ -109,23 +109,27 @@
 
 \begin{singlespace}
   \begin{centering}
-  	{\large AN ABSTRACT OF THE THESIS OF}\\[.04\textheight]
+  	{\large AN ABSTRACT OF THE DISSERTATION OF}\\[.04\textheight]
   \end{centering}
   
   \begin{flushleft}
     \ifdefined\SecondDegree
-        \StudentName\ for the degree of 
-    	\uline{Honors Baccalaureate of \Degree\ in \Major }
+        \uline{\StudentName}\ for the degree of 
+    	\uline{Doctor of Philosophy in \Major }
         and \uline{Honors Baccalaureate of \SecondDegree\ in \SecondMajor}
     \else
         \ifdefined\SecondMajor
             \StudentName\ for the degree of 
         	\uline{Honors Baccalaureate of \Degree\ in \Major\ and \SecondMajor}
         \else
-             \StudentName\ for the degree of \uline{Honors Baccalaureate of \Degree\ in \Major}
+             \uline{\StudentName} for the degree of \uline{\Degree\ in \Major}
         \fi
     \fi
-    presented on \DatePresented. Title: \uline{\ThesisTitle}\\[.05\textheight]
+    presented on \uline{\DatePresented}. 
+    \\[.04\textheight]
+    
+    
+    Title: \uline{\ThesisTitle}\\[.05\textheight]
 
     Abstract approved:\\[.03\textheight]
     \hrulefill\\
@@ -159,7 +163,7 @@ Corresponding e-mail address: \StudentEmail
   \vspace*{\baselineskip} % Whitespace at the top of the page
 
   \textcopyright Copyright by \StudentName \\
-  \today \\
+  \DatePresented \\
   All Rights Reserved
   \end{singlespace}
 \end{centering}
@@ -176,36 +180,41 @@ Corresponding e-mail address: \StudentEmail
 \begin{singlespace}
   \begin{flushleft}
     \ifdefined\SecondDegree
-    \uline{Honors Baccalaureate of \Degree\ in \Major\ }
+    \uline{Doctor of Philosophy of \Degree\ in \Major\ }
     and \uline{Honors Baccalaureate of \SecondDegree\ in \SecondMajor}
     \else
         \ifdefined\SecondMajor
                            
-              {Honors Baccalaureate of \Degree\ in \Major\ and  \SecondMajor}
+              {Doctor of Philosophy of \Degree\ in \Major\ and  \SecondMajor}
         \else
-        	\underline{Honors Baccalaureate of \Degree\ in \Major}
+        	\underline{ \Degree\ in \Major}
         \fi
     \fi
-    project of \StudentName\ presented on \DatePresented \\[.1\textheight]
+    dissertation of \uline{\StudentName}\ presented on \uline{\DatePresented} \\[.1\textheight]
 
 
     APPROVED:\\[.06\textheight]
 
-    \hrulefill\\
-    \Mentor, Mentor, representing \MentorDept\\[.05\textheight]
+   % \hrulefill\\
+   % \Mentor, Mentor, representing \MentorDept\\[.05\textheight]
 
-    \hrulefill\\
-    \CommitteeOne, Committee Member, representing \CommitteeOneDept\\[.05\textheight]
+%    \hrulefill\\
+%    \CommitteeOne, Committee Member, representing \CommitteeOneDept\\[.05\textheight]
 
+%    \hrulefill\\
+ %   \CommitteeTwo, Committee Member, representing \CommitteeTwoDept\\[.09\textheight]
+	
+	\hrulefill\\
+	Major Professor, representing Statistics \\[.09\textheight]
+%	\vfill 
+	\hrulefill\\
+	Chair of the Department of Statistics \\[.09\textheight] 
+%	\vfill
     \hrulefill\\
-    \CommitteeTwo, Committee Member, representing \CommitteeTwoDept\\[.09\textheight]
-
-    \hrulefill\\
-    Toni Doolen, Dean, Oregon State University Honors College
-
+    Dean of the Graduate School \\[.09\textheight]
     \vfill
 
-    I understand that my project will become part of the permanent collection of Oregon State University Honors College.  My signature below authorizes release of my project to any reader upon request.\\[.05\textheight]
+    I understand that my project will become part of the permanent collection of Oregon State University libraries.  My signature below authorizes release of my dissertation to any reader upon request.\\[.05\textheight]
 
     \hrulefill\\
     \centering\StudentName, Author

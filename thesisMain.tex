@@ -28,6 +28,7 @@
 
 %Honors College Formatting
 \usepackage{OSUHonorsThesis}
+%\usepackage{}
 
 %-------------------------------------------------------
 % begin modification  by Bin Zhuo
@@ -47,6 +48,25 @@
 \usepackage{caption}
 \captionsetup[figure]{labelfont=bf}
 \captionsetup[table]{labelfont=bf}
+
+
+
+%\usepackage{dgjournal}   % copied from the journal
+%\usepackage{mathptmx}	% copied from the journal
+%\usepackage[authoryear,comma,sectionbib]{natbib} % copied from the journal
+
+
+% packages used in this article
+\usepackage{url}
+\usepackage{caption}
+\captionsetup[figure]{labelfont=bf}
+\captionsetup[table]{labelfont=bf}
+\usepackage{graphicx}
+\usepackage{amsmath, bm}
+\usepackage{multirow}
+\usepackage[toc,page,title,titletoc]{appendix}
+
+
 
 
 % New command (modified  by Bin Zhuo)
@@ -149,6 +169,37 @@
 
 
 
+
+%%%% Command for chapter 1
+
+\DeclareMathOperator{\median}{median}
+\newcommand{\howmanySamples}{211~}
+\newcommand{\howmanylab}{24~}
+\newcommand{\howmanyseedlingsample}{60~}
+\newcommand{\howmanyleafsample}{60~}
+\newcommand{\howmanytissuesample}{91~}
+\newcommand{\howmanyseedlingexperiment}{9~}
+\newcommand{\howmanyleafexperiment}{5~}
+\newcommand{\howmanytissueexperiment}{10~}
+\newcommand{\overlapGene}{104~}
+\newcommand{\overlapGeneCze}{9~}
+\newcommand{\overlapProb}{$4.8\times 10^{-9}$~}
+\newcommand{\rankInSeedling}{159~}
+\newcommand{\rankInLeaf}{112~}
+\newcommand{\rankInTissue}{513~}
+\newcommand{\rankTopPctSeedling}{0.7\%}
+\newcommand{\rankTopPctLeaf}{0.5\%}
+\newcommand{\rankTopPctTissue}{2.2\%}
+\newcommand{\SelectFiveGene}{AT1G63110, AT1G79280, AT3G27530, AT4G02560, AT5G53540}
+\newcommand{\recalltophundred}{29~}
+\newcommand{\recalltopthousand}{98~}
+\newcommand{\recallrankcorrelation}{0.97~}
+\title{Identifying stably expressed genes from multiple RNA-Seq data sets}
+\date{} % Today's date or a custom date
+
+
+
+
 %-------------------------------------------------------
 %%%   end modification  by Bin Zhuo
 %-------------------------------------------------------
@@ -163,15 +214,15 @@
 %-------------------------------------------------------
     %%Student Information:
     \def\StudentName{Bin Zhuo}
-    \def\Degree{Science} %Science, Arts or Fine Arts
+    \def\Degree{Doctor of Philosophy} %Science, Arts or Fine Arts
     \def\Major{Statistics}
-    \def\HonorsType{Scholar} %Scholar or Associate
+    \def\HonorsType{} %Scholar or Associate
     \def\StudentEmail{zhuob@oregonstate.edu}
     \def\CommencementMonth{June 2016}
     
      %%Thesis Information
-    \def\ThesisTitle{Global (Collective) analysis of RNA-Seq experiment: multiple data sets \&  multiple genes}
-    \def\DatePresented{Month dd, yyyy}
+    \def\ThesisTitle{Global analysis of RNA-Seq experiment: multiple data sets \&  multiple genes}
+    \def\DatePresented{June 22, 2016}
     \def\keywords{keyword1, keyword2, keyword3} %Up to five keywords
 
     %%The committee
@@ -217,18 +268,32 @@
   %Reset page numbering to one
  % \setcounter{page}{1}
  % \setcounter{secnumdepth}{4}
- \setcounter{page}{1}
- \pagenumbering{arabic}
+% \setcounter{page}{1}
+% \pagenumbering{arabic}
 
   %Begin Thesis Body
   \tableofcontents
-  \newpage
+  \newpage 
+  \listoffigures %---------LIST OF FIGURES (Only If You Have Two Or More)
+  \clearpage
+  \listoftables %----------LIST OF TABLES (Only If You Have Two Or More)
+  \clearpage
+ 
+% \listofappendices
+% \clearpage
+
+
+  %\DisplayTitle \vspace*{2em}
+   \pagestyle{myheadings}
+  \setcounter{page}{1} \thispagestyle{empty}
+  
 %\pagenumbering{arabic} 
   \input{introduction.tex}
-  \input{chap1.tex}
+%  \input{chap1.tex}
   \input{chap2.tex}
   \input{chap3.tex}
   \input{conclusion.tex}
+  \input{appendix.tex}
 %  \input{thesisText.tex}
   %End Thesis Body
 

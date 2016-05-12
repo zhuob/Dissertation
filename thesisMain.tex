@@ -58,37 +58,9 @@
 
 % packages used in this article
 \usepackage{url}
-\usepackage{caption}
-\captionsetup[figure]{labelfont=bf}
-\captionsetup[table]{labelfont=bf}
-\usepackage{graphicx}
-\usepackage{amsmath, bm}
 \usepackage{multirow}
 \usepackage[toc,page,title,titletoc]{appendix}
 
-
-
-
-% New command (modified  by Bin Zhuo)
-\newcommand{\cov}{\text{Cov}}
-\newcommand{\var}{\text{Var}}
-\newcommand{\pois}{\text{Poisson}}
-\newcommand{\OurMethod}{MEQLEA}
-\newcommand{\HowmanyTest}{six}
-\newcommand{\aaCase}{a}
-\newcommand{\aCase}{c}
-\newcommand{\cCase}{b}
-\newcommand{\eCase}{d}
-\newcommand{\fCase}{e}
-\newcommand{\CMR}{CAMERA-rank}
-\newcommand{\CMT}{CAMERA-modt}
-\newcommand{\gent}{SigPathway}
-\newcommand{\gen}{geneSetTest}
-\newcommand{\genr}{MRSGE}
-\newcommand{\thepapertobefinished}{Zhuo and Di, unpublished work}
-\newcommand{\HowmanySimu}{$10,000$}
-\newcommand{\FDR}{Benjamini-Hochberg}
-\newcommand{\FDRabb}{BH}
 
 
 
@@ -200,6 +172,43 @@
 
 
 
+%%%% Command for chapter 1
+\newtheorem{theorem}{Theorem}       % theorem environment
+\newtheorem{definition}{Definition}     % definition environment
+\newtheorem{proof}{Proof}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{corollary}
+
+\newcommand{\cov}{\text{Cov}}
+\newcommand{\cor}{\text{Corr}}
+\newcommand{\var}{\text{Var}}
+\newcommand{\samplecor}{sample correlation}
+\newcommand{\popucor}{population correlation}
+
+
+
+%%%% Command for chapter 3
+%\newcommand{\cov}{\text{Cov}}
+%\newcommand{\var}{\text{Var}}
+\newcommand{\pois}{\text{Poisson}}
+\newcommand{\OurMethod}{MEQLEA}
+\newcommand{\HowmanyTest}{six}
+\newcommand{\aaCase}{a}
+\newcommand{\aCase}{c}
+\newcommand{\cCase}{b}
+\newcommand{\eCase}{d}
+\newcommand{\fCase}{e}
+\newcommand{\CMR}{CAMERA-rank}
+\newcommand{\CMT}{CAMERA-modt}
+\newcommand{\gent}{SigPathway}
+\newcommand{\gen}{geneSetTest}
+\newcommand{\genr}{MRSGE}
+\newcommand{\thepapertobefinished}{Zhuo and Di, unpublished work}
+\newcommand{\HowmanySimu}{$10,000$}
+\newcommand{\FDR}{Benjamini-Hochberg}
+\newcommand{\FDRabb}{BH}
+
+
 %-------------------------------------------------------
 %%%   end modification  by Bin Zhuo
 %-------------------------------------------------------
@@ -221,7 +230,7 @@
     \def\CommencementMonth{June 2016}
     
      %%Thesis Information
-    \def\ThesisTitle{Global analysis of RNA-Seq experiment: multiple data sets \&  multiple genes}
+    \def\ThesisTitle{Global Analysis of RNA-Seq Experiment: Multiple Data Sets \&  Multiple Genes}
     \def\DatePresented{June 22, 2016}
     \def\keywords{keyword1, keyword2, keyword3} %Up to five keywords
 
@@ -285,7 +294,7 @@
 
   %\DisplayTitle \vspace*{2em}
    \pagestyle{myheadings}
-  \setcounter{page}{1} \thispagestyle{empty}
+  \setcounter{page}{1}  \thispagestyle{empty}
   
 %\pagenumbering{arabic} 
   \input{introduction.tex}

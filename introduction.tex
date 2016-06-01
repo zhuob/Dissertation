@@ -69,8 +69,7 @@ coordinated effort between RNA-Seq and real time PCR (RT-PCR) is one of the most
 identify new exons \citep{howald2012combining}. However, one major challenge of this technique is
 data processing: RNA-Seq experiment produces a huge amount of reads (up to hundreds of
 millions per sample) and obtaining the expression profiles requires fast read mapping tools as well
-as a lot of computing resource
-\citep{langmead2009ultrafast,li2010fast}.
+as a lot of computing resource \citep{langmead2009ultrafast,li2010fast}.
 
 
 
@@ -229,7 +228,26 @@ Furthermore, making the reference set explicit will be beneficial during DE anal
 available. 
 
 \paragraph{Estimating correlations of test statistics}
-NEED SOMETHING HERE
+Differential expression analysis involves simultaneous hypothesis testing for an ensemble of genes. 
+One common feature of such procedure is that a test statistic summarizing the magnitude of DE is 
+calculated for each gene, and then all the test statistics are pooled together and treated as a 
+sample from which to estimate sampling distribution of test statistics. However, since the 
+expression levels are correlated, the test statistics calculated from the expression levels are 
+also correlated \citep{barry2008statistical, efron2007correlation, wu2012camera}. Without 
+replicating the experiment, there's no way to obtain the correlation structure of test statistics 
+because only a single sample of test statistics is available. 
+
+To construct correlation structure for test statistics, the sample correlations (after any 
+treatment effects removed) are often used. \citet{efron2007correlation} approximates the 
+distribution of test statistics correlation by sample correlation, and uses this distribution to 
+derive the \textit{false discovery proportion} in the multiple hypothesis testing procedure. 
+For gene set test procedures that account for correlation among test statistics, 
+\citet{barry2008statistical}, \citet{wu2012camera} and \citet{yaari2013quantitative} also use 
+sample correlation to summarize test statistics correlation. However, it has only shown by 
+simulation that correlations among test statistics are almost the same as those among samples 
+ for test statistics taking specific forms \cite{barry2008statistical,efron2007correlation}. We 
+ will explore, from a theoretical point of view, the relationship between test statistics 
+ correlations and sample correlations in Chapter \ref{chap2}.
 
 \paragraph{Adjusting for correlations in competitive gene set test}
 Competitive gene set test compares DE genes in the set against those in its complementary set. A
@@ -242,8 +260,8 @@ care of in the enrichment analysis procedure, such as \gent~\citep{tian2005disco
 \citep{kim2005page}, \genr~\citep{michaud2008integrative} or the $2\times 2$ contingency-table-based
 tests \cite{alexa2010topgo, huang2007david,ye2006wego}. However, it has been argued that such test
 procedures will result in inflated type I error 
-\citep{efron2007testing,gatti2010heading,goeman2007analyzing,
-	wu2012camera,yaari2013quantitative}, as genes within a gene set are often
+\citep{efron2007testing,gatti2010heading,goeman2007analyzing,wu2012camera,yaari2013quantitative}, 
+as genes within a gene set are often
 co-expressed and function together.
 
 Several approaches have been proposed to address inter-gene correlation problems in competitive gene
@@ -309,7 +327,7 @@ It is often required that $\epsilon_i$'s meet \textit{Gauss-Markov} assumption,
 	\sigma^2<\infty, ~\cov[\epsilon_i, \epsilon_j]=0, \forall i \neq j.
 \end{equation}
 In practice, the error term is frequently, if not always, assumed to be normally distributed, 
-\begin{equation}\label{eq:normalassumption}
+\begin{equation}\label{eq:normalassumption1}
 	\bm \epsilon \sim N(0, \sigma^2 \bm I).
 \end{equation}
 

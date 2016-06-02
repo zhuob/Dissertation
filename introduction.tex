@@ -1,8 +1,177 @@
 \section{Introduction}\label{sec:intro}
 
-\subsection{Biological question of interest}\label{subsec:biol}
 
-\subsubsection{Background}
+In this thesis, we focus on applying statistical models to gene expression data. We first describe 
+the biological questions of interest, and then introduce necessary background on 
+RNA-Sequencing (RNA-Seq) experiment as well as steps for pre-processing RNA-Seq gene 
+expression data. We review generalized linear mixed models that will be used for analyzing RNA-Seq 
+data.
+
+\subsection{Overview of research questions}\label{subsec:biol}
+
+
+%\subsubsection{Questions for this thesis}
+We investigate three questions pertaining to gene expression analysis: identifying 
+stably expressed genes from multiple RNA-Seq data sets (Chapter \ref{chap1}); 
+investigating the relationship between correlations among test statistics and the underlying 
+population correlations (Chapter \ref{chap2}); and adjusting for correlations among test 
+statistics (of differential expression) in competitive gene set test (Chapter \ref{chap3}). 
+
+\subsubsection{Identifying stably expressed genes}
+ Differential expression (DE) analysis is a key task in gene expression study, because it uncovers 
+ the association between expression levels of a gene and the covariates of interest. The covariates 
+could either be categorical (e.g., treatment/control status, cell types), or continuous (e.g., 
+reagent concentration, time). For example, to understand the effect of a drug, one might ask which 
+genes are \textit{up-regulated} (increased expression levels) or \textit{down-regulated} (decreased 
+expression levels) between treatment and control groups? Finding these genes will help researchers 
+to understand the cause of a disease and to develop effective medicine. In recent years, many 
+statistical tools have  been developed for DE detection (methods review can be found in 
+\cite{rapaport2013comprehensive,seyednasrollah2015comparison,soneson2013comparison}) in RNA-Seq 
+experiments. Most of those approaches are based on Poisson \citep{marioni2008rna, wang2010degseq}
+or Negative Binomial (NB) distribution
+\citep{anders2010differential,di2011nbp,oberg2012technical,robinson2007moderated, wu2013new} because
+RNA-Seq expression data are present in the form of counts. %In practice, Poisson models are used
+%when there are only technical replicates while NB models are more suitable when there are
+%biological replicates.
+The NB distribution based models are more popular for their flexibility to deal with 
+\textit{over-dispersion} (a.k.a. extra-Poisson variation) that are often observed in RNA-Seq 
+expression data.
+
+
+
+Despite the optimistic claim that DE analysis of RNA-Seq data does not need 
+sophisticated normalization \citep{wang2009rna}, many works have shown that normalization of count 
+data is highly desirable to account for various sources of bias between samples
+\citep{anders2010differential,dillies2013comprehensive,hansen2012removing, risso2014nat,
+	risso2011gc,robinson2010scaling}.
+Many of the current normalization methods, for example, TMM \citep{robinson2010scaling} and DESeq
+\citep{anders2010differential} normalizations, assume that the majority of genes are not DE within
+the experiment under investigation. However, this assumption could be violated in some experiments
+where over $50\%$ of the genes' expression levels are altered by the treatments
+\citep{loven2012revisiting, wu2013use}. The consequence with such assumption can be alleviated if
+one could identify a set of reference genes whose expression levels are stable across
+different experimental conditions. This motivates us to identify reference (stably expressed) genes 
+by exploring a large number of existing RNA-Seq data sets.
+
+In microarray studies, there have been many attempts to find reference genes for normalization.
+Traditionally, the \textit{house-keeping genes}  are used as reference genes.
+However, a number of works have shown that house-keeping genes are not necessarily stably expressed
+according to numerical stability measures (see, for example,
+\cite{czechowski2005genome,huggett2005real}). Another choice, the \textit{spike-in genes}, is not
+reliable for normalization due to the same issue \citep{risso2014nat}. A popular approach has been
+to search from large sets of experiments for reference genes
+\citep{czechowski2005genome,dekkers2012identification,frericks2008toolbox,gur2009identification,stamova2009identification}
+whose expression stability are evaluated by some numerical stability measure. Validation 
+experiments (e.g. reverse
+transcription-PCR) show that reference genes identified by numerical methods generally outperform 
+house-keeping genes or spike-in genes in terms of expression stability 
+\citep{czechowski2005genome,hruz2011refgenes}.
+We will follow the strategy of quantifying gene expression stability by numerical measures and
+identify stably expressed genes.
+
+Identifying stably expressed genes not only helps count normalization, but also improves
+interpretability and comparability of RNA-Seq experiments in integrative analysis. Since genes are
+measured by relative frequencies, we argue that DE is a relative concept: when a normalization
+procedure is applied to a single data set, it effectively uses an implicit reference set of genes.
+Furthermore, making the reference set explicit will be beneficial during DE analysis, because often 
+times biologists compare results from one experiment to those from others experiments whose data 
+are publicly
+available. 
+
+\subsubsection{Estimating correlations among test statistics}
+Differential expression analysis involves simultaneous hypothesis testing for an ensemble of genes. 
+One common feature of testing an ensemble of genes is that a test statistic quantifying the 
+magnitude of DE is 
+calculated for each gene, and then all the test statistics are pooled together and treated as a 
+sample from which to estimate sampling distribution of test statistics. Since the 
+expression levels are correlated, the test statistics derived from the expression levels are 
+also correlated , and this inter-dependency of test statistics cannot be ignored 
+\citep{barry2008statistical, 
+efron2007correlation, wu2012camera} when testing a set of genes. However, without  
+replicating the experiment, there's no way to obtain the correlation structure of test 
+statistics because only a single sample of test statistics is available. 
+
+To construct correlation structure for test statistics, the sample correlations (after any 
+treatment effects removed) are often used. \citet{efron2007correlation} approximates the 
+distribution of test statistics correlation by the sample correlation, and uses this distribution 
+to  derive the \textit{false discovery proportion} in the multiple hypothesis testing procedure. 
+\citet{barry2008statistical}, \citet{wu2012camera} and \citet{yaari2013quantitative} also use 
+sample correlation to summarize test statistics correlation in their gene set test procedures that 
+are intended to account for correlation among test statistics. However, it has only been shown by 
+simulation that correlations among test statistics are almost the same as those among samples 
+for test statistics taking specific forms \cite{barry2008statistical,efron2007correlation}. We 
+will explore, from a theoretical point of view, the relationship between test statistics 
+correlations and sample correlations in Chapter \ref{chap2}. This investigation will help us 
+understand the validity of approximating test statistics correlation by sample correlation. 
+
+\subsubsection{Adjusting for correlations of test statistics in competitive gene set test}
+DE analysis evaluates each individual gene separately, but it fails to provide insights into
+biological mechanisms since genes may be correlated and function together. %Therefore, people 
+%usually 
+%examine an ensemble of genes. 
+For this reason, \textit{gene set test} is a frequently used technique that enables
+researchers to examine an ensemble of genes simultaneously and thus improves interpretability of DE
+results. Gene set test is the assessment of
+the association between a set of DE genes, which are significantly correlated with
+treatment or experimental design variables, and a prior set of genes, which are biologically
+related. Depending on the definition of the null hypothesis, there are two types of gene set test:
+the \textit{self-contained} test and the \textit{competitive} test \citep{goeman2007analyzing}. A
+self-contained test examines a set of genes by a fixed standard without reference to other genes in
+the genome (see, for example, \cite{goeman2005testing,goeman2004global, huang2013gene,
+	tsai2009multivariate, wu2010roast}). A competitive test compares DE
+genes in the test set to those not in the test set
+\citep{tian2005discovering,wu2012camera,yaari2013quantitative}. The competitive gene set test is
+much more popular among genomic literatures \citep{gatti2010heading,goeman2007analyzing}.  
+
+
+Competitive gene set test compares DE genes in the set against those in its complementary set. A
+number of
+statistical methodologies have been developed for this purpose (literature reviews can be found in
+\cite{huang2009bioinformatics,khatri2012ten, mishra2014gene}). Broadly speaking, all of the
+competitive gene set tests fall into two categories based on whether they assume independence of
+expression profiles among genes. In earlier literatures, the inter-gene correlations were not taken
+care of in the enrichment analysis procedure, such as \gent~\citep{tian2005discovering}, PAGE
+\citep{kim2005page}, \genr~\citep{michaud2008integrative} or the $2\times 2$ contingency-table-based
+tests \cite{alexa2010topgo, huang2007david,ye2006wego}. However, it has been argued that such test
+procedures will result in inflated type I error 
+\citep{efron2007testing,gatti2010heading,goeman2007analyzing,wu2012camera,yaari2013quantitative}, 
+as genes within a gene set are often
+co-expressed and function together.
+
+Several approaches have been proposed to address inter-gene correlation problems in competitive gene
+set test. One attempt is to evaluate the significance of the test set by permuting sample labels
+\citep{efron2007testing,gatti2010heading,subramanian2005gene}. Sample permutation does not require
+an explicit understanding of the underlying correlation structure among genes, and is therefore
+supposed to protect the test against such correlations. One very famous example of this kind is the
+\textit{gene set enrichment analysis} (GSEA) procedure \citep{subramanian2005gene}. Yet, sample
+permutation method has been criticized for several reasons: first, it cannot be applied to
+experiments having small
+number of biological replicates (e.g., three samples each for a two-group comparison, which is 
+common in RNA-Seq experiments);
+second, it is computationally intensive since tens of thousands of DE tests are involved in each 
+permutation; 
+third, and most importantly, it implicitly alters the null hypothesis being tested and makes the 
+null and
+alternative difficult to be characterized \citep{goeman2007analyzing, khatri2012ten, wu2012camera}.
+Another attempt has been to incorporate the inter-gene correlations into the formulation of gene set
+test procedure \citep{wu2012camera,yaari2013quantitative}. CAMERA \citep{wu2012camera} estimates a
+\textit{variance
+	inflation factor} (VIF) from sample correlation (after the treatment effects removed), and then
+includes it in its test statistic to assess the significance of the gene set. The same VIF has also 
+been used by QuSAGE
+\cite{yaari2013quantitative} 
+to adjust for inter-gene correlations. However, accurate estimation of VIF relies on
+the assumption that correlation between any two gene-level statistics are almost the same as
+correlation between their corresponding expression levels. In Chapter \ref{chap2}, we will
+demonstrate that this assumption is easily violated when differentially expressed genes are present,
+and as a remedy, we will propose a new gene set test procedure in Chapter \ref{chap3}.  
+
+
+
+
+
+
+\subsection{Background on RNA-Sequencing experiments}
 %	\textbf{What is gene expression}\\
 
 Gene is a piece of DNA that encodes a functional RNA or protein product, and is the basic physical
@@ -24,21 +193,17 @@ in a certain condition reflect the current state of the cell.
 %level of a gene is reflected by the relative abundance of the corresponding transcriptome, which is
 %in turn measured by the number of fragments  mapped to the reference genome. 
 
-
-
-
-\textbf{Why do people do expression analysis?}\\
+%\textbf{Why do people do expression analysis?}\\
 In a typical gene expression experiment, researchers are usually interested in comparing expression
-levels of one or more genes from different sources. Factors for comparison could be
-\textit{before vs
-	after} effect in a drug treatment, \textit{tumor vs normal} tissues in clinical study, or
-\textit{wild type vs mutant} strains in plant research. Another important factor is the time-course,
-where cells/tissues at different stages are sampled with the purpose of discovering temporal pattern
-of gene expression. There are many other types of experiment, each with specific factors of interest
-to be studied.
+levels of one or more genes under different experiment/environmental conditions. Factors for 
+comparison could be \textit{before vs after} effect in a drug treatment, \textit{tumor vs normal} 
+tissues in clinical study, or \textit{wild type vs mutant} strains in plant research. Another 
+important factor is the time-course, where cells/tissues at different stages are sampled with the 
+purpose of discovering temporal pattern of gene expression. There are many other types of 
+experiment, each with specific factors of interest to be studied.
 
 
-\textbf{What tools do people use to measure gene expression?}\\
+%\textbf{What tools do people use to measure gene expression?}\\
 The  expression levels of a gene can be measured using techniques such as
 complementary DNA (cDNA) libraries, microarray analysis, RNA fingerprinting by arbitrary primed PCR
 (RAP-PCR), expressed sequence tag (EST) sequencing, serial analysis of gene expression (SAGE), and
@@ -59,8 +224,9 @@ It is the number of reads aligned to each gene (referred to as ``read count") on
 genome/transcriptome that quantifies the genes' expression levels.  
 
 
-\textbf{pros and cons about RNA-Seq}\\
-RNA-Seq technology offers several key advantages over other methods \citep{wang2009rna}, the most
+%\textbf{pros and cons about RNA-Seq}\\
+RNA-Seq technology offers several key advantages over other methods for measuring gene expression 
+\citep{wang2009rna}, the most
 important of which are that it does not require prior knowledge of an organism for detecting
 transcripts,  and that it is sensitive to genes expressed at either low or higher levels and thus
 provides higher dynamic range. The sequencing of RNA allows researchers to study the entire
@@ -73,7 +239,7 @@ as a lot of computing resource \citep{langmead2009ultrafast,li2010fast}.
 
 
 
-\textbf{A workflow of pre-processing RNA-Seq data}\\
+%\textbf{A workflow of pre-processing RNA-Seq data}\\
 Preprocessing RNA-Seq data consists of two main steps: 1) mapping reads to the reference
 genome/transcriptome, and 2) summarizing read counts at given genomic feature (e.g., exon, gene or
 transcript) level. Read mapping is the first computational, and usually, the most time-consuming
@@ -120,176 +286,7 @@ RNA-Seq data sets that are needed in Chapter \ref{chap1}.
 
 
 
-\subsubsection{Statistical issues}
-The statistical analysis beginning from the read count matrix consists of three major parts: 1)
-normalization---adjusting for sources of bias between samples; 2) differential expression (DE)
-analysis---testing whether the expression levels of a gene are associated with treatment or 
-experimental variables; 
-and 3) gene set test---detecting which biological pathways are over-represented with DE genes.
-
-\paragraph*{Normalization}
-Despite the optimistic claim that RNA-Seq does not need sophisticated normalization
-\citep{wang2009rna}, many works have shown that normalization of count data is highly desirable
- to account for various sources of bias between samples before accessing differential expression
-\citep{anders2010differential,dillies2013comprehensive,hansen2012removing, risso2014nat,
-	risso2011gc,robinson2010scaling}. Normalization is needed for adjusting differences in sequencing
-depths or library sizes (total number of mapped reads for each biological sample) due to chance
-variation in sample preparation. In DE analysis, gene expression levels are often estimated from
-relative read frequencies. Therefore, normalization is also needed to account for the apparent
-reduction or increase in relative read frequencies of non-differentially expressed genes simply to
-accommodate the increased or decreased relative frequencies of truly DE genes. Currently there are
-many normalization methods available, such as the trimmed mean of M-values (TMM) 
-\citep{robinson2010scaling},
-the DESeq normalization \citep{anders2010differential}, and remove unwanted variation (RUV)
-\citep{risso2014nat}. 
-
-\paragraph*{DE analysis}
-Identification of DE genes is the key task in many gene expression studies. DE analysis uncovers the
-association between expression levels of a gene and the covariates of interest. The covariates 
-could either be
-categorical (e.g., treatment/control status, cell types), or continuous (e.g., reagent
-concentration, time). For example, to understand the effect of a drug, one might ask which genes are
-\textit{up-regulated} (increased expression levels) or \textit{down-regulated} (decreased expression levels)
-between treatment and control groups? Finding these genes will help researchers to understand the
-cause of a disease and to develop effective medicine. In recent years, many statistical tools have 
-been developed for DE detection (methods review can be found in 
-\cite{rapaport2013comprehensive,seyednasrollah2015comparison,soneson2013comparison}) in RNA-Seq 
-experiments. 
-Most of those approaches are based on Poisson \citep{marioni2008rna, wang2010degseq}
-or Negative Binomial (NB) distribution
-\citep{anders2010differential,di2011nbp,oberg2012technical,robinson2007moderated, wu2013new} because
-RNA-Seq expression data are present in the form of counts. %In practice, Poisson models are used
-%when there are only technical replicates while NB models are more suitable when there are
-%biological replicates.
-The NB distribution based models are more popular for their flexibility to deal with 
-\textit{over-dispersion} (a.k.a. extra-Poisson variation) that are often observed in RNA-Seq expression data.
-
-
-%Prior to DE analysis, \textit{normalization} is needed to adjust for sources of bias (explained
-%later). Depending on the question of interest, downstream analysis such as enrichment test of gene
-%set or gene network analysis may also be performed. 
-\paragraph*{Gene set test}
-DE analysis evaluates each individual gene separately, but it fails to provide insights into
-biological mechanisms since genes may be correlated and function together. %Therefore, people usually 
-%examine an ensemble of genes. 
-For this reason, \textit{gene set test} is a frequently used technique that enables
-researchers to examine an ensemble of genes simultaneously and thus improves interpretability of DE
-results. Gene set test is the assessment of
-the association between a set of DE genes, which are significantly correlated with
-treatment or experimental design variables, and a prior set of genes, which are biologically
-related. Depending on the definition of the null hypothesis, there are two types of gene set test:
-the \textit{self-contained} test and the \textit{competitive} test \citep{goeman2007analyzing}. A
-self-contained test examines a set of genes by a fixed standard without reference to other genes in
-the genome (see, for example, \cite{goeman2004global,goeman2005testing, huang2013gene,
-	tsai2009multivariate, wu2010roast}). A competitive test compares DE
-genes in the test set to those not in the test set
-\citep{tian2005discovering,wu2012camera,yaari2013quantitative}. The competitive gene set test is
-much more popular among genomic literatures \citep{gatti2010heading,goeman2007analyzing}.  
-
-
-
-
-\subsubsection{Questions for this thesis}
-In this thesis, we focus on three aspects of gene expression analysis: identifying stably
-expressed genes from multiple RNA-Seq data sets (Chapter \ref{chap1}); estimating correlations
-between test statistics via sample
-correlations [NEED TO REVISE] (Chapter \ref{chap2}); and adjusting for correlations in competitive 
-gene set test
-(Chapter \ref{chap3}).
-
-\paragraph{Identifying stably expressed genes}
-Many of the current normalization methods, for example, TMM \citep{robinson2010scaling} and DESeq
-\citep{anders2010differential} normalizations, assume that the majority of genes are not DE within
-the experiment under investigation. However, this assumption could be violated for some experiments
-where over $50\%$ of the genes' expression levels are altered by the treatments
-\citep{loven2012revisiting, wu2013use}. The consequence with such assumption can be alleviated if
-one could identify a set of stably expressed genes whose expression levels are stable across
-different experimental conditions. This motivates us to identify such a set of genes by exploring a
-large number of existing RNA-Seq data sets.
-
-In microarray studies, there have been many attempts to find reference genes for normalization.
-Traditionally, the \textit{house-keeping genes}  are used as reference genes.
-However, a number of works have shown that house-keeping genes are not necessarily stably expressed
-according to numerical stability measures (see, for example,
-\cite{czechowski2005genome,huggett2005real}). Another choice, the \textit{spike-in genes}, is not
-reliable for normalization due to the same issue \citep{risso2014nat}. A popular approach has been
-to search from large sets of experiments for reference genes
-\citep{czechowski2005genome,dekkers2012identification,frericks2008toolbox,gur2009identification,stamova2009identification}
-whose expression stability are evaluated by some numerical stability measure. Validation experiments (e.g. reverse
-transcription-PCR) show that reference genes identified by numerical methods generally outperform house-keeping genes or spike-in genes in terms of expression stability \citep{czechowski2005genome,hruz2011refgenes}.
-We will follow the strategy of quantifying gene expression stability by numerical measures and
-identify stably expressed genes.
-
-Identifying stably expressed genes not only helps count normalization, but also improves
-interpretability and comparability of RNA-Seq experiments in integrative analysis. Since genes are
-measured by relative frequencies, we argue that DE is a relative concept: when a normalization
-procedure is applied to a single data set, it effectively uses an implicit reference set of genes.
-Furthermore, making the reference set explicit will be beneficial during DE analysis, because often times biologists compare results from one experiment to those from others experiments whose data are publicly
-available. 
-
-\paragraph{Estimating correlations of test statistics}
-Differential expression analysis involves simultaneous hypothesis testing for an ensemble of genes. 
-One common feature of such procedure is that a test statistic summarizing the magnitude of DE is 
-calculated for each gene, and then all the test statistics are pooled together and treated as a 
-sample from which to estimate sampling distribution of test statistics. However, since the 
-expression levels are correlated, the test statistics calculated from the expression levels are 
-also correlated \citep{barry2008statistical, efron2007correlation, wu2012camera}. Without 
-replicating the experiment, there's no way to obtain the correlation structure of test statistics 
-because only a single sample of test statistics is available. 
-
-To construct correlation structure for test statistics, the sample correlations (after any 
-treatment effects removed) are often used. \citet{efron2007correlation} approximates the 
-distribution of test statistics correlation by sample correlation, and uses this distribution to 
-derive the \textit{false discovery proportion} in the multiple hypothesis testing procedure. 
-For gene set test procedures that account for correlation among test statistics, 
-\citet{barry2008statistical}, \citet{wu2012camera} and \citet{yaari2013quantitative} also use 
-sample correlation to summarize test statistics correlation. However, it has only shown by 
-simulation that correlations among test statistics are almost the same as those among samples 
- for test statistics taking specific forms \cite{barry2008statistical,efron2007correlation}. We 
- will explore, from a theoretical point of view, the relationship between test statistics 
- correlations and sample correlations in Chapter \ref{chap2}.
-
-\paragraph{Adjusting for correlations in competitive gene set test}
-Competitive gene set test compares DE genes in the set against those in its complementary set. A
-number of
-statistical methodologies have been developed for this purpose (literature reviews can be found in
-\cite{huang2009bioinformatics,khatri2012ten, mishra2014gene}). Broadly speaking, all of the
-competitive gene set tests fall into two categories based on whether they assume independence of
-expression profiles among genes. In earlier literatures, the inter-gene correlations were not taken
-care of in the enrichment analysis procedure, such as \gent~\citep{tian2005discovering}, PAGE
-\citep{kim2005page}, \genr~\citep{michaud2008integrative} or the $2\times 2$ contingency-table-based
-tests \cite{alexa2010topgo, huang2007david,ye2006wego}. However, it has been argued that such test
-procedures will result in inflated type I error 
-\citep{efron2007testing,gatti2010heading,goeman2007analyzing,wu2012camera,yaari2013quantitative}, 
-as genes within a gene set are often
-co-expressed and function together.
-
-Several approaches have been proposed to address inter-gene correlation problems in competitive gene
-set test. One attempt is to evaluate the significance of the test set by permuting sample labels
-\citep{efron2007testing,gatti2010heading,subramanian2005gene}. Sample permutation does not require
-an explicit understanding of the underlying correlation structure among genes, and is therefore
-supposed to protect the test against such correlations. One very famous example of this kind is the
-\textit{gene set enrichment analysis} (GSEA) procedure \citep{subramanian2005gene}. Yet, sample
-permutation method has been criticized for several reasons: first, it cannot be applied to
-experiments having small
-number of biological replicates (e.g., three samples each for a two-group comparison, which is common in RNA-Seq experiments);
-second, it is computationally intensive since tens of thousands of DE tests are involved in each permutation; 
-third, and most importantly, it implicitly alters the null hypothesis being tested and makes the null and
-alternative difficult to be characterized \citep{goeman2007analyzing, khatri2012ten, wu2012camera}.
-Another attempt has been to incorporate the inter-gene correlations into the formulation of gene set
-test procedure \citep{wu2012camera,yaari2013quantitative}. CAMERA \citep{wu2012camera} estimates a
-\textit{variance
-	inflation factor} (VIF) from sample correlation (after the treatment effects removed), and then
-includes it in its test statistic to assess the significance of the gene set. The same VIF has also 
-been used by QuSAGE
-\cite{yaari2013quantitative} 
-to adjust for inter-gene correlations. However, accurate estimation of VIF relies on
-the assumption that correlation between any two gene-level statistics are almost the same as
-correlation between their corresponding expression levels. In Chapter \ref{chap2}, we will
-demonstrate that this assumption is easily violated when differentially expressed genes are present,
-and as a remedy, we will propose a new gene set test procedure in Chapter \ref{chap3}.  
-
-\subsection{Statistical Methods}\label{subsec:glmm}
+\subsection{Background on generalized linear mixed models}\label{subsec:glmm}
 We have mentioned earlier that RNA-Seq data are essentially present in the form of count matrices. 
 Therefore it might not be appropriate to impose normal distribution on gene expression profiles, 
 especially when the sample size is small. Generalized linear models (GLMs) are a natural choice for 
@@ -299,7 +296,7 @@ sometimes extended to generalized linear mixed models (GLMMs).
 In this section, we will first describe the formulation GLMMs,
 and then review commonly used methods for parameter estimation under this framework.
 
-\subsubsection{Generalized linear mixed models}\label{subsubsec:intro-stat-framework}
+\subsubsection{Framework of generalized linear mixed models}\label{subsubsec:intro-stat-framework}
 GLMMs are a natural generalization of classical linear models. To illustrate this point, we will
 begin with classical linear models, and discuss how to generalize them to linear mixed models and
 then to GLMMs by relaxing different layers of assumptions. 
@@ -543,7 +540,7 @@ where $\bm O$ is a $4\times 4$ matrix of 0 and
 The challenge due to the complexity of GLMM is the estimation of parameters. In the next section,
 we will summarize current available methods for estimating parameters and variance components.
 
-\subsubsection{Estimation of generalized linear mixed models}\label{subsub:estimation}	
+\subsubsection{Parameter estimation of generalized linear mixed models}\label{subsub:estimation}	
 There are three general approaches for estimating parameters under GLMM settings \citep[Chapter
 7]{myers2012generalized}: (i) using numerical method to approximate the integrals for the likelihood
 functions and obtaining the estimating equations; (ii) linearization of the conditional mean and
@@ -899,48 +896,6 @@ in several
 packages, such as the \verb|Rstan| \citep{Rstan} and the \verb|MCMCPack| 
 \citep{martin2011mcmcpack}. 
 
-\subsection{Multiple hypothesis testing}
-Multiple hypothesis testing procedures deal with type I error rates in a family of tests. The
-problems arise when we consider a set of statistical inference simultaneously.  For each of the
-individual tests or confidence intervals, there is a type I error which can be controlled by the
-experimenter.  If the family of tests contains one or more true null hypotheses, the probability of
-rejecting one or more of these true null increases. 
-
-While traditional multiple testing procedures focus on modest number of tests, a different set of
-techniques are needed for large-scale inference, in which tens or even hundreds of thousands of
-tests are performed simultaneously. For example, in genomics study, expression levels of 50,000
-genes for each of 100 individuals can be measured using modern technologies such as microarray or
-RNA-Sequencing. In testing differential expression (DE), 50,000 tests need to be conducted against
-the null that there is no DE between treatment/control. This has brought new challenge to the field
-of multiple hypothesis testing. \citet{benjamini1995controlling} points out that the control of
-familywise error rate (FWER), i.e. the probability of making one or more false discovery in a set
-of
-tests, tends to have substantially less power. 
-
-\textit{False discovery rate} (FDR), introduced by \citet{benjamini1995controlling}, is the expected
-proportion of false positives among all significant calls (null rejected). FDR has been studied
-extensively (\cite{benjamini2001control,efron2004large,efron2010large,storey2003statistical} and
-more) over the past two decades.  FDR is equivalent to FWER \citep{benjamini1995controlling} when
-all hypotheses are true but smaller if there are some true discoveries to be made. We will focus
-our
-attention on FDR in this part. 
-
-Let $m$,  $m_0$  and $m_1$ be the number of tests,  true nulls  and true alternatives respectively.
-Let also $F$ and $T$ be the number of true nulls and true alternatives among $S$ tests that are
-declared as significant. Table (\ref{table1}) shows the  relation among them. 
-\begin{table}[h]\label{table1}\begin{center}
-		\begin{tabular}{llll}
-			& Called significance & Called not significant & Total  \\ \hline
-			Null True &F &$m_0-F$  & $m_0$  \\
-			Alternative true & T  & $m_1 -T$  & $m_1$  \\
-			total & S & $m-S$  & $m$ \\ \hline
-		\end{tabular}\end{center}
-	\end{table} 
-	The FDR is 
-	
-	\subsection{Disertation Objective}
-	
-	
 	
 	
 	

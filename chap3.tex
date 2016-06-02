@@ -518,20 +518,18 @@
 	
 	Further assumptions on $p_t$ and $p_b$ will complete our generating model used in the type I 
 	error and power simulations. \underline{(REF methods part about DE and no DE ....)}
-	We have mentioned in the Introduction part that the test statistics correlations among genes may
+	We have mentioned that the test statistics correlations among genes may
 	not equal their sample correlations when at least one gene is truly DE (see Section 
 	\ref{section:introduction}). Therefore, if there are 
 	DE genes in the entire gene set, approaches assuming
 	almost equality of correlations among gene-level statistics and those among expression values 
-	may
-	not perform well. \underline{(a heads-up on how the 2 groups are different: if non-GO-term 
-	genes have DE)} 
-	To illustrate this point, we perform two groups of simulations ($A_1$ and $A_2$) for each of 
-	(\aaCase)-(\fCase) correlation structures. In both type I error and power simulations, we set 
-	the DE
+	may not perform well. For each of 
+	(\aaCase)-(\fCase) correlation structures, we conduct two groups of simulations: genes in the 
+	background set are allowed to be DE in group $A_2$ but 
+	not in group $A_1$.  In both type I error and power 
+	simulations, we set the DE
 	probability to be $0\%(S_0)$ in group $A_1$ and $10\%(S_0)$ in group $A_2$ for genes in the
-	background set. That is, genes in the background set are allowed to be DE in group $A_2$ but 
-	not in group $A_1$.
+	background set.
 	 In the type I error simulation, we have $p_t = p_b$ under the null. In the power
 	simulation, we considered four different scenarios for the alternative hypothesis of the 
 	presence of enrichment: for genes in the test set, we set DE
@@ -631,9 +629,9 @@
 	%to compare differences in expression levels between test set and background set in competitive
 	%gene set test.  
 	
-	In terms of type I error control and power, we expect some of the six tests to have different
-	performances between group $A_1$ and $A_2$ simulations under one or more correlation 
-	structures. 
+%	In terms of type I error control and power, we expect some of the six tests to have different
+%	performances between group $A_1$ and $A_2$ simulations under one or more correlation 
+%	structures. 
 	
 	
 	\subsection{Results}\label{section:results}
@@ -1103,9 +1101,9 @@
 		\centering
 		\caption{Enriched gene sets and their nominal $p$ values for lymphoblastoid cells data. 
 		Reported
-			are gene sets with FDR$<0.05$ for at least one of the \OurMethod, GSEA, \CMT~and 
+			are gene sets with $\text{FDR}<0.05$ for at least one of the \OurMethod, GSEA, \CMT~and 
 			\genr~methods using
-			\FDR(\FDRabb) procedure.}
+			\FDR~(\FDRabb) procedure.}
 		\begin{tabular}{p{2cm}p{1cm}p{2cm}p{2cm}p{3cm}p{2cm}p{0.5cm}} \hline
 			Gene set & Size & \OurMethod & GSEA & \CMT & \genr \\ 		\hline
 			chrY & 40 & 0.0E+00 & 0.0E+00 & 1.0E-05 & 5.9E-07 \\ 

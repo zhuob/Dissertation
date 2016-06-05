@@ -1,1 +1,104 @@
-\section{Conclusion}\label{ch:conclusion}
+\pagebreak
+\newpage
+
+\section{Conclusions}\label{ch:conclusion}
+
+\subsection{Summary of the Dissertation}
+Detecting differentially expressed genes plays a central role in gene expression analysis. The 
+statistical questions we seek to address in this thesis help both ``pre" DE analysis---finding 
+stably expressed genes for RNA-Seq count normalization, and ``post" DE analysis---investigating 
+correlation among test statistics (for DE) and understanding the effect of treatments on sets of 
+genes (biological pathways).
+
+%\textbf{Major findings in chapter 2}\\
+In Chapter \ref{chap1} we advocate quantifying RNA-Seq gene expression stability by a numerical 
+measure applied to a large number of data sets. We show that traditional house-keeping genes are 
+not necessarily stably expressed when examined by a numerical stability measure. 
+%To find stably expressed genes for Arabidopsis, we 
+%collected gene expression data from 24 RNA-Seq experiments conducted by different labs. We divided 
+%the experiments into three groups based on the tissue type used, and identified three sets of 
+%stably expressed genes accordingly. 
+We emphasize that the ranking of genes in terms of numerical stability depends on multiple factors: 
+the reference sample set used, the technology used for measuring gene expression, and the specific 
+numerical stability measure used. Because DE is measured by relative frequencies, we argue that DE 
+is a relative concept, and that making the reference gene set explicit can improve the 
+interpretability of DE results.  When comparing differential expression among multiple experiments, 
+we suggest using a common set of genes as reference to avoid inconsistent conclusions. For count 
+normalization of Arabidopsis RNA-Seq data sets,  we recommend  using the top 1000 stably expressed 
+genes chosen from the appropriate reference sample (multi-tissue, leaf or seedling, etc.).
+
+In Chapter \ref{chap2} we explored the relationship between population correlation $\rho$ and test 
+statistics correlation $\rho_T$ (see Section \ref{subsec:generalsetup} for details about $\rho$ and 
+$\rho_T$) under bivariate setting. The statistics investigated are of the form $T_X = \bm a^T\bm 
+X/S_X$. Under the assumption of independence between denominator and numerator of $T_X$, we show 
+that $\rho_T$ does not necessarily equal $\rho$. For normally distributed 
+random variables, we give exact formula of $\rho_T$ when $T$ is the test statistic for 
+equal-variance two sample $t$-test. The formula (see equation (\ref{eq:limitT})) suggests that 
+$\rho_T$ is a function of both $\rho$ and signal-to-noise ratio, and we conclude that $|\rho_T|\leq 
+|\rho|$ for two sample $t$-test of normal data. In the context of gene expression analysis, the two 
+sample $t$-test is a common choice for 
+detecting DE genes, and sample correlation has been used to approximate test statistics 
+correlation \cite{barry2008statistical,efron2007correlation,wu2012camera}. Our theoretical 
+derivation shows, however, that correlation between test statistics will be over-estimated (in 
+absolute value) by sample correlation. This will have an impact on statistical inferences such as 
+false discovery rate control or gene set tests that are intended to adjust for test statistics 
+correlation by sample correlation.
+
+The \OurMethod, a new gene set test framework we proposed in Chapter \ref{chap3}, is motivated by 
+the observation (in Chapter \ref{chap2}) that correlation between test statistics may not equal 
+correlation between expression levels. It~uses difference in mean as gene level statistics 
+whose correlation are exactly the same as sample correlation, and works for testing gene set in 
+two group comparison experiment. It has the flexibility to allow for DE genes in the 
+background set, and does not require the data to be normally distributed. It effectively adjusts 
+for completely unknown and unstructured correlations among genes. 
+ We demonstrate by simulation study that \OurMethod~holds type I error size 
+correctly, and maintains good power for all correlation structures we examined. We apply 
+\OurMethod~to two real data sets and find meaningful gene sets that are otherwise overlooked by 
+methods such as GSEA or CAMERA.
+
+
+\subsection{Future Work}
+To identify stably expressed genes, our model (equation (\ref{eq:GLMM})) still needs to estimate an 
+initial set of normalization factors, which requires that we have to make assumptions about the 
+relative fold changes between samples. This kind of circular dependence seems unavoidable. We use 
+an one-step iteration to reduce the dependency of the results on the initial normalization factors. 
+In the future, we can examine the numerically stably expressed genes by evolutionary genetics 
+methods, and ask whether there is connection between measures of expression stability and measures 
+of genotypic/phenotypic features such as directional selection \citep{sabeti2006positive}.
+On the other hand, it would also be interesting to model the random effect terms more accurately. 
+In Chapter \ref{chap1} the random effect terms are assumed to be normally distributed, which is 
+appropriate 
+if the purpose is just to estimate their corresponding variance components. A more careful 
+examination of individual data sets suggests that the between sample variances differ across 
+experiments. Therefore, it may be beneficial to build a prior distribution of the random effect 
+terms when analyzing a new data set. 
+
+The investigation in Chapter \ref{chap2} is just a first attempt towards understanding correlation 
+between  test statistics. Our results suggest that test statistics correlation may not be 
+approximated 
+by sample correlation. In the future, we are interested in finding analytical expressions of 
+correlation for test statistics of different hypothesis testing procedures, and as a result, 
+improving the accuracy of FDP estimation based on the work of \citet{efron2007correlation}. 
+
+In Chapter \ref{chap3}, we showed that \OurMethod~adequately adjusts for correlation among test 
+statistics. However, everything comes at a price. 
+It is important to choose appropriate DE measure so that correlations between test statistics can 
+be estimated from the samples. Our strategy is to use linear combination of the data (e.g., 
+difference in mean under two group comparison, see Chapter \ref{chap3}) as gene level test 
+statistics, which may not be suitable for all cases. In many gene expression experiments, 
+researchers  might use more complicated design to study factors of interest.  When the gene level 
+test  statistics are derived from such a design based statistical analysis (e.g., generalized 
+linear  models), it is often difficult to estimate correlation among test statistics from data. In 
+the future, we can either generalize \OurMethod~to accommodate complicated design structures, or 
+develop techniques that can estimate correlation between test statistics under 
+more general statistical models.  
+
+
+
+
+
+
+
+
+
+

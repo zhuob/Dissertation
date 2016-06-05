@@ -275,6 +275,8 @@
   \ThesisTitlePage
   \ThesisApprovalPage
   %End Thesis Pre-text
+   \ThesisAbstractPage{\input{acknowledge.tex}}
+  
 
   %Reset page numbering to one
  % \setcounter{page}{1}
@@ -304,7 +306,7 @@
   \input{chap2.tex}
   \input{chap3.tex}
   \input{conclusion.tex}
-  \input{appendix.tex}
+
 %  \input{thesisText.tex}
   %End Thesis Body
 
@@ -319,6 +321,7 @@
 %\bibliographystyle{abbrv}
 \bibliography{thesis}
 
+  \input{appendix.tex}
 
 %  \FlyLeaf
 \end{document}

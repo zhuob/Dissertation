@@ -539,7 +539,7 @@ likelihood function.
 %For each gene, we estimate variance components $\hat\sigma_{\text{sample}}^2,  
 %\hat\sigma_{\text{treatment}}^2,  \hat\sigma_{\text{experiment}}^2$  from (\ref{eq:GLMM}) and 
 %calculate the total variance $\hat\sigma^2$.
-We rank all the genes according to their values of $\hat{sigma}^2$ in increasing order (smallest 
+We rank all the genes according to their values of $\hat{\sigma}^2$ in increasing order (smallest 
 first), and consider highly
 ranked (e.g., top 1000) genes to be stably expressed. 
 
@@ -554,7 +554,7 @@ The assessment of gene expression stability depends on the specific stability
 measure used. 
 % (It should be obvious, but often not emphasized in practice,
 % that different stability measures. We already said this a few times.)
-\cite{czechowski2005genome} and \cite{dekkers2012identification} used  the
+\citet{czechowski2005genome} and \citet{dekkers2012identification} used  the
 coefficient of variation (CV) measure, computed as \textit{standard
 	deviation devided by mean}, to find stably expressed genes from microarray data.
 
@@ -681,7 +681,7 @@ in each sample and the mean is computed over all samples.
 	genes are stably expressed under a wide range of experimental conditions and
 	in different tissue types, and thus may be worth further study. This list of
 	\overlapGene genes has significant overlap with the top $100$ stably expressed genes
-	identified by \cite{czechowski2005genome} from a developmental series of
+	identified by \citet{czechowski2005genome} from a developmental series of
 	microarray samples: \overlapGeneCze out of these \overlapGene genes (see Table 4 in the
 	supplementary material for details),
 	\begin{center}
@@ -699,10 +699,10 @@ in each sample and the mean is computed over all samples.
 	a list of \overlapGene genes random selected from a set of $14000$ genes to have an
 	overlap of size \overlapGeneCze or more with a pre-selected list of $100$ genes). In
 	particular, one gene, AT1G13320, is in all but one of the ten lists of top 500 stably
-	expressed genes identified by \cite{czechowski2005genome} for different
+	expressed genes identified by \citet{czechowski2005genome} for different
 	experimental and experimental conditions (the only exception is the set of
 	diurnal series), and is also identified by
-	\cite{hong2010identification} as a stably expressed gene under all but one of the six
+	\citet{hong2010identification} as a stably expressed gene under all but one of the six
 	experimental conditions they examined.  This gene is ranked \rankInSeedling (top 
 	\rankTopPctSeedling), \rankInLeaf
 	(top \rankTopPctLeaf), \rankInTissue (top \rankTopPctTissue) according to our stability measure 
@@ -721,7 +721,7 @@ in each sample and the mean is computed over all samples.
 	
 	\subsubsection{Comparison to house-keeping genes and stably expressed genes
 		identified from microarray data}\label{section:CompareStablyExpressedGene}
-	\cite{czechowski2005genome} discussed the expression stability of
+	\citet{czechowski2005genome} discussed the expression stability of
 	house-keeping genes and showed that the house-keeping genes are not stably
 	expressed according to their numerical measure. In particular, they compared
 	the expression profiles of five traditional house-keeping genes (AT1G13440,
@@ -730,7 +730,7 @@ in each sample and the mean is computed over all samples.
 	expressed according to the CV measure from a developmental series of
 	microarray experiments (see Figure 1 of that paper).  
 	In Figure \ref{expressionlevel1}, we compare the expression profiles 
-	of these 10 genes from \cite{czechowski2005genome} to the expression profiles
+	of these 10 genes from \citet{czechowski2005genome} to the expression profiles
 	of five genes (\SelectFiveGene) that we
 	randomly selected from the top 100 most stably expressed genes identified from
 	the multi-tissue group RNA-Seq data according the total variance $\hat\sigma^2$.
@@ -843,7 +843,7 @@ in each sample and the mean is computed over all samples.
 		\item[$L_1$:]
 		100 top stably expressed genes from the multi-tissue group according
 		to the $M$-value in geNorm (applied to $(\text{count}+1)$) of 
-		\cite{vandesompele2002accurate} ; 
+		\citet{vandesompele2002accurate} ; 
 		\item[$L_2$:]	
 		100 top stably expressed genes from the seedling group according to the total variance 
 		$\hat\sigma^2$ from the GLMM;
@@ -852,9 +852,10 @@ in each sample and the mean is computed over all samples.
 		$\hat\sigma^2$ from the GLMM; 
 		\item[$L_4$:]
 		100 stably expressed genes identified from a developmental series of microarray
-		experiments by \cite{czechowski2005genome} using the CV measure (see Section 
+		experiments by \citet{czechowski2005genome} using the CV measure (see Section 
 		\ref{subsection:OtherStabilityMeasure}); 
-		\item[$L_5$:] 50 stably expressed genes identified by \cite{dekkers2012identification} from 
+		\item[$L_5$:] 50 stably expressed genes identified by \citet{dekkers2012identification} 
+		from 
 		microarray
 		seed experiments using the CV measure.  
 	\end{enumerate}
@@ -1397,7 +1398,7 @@ in each sample and the mean is computed over all samples.
 			\url{https://github.com/zhuob/StablyExpressedGenes}
 			
 			
-			\newpage
+	%		\newpage
 			\textbf{Acknowledgment}: Research reported in this publication was supported by the 
 			National Institute of General Medical Sciences of the National Institutes of Health 
 			under Award Number R01GM104977 (to YD, SCE, and JHC). We thank Duo Jiang and Wanli 

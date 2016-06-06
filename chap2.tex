@@ -1,7 +1,24 @@
 \section{Test statistics correlation may not converge to population correlation}\label{chap2}
+	\vspace*{5cm}
+	\begin{centering}
+		{\normalsize Bin Zhuo, Jiang Duo and Yanming Di}\\[.04\textheight]
+	\end{centering}	
+	\vspace*{5cm}
 
+\newpage
 	\begin{abstract}
-		content...
+	In this paper, we investigate the relationship between test statistics correlation and 
+	population correlation. We are motivated by some research works where a large number of test 
+	statistics are pooled together for the purpose of testing multiple genes or gene sets. Among 
+	them, some methods are intended to adjust for correlation between test statistics, whose 
+	correlation are estimated by sample correlation---a consistent estimator of the population 
+	correlation. We show that test statistics correlation may not equal population correlation 
+	unless the test statistic takes some specific form. Under bivariate normal assumption, we 
+	present the exact formula for test statistics correlation when 
+	the statistics are derived from equal-variance two sample $t$-test. Based on the formula,  we 
+	prove that test statistics correlation is no more greater in absolute value than population 
+	correlation.
+	
 	\end{abstract}
 
 	\subsection{Introduction}
@@ -38,9 +55,9 @@
 	
 %	\textbf{Why would people care about correlation between genes?}\\
 	The stochastic dependence of test statistics has brought methodological issues to statistical 
-	analysis accessing both individual genes and gene sets. 
-	The interest in examining individual genes is to find DE genes among tens of thousands of 
-	candidates. Multiple hypothesis testing 
+	models that are intended to test individual genes or gene sets and assume independence among 
+	test statistics. The interest in examining individual genes is to find DE genes among tens of 
+	thousands of candidates. Multiple hypothesis testing 
 	procedures, such as \textit{false discovery rate} (FDR) \citep{benjamini1995controlling} and 
 	\textit{$q$-value} \citep{storey2003positive}, 
 	are needed to control type I error rate. In many cases, such techniques work only 

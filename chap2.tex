@@ -40,8 +40,8 @@
 	%	\textbf{Introduction}\\
 	
 	Inter-gene correlations are commonly observed in sequencing data generated from gene expression 
-	experiments \citep{efron2012large1, qiu2005effects,storey2003positive, huang2013gene, 
-		gatti2010heading}.
+	experiments \citep{efron2012large1, gatti2010heading, 
+	huang2013gene,qiu2005effects,storey2003positive}.
 	The key task of expression analysis is to detect differentially expressed (DE) genes whose 
 	expression levels are associated with experimental or treatment variables under study. 
 	In such a task, 
@@ -158,36 +158,20 @@
 	
 	
 	
-	
-	
-	
-	
-	\subsection{General setup}
-		\textit{Correlation} is a statistical quantity used to assess a possible linear 
-		relationship 
-		between two random variables or two sets of 
-		data sets. The degree of correlation is measured by \textit{correlation coefficient}, a 
-		scaler 
-		taking values on the interval $[-1, 1]$. 
-		Correlation coefficient of $+1$ ($-1$) indicates perfect positive (negative dependence), 
-		while 
-		correlation coefficient of 0 implies no linear 
-		relationship between two random variables. Larger correlation coefficient (in absolute 
-		value) 
-		corresponds to stronger linear correlation. 
+	\subsection{General setup}\label{subsec:generalsetup}
+	\textit{Correlation} is a statistical quantity used to assess a possible linear relationship 
+	between two random variables or two sets of data sets. The degree of correlation is measured by 
+	\textit{correlation coefficient}, a scaler taking values on the interval $[-1, 1]$. Correlation 
+	coefficient of $+1$ ($-1$) indicates perfect positive (negative dependence), while correlation 
+	coefficient of 0 implies no linear relationship between two random variables. Larger 
+	correlation coefficient (in absolute value) corresponds to stronger linear correlation. 
 		
-	\subsubsection{Overview of Pearson's correlation coefficient}\label{subsec:generalsetup}
-
 	There are a number of ways to look at the correlation coefficient, many of which are special 
 	cases of \textit{Pearson's correlation coefficient} 
 	\citep{lee1988thirteen}. For example, the \textit{Kendall tau rank correlation coefficient} is 
 	computed as Pearson's correlation coefficient between the ranked variables. Throughout this 
-	paper, we will discuss Pearson's correlation under bivariate settings. 
-	
-	%The most familiar measure of dependence between two quantities is 
-	%the \textit{Pearson's correlation coefficient}.  
-	We will restrict our interest, following the notation of 
-	\citet{lee1988thirteen},  to two 
+	paper, we will discuss Pearson's correlation under bivariate settings. We will restrict our 
+	interest, following the notation of \citet{lee1988thirteen},  to two 
 	types of Pearson's correlation coefficient. The first type of correlation, which we refer to as 
 	\textit{\popucor}, is the standardized 
 	covariance
@@ -538,7 +522,8 @@
 		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/ct2.eps}
 		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/ct3.eps}
 		\includegraphics[width=6.5cm, height= 6.5cm]{Figures/ct4.eps}
-		\caption{Contour plot of theoretical correlation between test statistics. For 
+		\caption[Contour plot of theoretical correlation between test statistics.]{Contour plot of 
+		theoretical correlation between test statistics. For 
 			each fixed $\rho$ and each pair of $\delta_X$ (	$=\Delta_X/\sigma_X$) 
 			and $\delta_Y$ ($=\Delta_Y/\sigma_Y$), the theoretical correlation $\rho_T$ is 
 			calculated according to equation (\ref{eq:limitT}).}
@@ -688,7 +673,8 @@
 		\includegraphics[width=4.8cm, height= 6.2cm]{Figures/case4.eps}
 		\includegraphics[width=4.8cm, height= 6.2cm]{Figures/case5.eps}
 		\includegraphics[width=4.8cm, height= 6.2cm]{Figures/case6.eps}
-		\caption{Plots of test statistics correlation against true population 
+		\caption[Plots of test statistics correlation against true population 
+		correlation]{Plots of test statistics correlation against true population 
 			correlation. The test statistics are calculated 
 			using two sample $t$-test with equal variance, and the theoretical correlation is 
 			calculated by 
@@ -1071,7 +1057,7 @@
 	
 	
 	
-	\subsection{Conclusion}
+	\subsection{Conclusion and discussion}
 	
 %	\textbf{State the major findings} \\
 	This article discusses the relationship between population correlation $\rho$ and the 
@@ -1104,7 +1090,8 @@
 	there are true DE genes whose expression 
 	levels are correlated in either way, the VIF may not be accurately estimated in 
 	\cite{wu2012camera}, resulting in biased test
-	for their enrichment analysis (REF our paper?). Our results also indicate that the variance of 
+	for their enrichment analysis as we will see in Chapter \ref{chap3}. Our results also indicate 
+	that the variance of 
 	$\rho_T$ may also be overestimated in
 	\cite{efron2007correlation}, which leads to larger variation in estimating their conditional 
 	FDP.
@@ -1125,8 +1112,16 @@
 	and $\rho$ should not be taken for granted. In the future, we will explore the relationship 
 	between $\rho_T$ and $\rho$ for more general cases and for other types of statistics. 
 	
+	The R codes for reproducing results in this paper are available at Github: 
+	\url{https://github.com/zhuob/CorrelatedTest}.
 	% \textbf{Make suggestions for further research\\ }
 
+
+	\subsection*{Acknowledgement}			
+	We thank Sarah Emerson for valuable comments and suggestions in method development and 
+	manuscript preparation. This article is part of doctor dissertation of BZ under the supervision 
+	of YD.
+	
 
 
 

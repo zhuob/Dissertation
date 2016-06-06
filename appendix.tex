@@ -1,0 +1,224 @@
+\newpage
+%\renewcommand{\thesubsection}{\Alph{subsection}}
+%\section{Appendix}\label{ch:appendix}
+%\addcontentsline{toc}{section}{Appendices}
+\renewcommand{\thesubsection}{\Alph{subsection}}
+
+
+\begin{appendices}
+
+	\subsection{Standardization}\label{app:standardization} 
+	Standardization for each gene: first, we obtain the residuals by subtracting off the means 
+	within
+	each treatment group;
+	\begin{equation}
+	r_{ijk} = y_{ijk} - \sum_{j=1}^{n_k}{y}_{ijk}/n_k;
+	\end{equation}
+	then we calculate the pooled standard deviation from the residuals,
+	\begin{equation}
+	s_i = \textit{std}(r_{ijk});
+	\end{equation}
+	next we get the standardized expression by dividing the original expression levels by the
+	standard deviation,
+	\begin{equation}
+	y^{\ast}_{ijk} = y_{ijk}/s_i
+	\end{equation}
+	We perform the standardization procedure to every gene in the data set.\\
+	
+	\subsection{Covariance matrix for test statistics}\label{app:covariance}
+	Note that if we let $\delta_i$ be the DE size for gene $i$, then $E(\delta_i)= \mu_{\delta}$ 
+	and $\var(\delta_i) = \sigma_{\delta}^2$. To prove the equation (\ref{eq:DeltaBinom}), we 
+	introduce an additional random variable $Z_i$ for DE status, where 
+	$Z_i\sim \text{Bernoulli}(1, p_t)$ if $G_i = 1$ and $Z_i\sim \text{Bernoulli}(1, p_b)$ if $G_i 
+	= 0$. It follows that $\Delta_i =Z_i\delta_i$, and we have 
+	\begin{equation}\notag
+	E(\Delta_i|\bm G) = E(Z_i\delta_i|\bm G) = E(\delta_i)E(Z_i|\bm G)=  p_i\mu_{\delta},
+	\end{equation}
+	and 
+	\begin{equation}\notag
+	\begin{aligned}
+	\text{Var}(\Delta_i|\bm G) & = E[(Z_i\delta_i)^2|\bm G]- [E(Z_i\delta_i|\bm G)]^2 \\
+	& = \text{Var}(Z_i|\bm G)[E(\delta_i)]^2 + \left[(EZ_i|\bm G)^2 + 
+	\text{Var}(Z_i|\bm G)\right]\text{Var}(\delta_i) \\
+	& =p_i\sigma_{\delta}^2 + p_i(1-p_i)\mu_{\delta}^2..
+	\end{aligned}
+	\end{equation}
+	If the gene-level test statistics $U_i$'s take the form of equation (\ref{eq:U}), then we have 
+	$E(U_i|\bm G) = E(\Delta_i + \eta_i|\bm G)  = p_i\mu_{\delta}$. Next, note that the covariance 
+	between two genes $i_1$ and $i_2$ is given by, 
+	\begin{equation}\label{eq:app1}
+	\begin{aligned}
+	\text{Cov}(U_{i_1}, U_{i_2}|\bm G) & =\cov\left[(\Delta_{i_1} + \eta_{i_1}, \Delta_{i_2} + 
+	\eta_{i_2})|\bm G\right] \\
+	& = \text{Cov}(\Delta_{i_1}, \Delta_{i_2}|\bm G) + \text{Cov}(\eta_{i_1}, \eta_{i_2}|\bm G)\\
+	& = \text{Cov}[(\dfrac{1}{n_1}\sum_{j: X_j=1}\epsilon_{i_1,j}-
+	\dfrac{1}{n_2}\sum_{j: X_j=0}\epsilon_{i_1,j}, \dfrac{1}{n_1}\sum_{j: X_j=1}\epsilon_{i_2,j}-
+	\dfrac{1}{n_2}\sum_{j: X_j=0}\epsilon_{i_2,j})|\bm G]\\
+	& = \left(\frac{1}{n_1} + \frac{1}{n_2}\right)c_{i_1,i_2},
+	\end{aligned}
+	\end{equation}
+	where $c_{i_1,i_2}$ is the corresponding entry in $\bm C$. Also 
+	\begin{equation}\label{eq:app2}
+	\begin{aligned}
+		\var(U_{i_1}|\bm G) &= \var(\Delta_{i_1} + \eta_{i_1} |\bm G) \\
+		& = \var(\Delta_{i_1}|\bm G) + \var(\dfrac{1}{n_1}\sum_{j: X_j=1}\epsilon_{i_1,j}-
+		\dfrac{1}{n_2}\sum_{j: X_j=0}\epsilon_{i_1,j}|\bm G)\\
+		& =\text{Var}(\Delta_{i_1}|\bm G) + \frac{1}{n_1} + \frac{1}{n_2}. 
+	\end{aligned}
+	\end{equation}
+	Equation (\ref{eq:U_var}) immediately follows from equations (\ref{eq:app1}) and 
+	(\ref{eq:app2}).	
+	% latex table generated in R 3.2.3 by xtable 1.8-0 package
+	% Fri Apr 22 13:30:45 2016
+	
+	
+	
+	\subsection{Supplimentary Tables}\label{app:supp}
+	
+	
+	%	\subsection{Sources of the twenty-four RNA-Seq data sets}\label{app:24experiments} 
+		\begin{table}[H]
+			\centering
+			\caption[Summary information for the 24 experiments used in Chapter 
+			\ref{chap1}]{Summary of data sets used in the three groups: the seedling, the leaf and 
+			the 
+				multi-tissue groups.} 
+			\label{app:24experiments}
+			\scalebox{0.80}{
+			\begin{tabular}{lrlrr} \hline
+				GEO Number & Reference                              & Tissue                      
+				&N                        &Quality\tablefootnote{The number of mapped reads divided 
+				by 
+					the total number of reads in the sample}($\geq$) \\ \hline
+				GSE32202 & NA                                     & seedling                    & 
+				6  & 
+				84.30\% \\
+				
+				GSE37159 & NA                                     & seedling                    & 
+				8  & 
+				82.50\% \\
+				%	GSE38400\tablefootnote{This data set is excluded in the analysis due to low 
+				%mapping 
+				%quality.} & \cite{zhu2013swi}                    & seedling                    & 
+				%12 & 
+				%45.90\%  \\
+				GSE41766 & \cite{bai2012triple}                 & seedling                    & 6  
+				& 
+				85.20\% \\
+				%	GSE43703\tablefootnote{This data set is excluded in the analysis due to low 
+				%mapping 
+				%quality.}  & \cite{liu2013translational}          & seedling                    & 
+				%8 & 
+				%22.50\% \\
+				GSE43865\tablefootnote{We chose all the 6 samples at the onset of treatment out of 
+				the 
+					42 samples.}   & \cite{rugnone2013lnk}                & 
+					seedling                    & 6 
+				& 92.50\% \\
+				GSE51119 & \cite{zhiponova2014helix}            & seedling                    & 10 
+				& 
+				70.50\% \\
+				GSE51772 & \cite{oh2014cell}                    & seedling                    & 8  
+				& 
+				90.60\% \\
+				GSE53078 & \cite{fan2014bhlh}                   & seedling                    & 4  
+				& 
+				86.10\% \\
+				GSE60835\tablefootnote{We chose the samples of ecotype Columbia from the 12 
+				samples.} & 
+				\cite{dong2014arabidopsis}           & seedling                    & 6  & 65.60\% 
+				\\ 
+				GSE66666 & \cite{capella2015arabidopsis}		&seedling 					&6  & 
+				91.20\% \\ \hline
+				GSE36626 & \cite{wollmann2012dynamic}           & leaves                      & 4  
+				& 
+				85.50\% \\
+				GSE39463\tablefootnote{We chose all samples at 6 hours post inoculation out of the 
+				48 
+					samples.}  & \cite{maekawa2012conservation}       & leaves                      
+					& 12 & 
+				74.50\% \\
+				GSE48235 & \cite{liu2014different}              & leaves                      & 6  
+				& 
+				90.40\% \\
+				GSE51304\tablefootnote{Out of the 48 samples,  the total number of RNA-Seq samples 
+				is 
+					18.} & \cite{stroud2014non}                 & leaves                      & 18 
+					& 
+				88.40\% \\
+				GSE54677\tablefootnote{Out of the 24 samples,  the total number of RNA-Seq samples 
+				is 
+					20.} & \cite{moissiard2014transcriptional}  & leaves                      & 20 
+					& 
+				85.20\% \\ \hline
+				GSE35288 & \cite{niederhuth2013transcriptional} & flower                      & 6  
+				& 
+				76.50\% \\
+				GSE35408 & \cite{bai2012brassinosteroid}        & hypocotyl                   & 10 
+				& 
+				77.00\%    \\
+				GSE52966 & \cite{chaiwanon2015spatiotemporal}   & primary root                & 18 
+				& 
+				87.20\% \\
+				GSE56326 & NA                                     & carpels                     & 
+				8  & 
+				92.40\% \\
+				GSE59167 & \cite{pallakies2014cle40}            & root tip tissue             & 11 
+				& 
+				87.10\% \\
+				GSE59637 & \cite{mizzotti2014seedstick}         & inflorescences and siliques & 4  
+				& 
+				71.70\% \\
+				GSE60183 & \cite{kimura2015flowering}           & epidermis					  & 6  
+				& 
+				62.30\% \\
+				GSE61061 & \cite{macgregor2015seed}   	        & seed                        & 6  
+				& 
+				91.60\% \\
+				GSE62799 & \cite{groth2014snf2}                 & aerial tissue               & 6  
+				& 
+				89.30\% \\
+				GSE63355 & \cite{liu2015repair}                 & shoot apical meristem       & 16 
+				& 
+				87.90\%  \\ \hline
+			\end{tabular}
+		}
+		\end{table}
+		
+		
+	
+	\begin{landscape}		
+	\begin{table}[ht]
+	%	 \renewcommand\tablename{\ref{app:supp}}  % give the table a new name format
+		\caption[Type I error rates for different methods]{Type I error rates for different methods 
+				(see Chapter \ref{chap3}). The type I error rates are summarized at a significant 
+				level of 0.05, based on \HowmanySimu~simulated data sets.}
+			\label{table:apptypeIerror}
+		\centering
+		\begin{tabular}{llrrrrrrr}
+			\hline
+		Group & Correlation & \OurMethod & \genr & \gent & \CMT & \CMR & GSEA & QuSAGE \\
+			\hline
+			\multirow{5}{*}{$A_1$}  & (a) & 0.056 & 0.049 & 0.051 & 0.049 & 0.047 & 0.049 & 0.078 
+			\\ 
+			 & (b) & 0.059 & 0.050 & 0.051 & 0.000 & 0.000 & 0.048 & 0.000 \\ 
+			 & (c) & 0.056 & 0.513 & 0.517 & 0.051 & 0.044 & 0.051 & 0.052 \\ 
+			 & (d) & 0.059 & 0.586 & 0.594 & 0.114 & 0.104 & 0.051 & 0.106 \\ 
+			 & (e) & 0.058 & 0.674 & 0.679 & 0.213 & 0.197 & 0.053 & 0.203 \\ \hline
+			\multirow{5}{*}{$A_2$} & (a) & 0.050 & 0.052 & 0.051 & 0.048 & 0.050 & 0.946 & 0.491 \\ 
+			 & (b) & 0.052 & 0.051 & 0.051 & 0.000 & 0.000 & 0.837 & 0.027 \\ 
+			 & (c) & 0.054 & 0.442 & 0.188 & 0.000 & 0.021 & 0.290 & 0.131 \\ 
+			 & (d) & 0.052 & 0.522 & 0.235 & 0.001 & 0.049 & 0.220 & 0.175 \\ 
+			 & (e) & 0.054 & 0.614 & 0.334 & 0.004 & 0.116 & 0.113 & 0.267 \\ 
+			\hline
+		\end{tabular}
+	\end{table}
+	
+	\end{landscape}	
+
+\end{appendices}
+	
+
+
+
+\newpage

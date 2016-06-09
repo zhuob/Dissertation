@@ -1,4 +1,4 @@
-\section{Test statistics correlation may not converge to population correlation}\label{chap2}
+\section{Test-statistic correlation may not equal \popucor}\label{chap2}
 	\vspace*{5cm}
 	\begin{centering}
 		{\normalsize Bin Zhuo, Jiang Duo and Yanming Di}\\[.04\textheight]
@@ -7,20 +7,27 @@
 
 \newpage
 	\begin{abstract}
-	In this paper, we investigate the relationship between test statistics correlation and 
-	population correlation. We are motivated by some research works where a large number of test 
-	statistics are pooled together for the purpose of testing multiple genes or gene sets. Among 
-	them, some methods are intended to adjust for correlation between test statistics, whose 
-	correlation are estimated by sample correlation---a consistent estimator of the population 
-	correlation. We show that test statistics correlation may not equal population correlation 
-	unless the test statistic takes some specific form. Under bivariate normal assumption, we 
-	present the exact formula for test statistics correlation when 
-	the statistics are derived from equal-variance two sample $t$-test. Based on the formula,  we 
-	prove that test statistics correlation is no more greater in absolute value than population 
-	correlation.
-	
+		We investigate the relationship between correlation among test statistics and \popucor. 
+		% For testing multiple genes or gene sets, pooling DE test 
+		% statistics together is a frequently used idea and the correlation among test statistics 
+		%needs to be 
+		% taken into account. 
+		In FDR control procedures and gene-set enrichment analysis, the sample correlation of 
+		observed data are often used to approximate the 
+		test statistics correlation. We show, however, that such an approximation is only valid 
+		under 
+		limited settings. In particular, we derive a formula for correlation between test 
+		statistics when 
+		they take a specific form, and as a special case, we present the exact expression of test 
+		statistics correlation for equal-variance two sample $t$-test statistic under bivariate 
+		normal assumption. 
+		
+		% We conclude that test statistics correlation is no more greater in absolute 
+		% value than \popucor~(normally distributed) in the context of 
+		% equal-variance two sample $t$-test.
+		
 	\end{abstract}
-
+	
 	\subsection{Introduction}
 	%	\textbf{What's the consequence if the correlation between statistics cannot be represented 
 	%sample correlation?}
@@ -39,124 +46,151 @@
 	%	
 	%	\textbf{Introduction}\\
 	
-	Inter-gene correlations are commonly observed in sequencing data generated from gene expression 
-	experiments \citep{efron2012large1, gatti2010heading, 
-	huang2013gene,qiu2005effects,storey2003positive}.
-	The key task of expression analysis is to detect differentially expressed (DE) genes whose 
-	expression levels are associated with experimental or treatment variables under study. 
-	In such a task, 
-	a summary statistic is calculated for each gene to quantify the magnitude of DE. The test 
-	statistics are often of familiar form. For example, 
-	they may come from two-sample comparison or experimental design based regression models. 
-	However, since the expression levels are correlated, the test statistics calculated from the 
-	expression levels are also correlated \citep{barry2008statistical, efron2007correlation, 
-		wu2012camera}. This paper concerns the relationship between test 
-	statistics correlations and the corresponding expression level correlations.
+	Between-gene correlations are commonly observed in gene expression 
+	data \citep{efron2012large1, gatti2010heading, 
+		huang2013gene,qiu2005effects,storey2003positive}.
+	One key task of expression analysis is to detect differentially expressed (DE) genes whose 
+	expression levels are associated with experimental or environmental variables under study. 
+	In such a task, a test statistic is calculated for each gene to quantify the magnitude of DE. 
+	The test statistics may come from two-sample comparison or experimental design based regression 
+	models. Between a pair of genes, when the observed expression levels are correlated, the test 
+	statistics calculated from the observed data will also also correlated 
+	\citep{barry2008statistical, efron2007correlation, wu2012camera}. This paper concerns the 
+	relationship between test-statistic correlation and \popucor~(e.g., expression levels).
 	
-%	\textbf{Why would people care about correlation between genes?}\\
-	The stochastic dependence of test statistics has brought methodological issues to statistical 
-	models that are intended to test individual genes or gene sets and assume independence among 
-	test statistics. The interest in examining individual genes is to find DE genes among tens of 
-	thousands of candidates. Multiple hypothesis testing 
-	procedures, such as \textit{false discovery rate} (FDR) \citep{benjamini1995controlling} and 
-	\textit{$q$-value} \citep{storey2003positive}, 
-	are needed to control type I error rate. In many cases, such techniques work only 
+	%	\textbf{Why would people care about correlation between genes?}\\
+	The dependency among test statistics has brought methodological issues to multiple hypothesis 
+	testing procedures and gene-set analysis. 
+	%The interest in examining individual genes is to find DE genes among tens of thousands of 
+	%candidates. 
+	Multiple hypothesis testing procedures determine a $p$-value cutoff by controlling 
+	\textit{false discovery rate} (FDR) 
+	\citep{benjamini1995controlling} or 
+	\textit{$q$-value} \citep{storey2003positive}. 
+	Many FDR-control procedures are valid only 
 	when test statistics are independent \citep{benjamini1995controlling} or 
-	have positive regression dependency \citep{benjamini2001control}. The goal of evaluating gene 
-	sets is to find molecular pathways or gene 
-	networks that are related to the experimental condition or factors of interest. Testing a gene 
-	set is usually done by pooling the test 
-	statistics of its member genes, and may or may not involve genes not in the test set 
-	\citep{goeman2007analyzing}. In all situations, the 
-	correlation between test statistics is a nuisance aspect, which, if not addressed 
-	appropriately, will undermine the applicability of the 
-	corresponding approaches \citep{gatti2010heading, wu2012camera}. For
+	have positive regression dependency \citep{benjamini2001control}. For
 	example, \citet{efron2007correlation} showed in a simulation study that for a nominal FDR of 
 	$0.1$, the actual FDR can easily vary by a factor of 10 when correlation between test 
-	statistics 
-	exists. 
+	statistics exists. 
+	In a gene-set analysis, one tests for over-abundance of DE genes in a
+	gene set (e.g., molecular pathways or gene networks) \citep{goeman2007analyzing}. 
+	The correlation among DE test statistics, if not addressed appropriately, will undermine 
+	the validity of the gene-set analysis \citep{gatti2010heading, wu2012camera}. 
+	%	applicability of the corresponding approaches 
 	
-%	\textbf{What are existing ways of dealing with inter-gene correlations?}\\
-	A number of attempts have been made to deal with issues of inter-gene correlation when testing 
-	either individual genes or gene sets. One 
-	approach is to derive certain summary statistic from correlation among test statistics and 
-	then use it in the hypothesis testing procedure. For testing individual genes, 
-	\citet{efron2007correlation} estimates some dispersion variate to summarize correlation among 
-	test statistics, and then calculates the \textit{false discovery 
-		proportion} (FDP) conditioning on this dispersion variate.  For 
-	testing gene sets, \citet{wu2012camera} estimate a \textit{variance inflation factor} (VIF) 
-	associated with inter-gene correlation and 
-	incorporate it into their parametric/rank-based gene set test procedures. The same VIF is also 
-	used by \citet{yaari2013quantitative} to account 
-	for correlation in their distribution-based gene set test. Another approach is to permute the 
-	labels of biological samples, aiming to generate the null distribution of test statistic for 
-	each gene.
-	This type of permutation preserves underlying correlation structure between genes, and thus 
-	protect the test against such correlations. The 
-	\textit{gene set enrichment analysis} (GSEA) procedure \citep{subramanian2005gene} falls into 
-	this category.
-	However, sample permutation method has an extra assumption, which states that the test 
-	statistics always follow the distribution they have under complete null  that no gene is DE 
-	\cite{efron2012large1}. In other words, this 
-	assumption expects that the distribution of test statistics under the null is not affected by 
-	the presence of non-null cases. For this reason, we will not discuss sample permutation based 
-	methods in this paper.  
+	%	\textbf{What are existing ways of dealing with inter-gene correlations?}\\
+	A number of attempts have been made to account for test-statistic
+	correlation in FDR control and gene-set analysis. 
+	Without replicating the experiment, we cannot directly estimate test-statistic
+	correlation between genes since only a single test statistic value is 
+	available for each gene. For this reason, the sample correlation
+	between observed data (after gene 
+	treatment effects accounted for) is often used as an surrogate.
+	%	when testing 
+	%	either single genes or gene sets. 
+	%	One approach is to use a summary statistic to represent the test-statistic correlation.  
+	\citet{efron2007correlation} estimates a quantity called \textit{dispersion variate} from the 
+	distribution 
+	of correlation among observed data, and then calculates the \textit{false discovery proportion} 
+	(FDP) conditioning on this dispersion variate. \citet{wu2012camera} estimate a \textit{variance 
+		inflation factor} (VIF) from the sample correlation of observed data and 
+	incorporate it into their parametric/rank-based gene-set test procedures. The same VIF is also 
+	used by \citet{yaari2013quantitative} in their gene-set test. 
 	
-%	\textbf{Key question: Are  expression level correlations the same as test statistics 
-%	correlation?}\\
-	Summarizing test statistics correlation requires that the correlations between test statistics 
-	are known or at least can be estimated from the data. Without 
-	replicating the experiment, however, there's no way to obtain the correlation between any pair 
-	of test statistics because only a single  statistic is available for each gene. In the case of 
-	one-sided test (e.g., two sample $t$-test), one possible choice is to use sample 
-	correlations (after gene treatment effects nullified) to represent correlations among test 
-	statistics \citep{barry2008statistical, efron2007correlation, wu2012camera, 
-		yaari2013quantitative}. 
-	%The sample correlation is a consistent estimator of underlying population correlation 
-	%\cite{fisher1915frequency}. 
-	\citet{efron2007correlation} estimates the distribution of $z$-value (transformed from 
-	corresponding two sample $t$-test statistic) 
-	correlation by sample correlation. \citet{barry2008statistical} show by Monte Carlo simulation 
-	of gene expression data that a nearly linear 
-	relationship holds between test statistic correlation and sample correlation for several types 
-	of test statistics they examine.  This Monte Carlo simulation results are cited by 
-	\citet{wu2012camera} as a justification for estimating their VIF---a summary of correlation 
-	between test statistics---from sample correlation.
-	In all of the 
-	works, it is shown by simulation only the 
-	equivalence (in terms of either distribution or numerical summarization) of sample correlation  
-	and test statistics	correlation. 
-	To the best of our knowledge, such equivalence has not yet been justified or disproved 
-	theoretically.
+	It is yet unclear when and to what extend will the test statistics
+	correlations can be approximated by sample correlations of observed
+	data. 
+	\citet{barry2008statistical} showed by Monte Carlo simulation of gene
+	expression data that a nearly linear relationship holds between test
+	statistic correlation and sample correlation of observed data for
+	several forms of test statistics they examined. This Monte Carlo
+	simulation results are cited by \citet{wu2012camera} and
+	\citet{yaari2013quantitative} as a justification for estimating their
+	VIF from observed data. \citet{efron2007correlation} also concludes
+	through simulation that the distribution of $z$-value (the test
+	statistic in that paper) correlation can be nearly represented by the
+	distribution of sample correlation from observed data. 	
 	
 	
-%	\textbf{What did we find}\\
-	We investigate the effect of testing procedures on inter-gene correlation. First, we present a 
-	formula for calculating correlation between test statistics when they take specific form and 
-	meet some assumption of independence. Then we apply this formula to a special case where 
-	two-group comparison experiment is considered. We show that 1) the test statistics correlation 
-	$\rho_T$ is equal to the population correlation $\rho$ when the test statistics are a linear 
-	combination of the expression levels, and that 2) $\rho_T$ is no more larger than $\rho$ in 
-	absolute value when the test statistics are derived from two sample $t$ test. We conduct 
-	simulations to illustrate our findings.
+	Some gene-set analysis methods based on sample-permutation implicitly
+	assumes that the joint distribution of test statistics will not change
+	under sample permutation. Our results will reveal that such assumptions
+	are invalid.  
+	The key issue is, as also pointed out by  \citet{efron2012large1}, that sample permutation 
+	method has an
+	extra assumption, which states that the test statistics always follow the
+	distribution they have under complete null that no gene is DE.
+	We will show that that the test-statistic correlation depends on
+	correlation between gene expression levels and also on DE status.
+	Permutation of biological samples will change the DE status and thus
+	alternate the correlations among  (and thus the joint distribution of) the
+	test statistics. As a consequence, in the presence of DE genes, the
+	GSEA \citep{subramanian2005gene} procedure will not provide a valid null distribution for 
+	gene-set enrichment test.
+	
+	%	Some other gene-set analysis methods implicitly assume that the joint
+	% distribution of test statistics among non-DE genes is not affected by
+	% the presence of DE genes.
 	
 	
-%	\textbf{Relevant but different work}\\
-	A relevant research was done by \citet{qiu2005effects}, in which they studied the effect of 
-	different
-	normalization procedures on the inter-gene correlation structure for microarray data. They 
-	randomly
-	assigned 330 arrays into 15 pairs, each containing 22 arrays within each array 12558 genes. 
-	Then 15
-	$t$-statistics were calculated for each gene to mimic 15 two-sample comparisons under null
-	hypothesis of no DE. They compared the histogram of $t$-statistics correlation for different
-	normalization algorithms, and concluded that the normalization procedures are unable to 
-	completely
-	remove the correlation between the test statistics. % In this work, our interest is in 
-	%evaluating
-	%the effect of several testing procedures on gene expression correlation. 
+	%	The \textit{gene set enrichment analysis} (GSEA)
+	%	procedure \citep{subramanian2005gene} falls into this category.
+	%	For this reason, we will not discuss sample permutation based methods
+	%	in this paper.  
+	%	GSEA test permutes the labels of biological samples, aiming to
+	%	generate the null distribution of test statistic for each gene.  
+	%	However, such permutations will not preserve correlations between
+	%	test-statistics. 
+	
+	%	simulated null distributions .
+	
+	% This type of permutation preserves underlying correlation
+	% structure between genes, and thus protect the test against such
+	% correlations.
+	
+	%	statistics under the null is not affected by the presence of non-null
+	%	cases. For this reason, we will not discuss sample permutation based
+	%	methods in this paper.  
+	
+	%	\textbf{Key question: Are  expression level correlations the same as
+	%	test statistics correlation?}\\
+	%The sample correlation is a consistent estimator of underlying
+	%population correlation \cite{fisher1915frequency}. 
 	
 	
+	
+	%	\textbf{What did we find}\\
+	We investigate the relationship between the correlation of test
+	statistics and \popucor.  First, we present a formula for correlation
+	between test statistics when they take a specific form and meet some
+	assumption of independence. Then, under bivariate normal setting, we
+	apply this formula to a special case where two-group comparison
+	experiment is considered. We show that 1) the test statistics
+	correlation is equal to \popucor~when the test statistics are a linear
+	combination of the observed data, and that 2) the test statistics
+	correlation is no more larger than \popucor~in absolute value when the
+	test statistics are derived from two sample $t$ test under normal
+	assumption. We conduct simulations to illustrate our findings.
+	
+	
+	%	\textbf{Relevant but different work}\\
+%	A relevant research was done by \citet{qiu2005effects}, in which they
+%	studied the effect of different normalization procedures on the
+%	inter-gene correlation structure for microarray data.  They randomly
+%	assigned 330 arrays into 15 pairs, each containing 22 arrays within
+%	each array 12558 genes. Then 15 $t$-statistics were calculated for
+%	each gene to mimic 15 two-sample comparisons under null hypothesis of
+%	no DE. They compared the histogram of $t$-statistics correlation for
+%	different normalization algorithms, and concluded that the
+%	normalization procedures are unable to completely remove the
+%	correlation between the test statistics. % In 
+	%this work, our interest is in evaluating the effect of several
+	%testing procedures on gene expression correlation. 
+	
+
+	
+
 	
 	\subsection{General setup}\label{subsec:generalsetup}
 	\textit{Correlation} is a statistical quantity used to assess a possible linear relationship 
@@ -171,9 +205,9 @@
 	\citep{lee1988thirteen}. For example, the \textit{Kendall tau rank correlation coefficient} is 
 	computed as Pearson's correlation coefficient between the ranked variables. Throughout this 
 	paper, we will discuss Pearson's correlation under bivariate settings. We will restrict our 
-	interest, following the notation of \citet{lee1988thirteen},  to two 
-	types of Pearson's correlation coefficient. The first type of correlation, which we refer to as 
-	\textit{\popucor}, is the standardized 
+	interest to two types (following the notation of \citet{lee1988thirteen}) of Pearson's 
+	correlation coefficient.  The first type of correlation, which we refer to as 
+	\textit{\popucor} or \textit{the population correlation}, is the standardized 
 	covariance
 	\begin{equation}\label{eq:popucor}
 	\rho =\dfrac{\cov(X, Y)}{\sqrt{\var(X)\var(Y)}} = 
@@ -191,8 +225,7 @@
 	\end{equation}
 	where $(\bar{x}, \bar{y})$ is the vector of arithmetic mean of the observations. 
 	\citet{fisher1915frequency} proved that sample correlation $r$ is a consistent 
-	estimator for 
-	population correlation $\rho$.
+	estimator for the underlying correlation $\rho$.
 	
 	Let $(X_j, Y_j)$ be a bivariate random variable representing two features (genes) of sample $j 
 	= 1, \ldots, m$ , and $(x_j, y_j)$ the corresponding realization.
@@ -224,7 +257,7 @@
 	\stackrel{\text{def}}{=} \bm \Sigma 
 	\end{equation}
 	where $\rho$ is the population correlation defined by equation (\ref{eq:popucor}). In addition, 
-	we assume independence across samples (note that independence implies 0 correlation, but not 
+	we assume independence across samples (note that independence implies no correlation, but not 
 	vise versa), 
 	\begin{equation}\label{eq:indepsamples}
 	\cov(X_{j_1}, X_{j_2}) = \cov(Y_{j_1}, Y_{j_2}) = 0 \text{~~~for $j_1\neq j_2$}
@@ -235,36 +268,33 @@
 	
 	
 	In the context of gene expression study, the goal is to detect DE---whether the expression 
-	level of a gene is 
-	significantly correlated with treatment or experimental variables. Let $\bm a:=(a_1, \ldots, 
-	a_m)^T$ be a vector for a contrast of 
-	interest, then DE detection for gene $X$ can be statistically formulated as 
+	level of a gene is significantly correlated with the treatment or experimental variables. Let 
+	$\bm a:=(a_1, \ldots, a_m)^T$ be a vector for a contrast of interest, then DE detection for 
+	gene $X$ can be statistically formulated as 
 	\begin{equation}\label{eq:hypotheses}
 	H_{0}:  \bm a^T\bm \mu_X = 0 \textit{     Versus   }  H_{1}: \bm a^T\bm \mu_X \neq 0,
 	\end{equation}
-	where $\bm X = (X_1, \ldots, X_m)^T$ and $\bm \mu_{X} = (\mu_{X, 1}, \ldots, \mu_{X, m})^T$. 
+	where $\bm X = (X_1, \ldots, X_m)^T$ and $\bm \mu_{X} = (\mu_{X, 1}, \ldots, \mu_{X, m})^T$.  
 	DE detection for gene $Y$ can be obtained by applying the same contrast to $\bm Y = (Y_1, 
 	\ldots, Y_m)$ (simply replacing the subscript $X$ by $Y$ in equation (\ref{eq:hypotheses})).
 	This hypothesis testing procedure usually results in a ``$t$-test similar" test statistic, in 
-	which the numerator is a linear combination of 
-	$\bm X$ and the denominator is its standard error. Without a loss of generality, we express the 
-	test statistics as follows
+	which the numerator is a linear combination of $\bm X$ and the denominator is its standard 
+	error. Without a loss of generality, we express the test statistics as follows
 	\begin{equation}\label{eq:teststat}
 	T_X = \dfrac{\bm a^T\bm X}{S_X},  ~~~ T_Y = \dfrac{\bm a^T \bm Y}{S_Y},
 	\end{equation}  
-	where $S_X$ and $S_Y$ are the standard error for $\bm a^T\bm X$ and $\bm a^T\bm Y$ 
-	respectively.	
-	Our main goal is to explore the relationship between population correlation (equation 
-	(\ref{eq:popucor})) for the test statistics 
+	where $S_X$ and $S_Y$ are the standard errors for $\bm a^T\bm X$ and $\bm a^T\bm Y$ 
+	respectively. Our main goal is to explore the relationship between the underlying correlation 
+	 of the test statistics (equation (\ref{eq:popucor}))
 	\begin{equation}
-	\rho_T= \lim\limits_{m\rightarrow\infty}\rho_T(m) = \lim\limits_{m\rightarrow\infty}\cor({T_X, 
-		T_Y}),
+	\rho_T= \lim\limits_{m\rightarrow\infty}\rho_T(m) ,
 	\end{equation}  
-	and that for their corresponding expression levels 
+   where $\rho_T(m)= \cor({T_X, T_Y})$, and the underlying correlation of corresponding observed 
+   data 
 	\begin{equation}
 	\rho = \cor(X, Y). 
 	\end{equation}
-	We will examine two typical test statistics having the form of equation (\ref{eq:teststat}).%, 
+	We will examine under what condition and to what extend the equation $\rho_T = \rho$ holds.%, 
 	%for a given sample size of $n_1$ for treatment group and $n_2$ for control group.
 	
 	
@@ -275,10 +305,9 @@
 	making some assumptions about $T_X$ and $T_Y$, and show that the test statistics correlation 
 	$\rho_T$ does not always equal the population correlation $\rho$. For the case of two-group 
 	comparison, we prove that 1) if $T_X$ (or $T_Y$) is a linear transformation of $\bm X$ (or $\bm 
-	Y$), 
-	then $\rho_T= \rho$, and that 2) if $T_X$ (or $T_Y$) is the two sample $t$-test statistic for 
-	$\bm 
-	X$ (or $\bm Y$), then $|\rho_T| \leq |\rho|$. For 2), we show that the relationship between 
+	Y$), then $\rho_T= \rho$, and that 2) if $T_X$ (or $T_Y$) is the two sample $t$-test statistic 
+	for $\bm X$ (or $\bm Y$) under normal assumption, then $|\rho_T| \leq |\rho|$. For 2), we show 
+	that the relationship between 
 	$\rho_T$ and $\rho$ depends on whether the hypotheses tests (equation \ref{eq:hypotheses}) are 
 	true null or not. We perform simulations for the case of test statistics derived from 
 	two-sample $t$-test to illustrate our findings.
@@ -349,7 +378,7 @@
 	a]E[S_X^{-1}S_Y^{-1}]- (\bm a^T\bm \mu_X)(\bm a^T\bm \mu_Y)E[S_X^{-1}]E[S_Y^{-1}]
 	\end{aligned}
 	\end{equation}	
-	The result follows by plugging equations (\ref{eq:testprepare})-(\ref{eq:testnumerator}) into 
+	The result follows by plugging equations (\ref{eq:testprepare})---(\ref{eq:testnumerator}) into 
 	equation (\ref{eq:popucor}).
 	
 	\begin{corollary}\label{thm:lineartransformation} 
@@ -373,7 +402,7 @@
 		\mu_Y)}{\sigma_X\sigma_Y\bm a^T\bm a} \rho_s	
 	}{\sqrt{\left[ \frac{E(S_X^{-2})}{\var(S_X^{-1})} + \frac{(\bm a^T\bm \mu_X)^2}{\sigma_X^2\bm 
 	a^T\bm a}\right]\left[ \frac{E(S_Y^{-2})}{\var(S_Y^{-1})} + \frac{(\bm a^T\bm 
-	\mu_Y)^2}{\sigma_Y^2\bm a^T\bm a}\right]}} 
+	\mu_Y)^2}{\sigma_Y^2\bm a^T\bm a}\right]}}, 
 	\end{equation}
 	where 
 	\begin{equation}
@@ -708,10 +737,10 @@
 		follows a \textbf{bivariate chi square distribution} with density 
 		\begin{equation}\label{biChisq}
 		\begin{aligned}
-		f(w_x, w_y) & = \frac{2^{-m}(w_xw_y)^{(n-3)/2}e^{-\frac{w_x +
+		&f(w_x, w_y) \\
+		& = \frac{2^{-m}(w_xw_y)^{(n-3)/2}e^{-\frac{w_x +
 					w_y}{2(1-\rho^2)}}}{\sqrt{\pi}\Gamma(\frac{m}{2})(1-\rho^2)^{(m-1)/2}} 
-		\times \\
-		& \sum_{k=0}^{\infty}[1 +
+		\times  \sum_{k=0}^{\infty}[1 +
 		(-1)^k]\left(\frac{\rho\sqrt{w_xw_y}}{1-\rho^2}\right)^k\frac{\Gamma(\frac{k+1}{2})}{k!\Gamma(\frac{k+
 				m}{2})}
 		\end{aligned}
@@ -1093,7 +1122,7 @@
 	for their enrichment analysis as we will see in Chapter \ref{chap3}. Our results also indicate 
 	that the variance of 
 	$\rho_T$ may also be overestimated in
-	\cite{efron2007correlation}, which leads to larger variation in estimating their conditional 
+	\cite{efron2007correlation}, which leads to inflated variation in estimating their conditional 
 	FDP.
 	
 %	\textbf{	Acknowledge the study?s limitations \\}

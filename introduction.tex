@@ -1,7 +1,7 @@
 \section{Introduction}\label{sec:intro}
 % In this thesis, we focus on statistical analysis of gene expression data.
-In Section \ref{subsec:biol}, we give an overview of the three research questions addressed
-in this thesis.
+In Section \ref{subsec:biol}, we give an overview of the three research questions
+that will be addressed in this thesis.
 In Section \ref{subsec:RNABackground}, we provide necessary background on 
 RNA-Sequencing (RNA-Seq) experiments and RNA-Seq data processing.
 RNA-Seq experiments are the focus of this thesis. 
@@ -13,38 +13,26 @@ that will be used for variance component analysis of RNA-Seq data.
 
 %\subsubsection{Questions for this thesis}
 
-Differential expression (DE) analysis is a key task in gene expression study, because it uncovers 
+
+% underlie the fthe causes of a disease and to develop effective medicine. 
+In this thesis, we investigate three questions pertaining to gene  differential expression (DE)
+analysis: 1. Identifying stably expressed genes from multiple RNA-Seq data sets by a numerical 
+stability measure (Chapter \ref{chap1}); 2. Investigating the relationship between the correlations
+among DE test statistics and the correlations among underlying observed data
+(Chapter \ref{chap2}); 3. Accounting for correlations among DE test statistics in competitive 
+gene-set test (Chapter
+\ref{chap3}). 
+
+
+
+\subsubsection{Identifying stably expressed genes}
+DE analysis is a key task in gene expression study, because it uncovers 
 the association between expression levels of a gene and the covariates of interest. The covariates 
 could either be categorical (e.g., treatment/control status, cell types), or continuous (e.g., 
 reagent concentration, time). For example, to understand the effect of a drug, one might ask which 
 genes are \textit{up-regulated} (increased expression levels) or \textit{down-regulated} (decreased 
 expression levels) between treatment and control groups. Finding these genes will help researchers 
 understand which genes or pathways are involved in the drug's functions. 
-% underlie the fthe causes of a disease and to develop effective medicine. 
-In recent years, many 
-statistical tools have  been developed for DE detection (methods review can be found in 
-\cite{rapaport2013comprehensive,seyednasrollah2015comparison,soneson2013comparison}) in RNA-Seq 
-experiments. Most of those approaches are based on Poisson \citep{marioni2008rna, wang2010degseq}
-or Negative Binomial (NB) distribution
-\citep{anders2010differential,di2011nbp,oberg2012technical,robinson2007moderated, wu2013new} because
-RNA-Seq expression data are present in the form of counts. %In practice, Poisson models are used
-%when there are only technical replicates while NB models are more suitable when there are
-%biological replicates.
-The NB distribution based models are more popular for their flexibility to deal with 
-\textit{over-dispersion} (a.k.a. extra-Poisson variation) that are often observed in RNA-Seq 
-expression data.
-
-In this thesis, we investigate three questions pertaining to gene expression
-analysis: 1. Identifying stably expressed genes from multiple RNA-Seq data sets by a numerical 
-stability measure (Chapter \ref{chap1}); 2. Investigating the relationship between the correlations
-among test statistics and the correlations among underlying observed data
-(Chapter \ref{chap2}); 3. Accounting for correlations among test statistics
-(of differential expression) in competitive gene set test (Chapter
-\ref{chap3}). 
-
-
-
-\subsubsection{Identifying stably expressed genes}
 
 Despite the optimistic claim that DE analysis of RNA-Seq data does not need 
 sophisticated normalization \citep{wang2009rna}, many works have shown that normalization of count 
@@ -57,8 +45,8 @@ the experiment under investigation. However, this assumption could be violated i
 where over $50\%$ of the genes' expression levels are altered by the treatments
 \citep{loven2012revisiting, wu2013use}. The consequence with such assumption can be alleviated if
 one could identify a set of reference genes whose expression levels are stable across
-different experimental conditions. This motivates us to identify reference (stably expressed) genes 
-by exploring a large number of existing RNA-Seq data sets.
+different experimental conditions. This motivates us to examine a large number of existing RNA-Seq 
+data sets and to identify reference (stably expressed) genes. 
 
 In microarray studies, there have been many attempts to find reference genes for normalization.
 Traditionally, the \textit{house-keeping genes}  are used as reference genes.
@@ -85,18 +73,17 @@ times biologists compare results from one experiment to those from others experi
 are publicly
 available. 
 
-\subsubsection{Correlations among test statistics}
+\subsubsection{Correlation among test statistics}
 DE analysis involves simultaneous hypothesis testing for an ensemble of genes. 
 One common feature of testing an ensemble of genes is that a test statistic quantifying the 
-magnitude of DE is 
-calculated for each gene, and then all the test statistics are pooled together and treated as a 
-sample from which to estimate sampling distribution of test statistics. Since the 
-expression levels are correlated, the test statistics derived from the expression levels are 
-also correlated , and this inter-dependency of test statistics cannot be ignored 
-\citep{barry2008statistical, efron2007correlation, wu2012camera} when testing a set of genes. 
+magnitude of DE is calculated for each gene, and then all the test statistics are pooled together 
+and treated as a sample from which to estimate sampling distribution of test statistics. Since the 
+observed data (expression levels) are correlated, the test statistics derived from them are 
+also correlated, and this inter-dependency of test statistics cannot be ignored when testing a set 
+of genes \citep{barry2008statistical, efron2007correlation, wu2012camera}. 
 
 However, without replicating the experiment, we cannot directly compute
-the sample correction % there's no way to obtain the correlation structure 
+the sample correlation % there's no way to obtain the correlation structure 
 of the test statistic values between genes since only a single test statistic
 value is available for each gene. The sample correlation between observed data is often used to 
 approximate the sample correlation between two test statistic values computed from these data.
@@ -112,8 +99,8 @@ gene-set test procedures to account for correlation among test statistics.
 However, it has only been shown by simulation under limited settings that the correlations among 
 test statistics are almost the same as the correlations among underlying observed data 
 \cite{barry2008statistical,efron2007correlation}. 
-In Chapter \ref{chap2}, we will investigate when and to what degree that the
-test statistics correlations can be approximated by observed data correlations.
+In Chapter \ref{chap2}, we will investigate when and to what degree that the correlation of test 
+statistics can be approximated by the correlation of observed data.
 
 % This investigation will help us understand the validity of approximating test
 % statistics correlation by sample correlation. 
@@ -124,11 +111,11 @@ DE analysis evaluates each individual gene separately. Single-gene analysis
 may fail to provide insights into biological mechanisms when multiple genes
 function together.  Gene-set analysis is a commonly-used technique that
 provides a higher-level interpretation of the DE test results. For a given set
-of genes, a gene-set test will test whether there is an overabundance of DE
-genes in the set as compared to DE genes in a background set (such as a
+of genes, a gene-set test will evaluate whether there is an overabundance of DE
+genes in the set as compared to DE genes in a background set (such a
 gene-set test is sometimes called a ``competitive test" 
-\citep{goeman2007analyzing}). Commonly used gene sets are gene pathways, genes assigned to a common 
-ontology term, and so on.
+\citep{goeman2007analyzing}). Commonly considered gene sets are gene pathways, genes assigned to a 
+common ontology term, and so on.
 
 Many existing gene-set tests do not take possible correlation between test
 statistics into consideration, such as \gent~\citep{tian2005discovering}, PAGE
@@ -136,12 +123,13 @@ statistics into consideration, such as \gent~\citep{tian2005discovering}, PAGE
 tests \cite{alexa2010topgo, huang2007david,ye2006wego}. However, it has been argued that such test
 procedures will result in inflated type I error 
 \citep{efron2007testing,gatti2010heading,goeman2007analyzing,wu2012camera,yaari2013quantitative}, 
-as genes within a gene set are often co-expressed and function together. Those that do often use 
-observed data correlation to approximate test statistic correlation 
+as genes within a gene set are often co-expressed and function together. Those that do consider 
+test-statistic correlation often use 
+observed-data correlation to approximate test-statistic correlation 
 \citep{barry2008statistical,wu2012camera,yaari2013quantitative}. As we will show in
 Chapter \ref{chap2}, such an approximation is problematic when there is DE among genes. In
 Chapter \ref{chap3}, we introduce a gene-set test that correctly handles the
-test-statistic correlation among DE genes. 
+test-statistic correlation among genes. 
 
 
 
@@ -237,17 +225,15 @@ obtained in which each row represents a genomic feature unit and each column cor
 biological
 sample. 
 
-In this research work, we assemble an in-house pipeline to process RNA-Seq data sets based on the R \citep{Rpackage}
-platform.
-This pipeline, modified from a standard procedure given by \citet{anders2013count},   is designed to work
-for sequencing data available at the \textit{National Center for Biotechnology Information} (NCBI,
-\url{http://www.ncbi.nlm.nih.gov/}). It uses the SRA (Sequence Read Archive) Toolkit
-\citep{leinonen2010sequence} to convert SRA files to FASTQ files, the \verb|Subread| aligner
-\citep{liao2013subread} to map reads to the reference genome, and then the \verb|featureCounts| 
-\citep{liao2013featurecounts} to summarize
-counts (see Figure \ref{fig:flowchart} for the work flow). We will use this pipeline to process 
-multiple
-RNA-Seq data sets that are needed in Chapter \ref{chap1}.
+In this dissertation, we assemble an in-house pipeline to process RNA-Seq data sets based on the R 
+\citep{Rpackage} platform. This pipeline, modified from a standard procedure given by 
+\citet{anders2013count}, is designed to work for sequencing data available at the \textit{National 
+Center for Biotechnology Information} (NCBI, \url{http://www.ncbi.nlm.nih.gov/}). It uses the SRA 
+(Sequence Read Archive) Toolkit \citep{leinonen2010sequence} to convert SRA files to FASTQ files, 
+the \verb|Subread| aligner \citep{liao2013subread} to map reads to the reference genome, and then 
+the \verb|featureCounts| \citep{liao2013featurecounts} to summarize counts (see Figure 
+\ref{fig:flowchart} for the work flow). We will use this pipeline to process multiple RNA-Seq data 
+sets that are needed in Chapter \ref{chap1}.
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Figures/flowchart.pdf}
@@ -262,14 +248,22 @@ RNA-Seq data sets that are needed in Chapter \ref{chap1}.
 
 
 \subsection{Background on generalized linear mixed models}\label{subsec:glmm}
-We have mentioned earlier that RNA-Seq data are essentially present in the form of count matrices. 
-Therefore it might not be appropriate to impose normal distribution on gene expression profiles, 
-especially when the sample size is small. Generalized linear models (GLMs) are a natural choice for 
-analyzing RNA-Seq data. In addition, to account for random terms in biological experiments, GLMs 
-are 
-sometimes extended to generalized linear mixed models (GLMMs).
-In this section, we will first describe the formulation GLMMs,
-and then review commonly used methods for parameter estimation under this framework.
+
+In recent years, many statistical tools have  been developed for DE detection (methods review can 
+be found in \cite{rapaport2013comprehensive,seyednasrollah2015comparison,soneson2013comparison}) in 
+RNA-Seq experiments. Generalized linear models (GLMs) are a natural choice for analyzing RNA-Seq 
+expression data because RNA-Seq data are present in the form of counts. Most of those approaches 
+are based on Poisson \citep{marioni2008rna, wang2010degseq} or Negative Binomial (NB) distribution
+\citep{anders2010differential,di2011nbp,oberg2012technical,robinson2007moderated, wu2013new}. %In 
+%practice, Poisson models are used
+%when there are only technical replicates while NB models are more suitable when there are
+%biological replicates.
+The NB distribution based models are more popular for their flexibility to deal with 
+\textit{over-dispersion} (a.k.a. extra-Poisson variation) that are often observed in RNA-Seq 
+expression data. In addition, to account for random effects in biological experiments, GLMs are 
+sometimes extended to generalized linear mixed models (GLMMs). In this section, we will first 
+describe the formulation GLMMs, and then review commonly used methods for parameter estimation 
+under this framework.
 
 \subsubsection{Framework of generalized linear mixed models}\label{subsubsec:intro-stat-framework}
 GLMMs are a natural generalization of classical linear models. To illustrate this point, we will
@@ -284,10 +278,11 @@ of $p$ covariates $\bm X_1, \ldots, \bm X_p$,
 \begin{equation}\label{eq:clm}
 	\bm \mu =\beta_0 + \sum_{i=1}^p\beta_i \bm X_i
 \end{equation}	
-where $\beta$'s are unknown parameters and need to be estimated from data. For
-$j$th %\footnote{Unless specified otherwise, we assume there are $n$ observations (i.e. $j=1, \ldots
+where $\bm \beta = (\beta_0, \beta_1, \ldots, \beta_p)^T$ are unknown parameters and need to be 
+estimated from data. For $j$th %\footnote{Unless specified otherwise, we assume there are $n$ 
+%observations (i.e. $j=1, \ldots
 %	,n$).} 
- observation $Y_j$, we specify $\epsilon_j$, a random term, to allow for measurement error.
+observation $Y_j$, we specify a random term $\epsilon_j$ to allow for measurement error.
 Assuming a linear relationship between response $Y_j$ and predictors $(x_{1j}, \ldots, x_{pj})$, we
 present the linear model 
 \begin{equation}\label{eq:clm2}
@@ -305,8 +300,8 @@ In practice, the error term is frequently, if not always, assumed to be normally
 
 \paragraph{Linear mixed models}\label{para:lmm}
 The Gauss-Markov assumption in equation (\ref{eq:gauss-markov}) is vulnerable in practice, for 
-example,
-nonconstant variance, or correlated data where Cov$[\epsilon_i, \epsilon_j]\neq 0$.
+example, in the case of nonconstant variance or correlated data where Cov$[\epsilon_i, 
+\epsilon_j]\neq 0$.
 Equation (\ref{eq:clm2}) in either case, without loss of generality, can be expressed in matrix
 form as
 \begin{equation}\label{eq:clm3}
@@ -329,13 +324,13 @@ data can be specified using an extension of standard linear model by
 \begin{equation}\label{eq:lmm}
 	\bm Y = \bm {X\beta} + \bm {Z_1u_1}+\cdots + \bm {Z_qu_q} + \bm \epsilon	
 \end{equation}
-equation (\ref{eq:lmm}) differs from equation~(\ref{eq:clm3}) only in the $\bm {Z_iu_i}$ terms,
-which is the key part of \textit{linear mixed models}.  The $\bm Z_i$  are known $n\times p_i$ full
+Equation (\ref{eq:lmm}) differs from equation~(\ref{eq:clm3}) only in the $\bm {Z_iu_i}$ terms,
+which is the key part of \textit{linear mixed models}.  The $\bm Z_i$'s are known $n\times p_i$ full
 rank matrices, usually used to specify membership of predictors in various subgroups. The most
 important innovation in this model is that instead of estimating $\bm u_i$'s as fixed parameters, we
 assume them to be unknown random quantities, and $E[\bm u_i]=0$, $\cov[\bm u_i]= \sigma_i^2 \bm
-I_{p_i}$ for $i=1, \ldots, q$. It is, in many cases, reasonable to require that $\bm u_i$ are
-mutually independent, and that $\bm u_i$ is independent of $\bm \epsilon$ for $i=1, \ldots, q$. If
+I_{p_i}$ for $i=1, \ldots, q$. It is, in many cases, reasonable to require that $\bm u_i$ be
+mutually independent, and that $\bm u_i$ be independent of $\bm \epsilon$ for $i=1, \ldots, q$. If
 we further impose normal distribution on the random terms and errors, then equation (\ref{eq:lmm})
 can be casted in a Bayesian framework,
 \begin{equation}\label{eq:lmmGuass}
@@ -373,10 +368,9 @@ We can take a different perspective of classical linear models by arranging equa
 		\eta_j = g(\mu_j).
 	\end{equation}
 \end{enumerate}
-The classical linear models fits within this framework if we assume that the random components 
-$Y_j$'s
-are independent and normally distributed, and that the link function is identity (i.e., $g(\mu_j)=
-\mu_j$).
+The classical linear models fit within this framework if we assume that the random components 
+$Y_j$'s are independent and normally distributed, and that the link function is identity (i.e., 
+$g(\mu_j)= \mu_j$).
 
 We can extend part (i)---by allowing $Y_j$ to come from an exponential family (e.g., Poisson,
 Gamma or Binomial distribution), and part (iii)--- by requiring the link function to be monotonic
@@ -423,8 +417,8 @@ We will illustrate one specific type of GLMMs---the Poisson log-linear mixed-eff
 context of RNA-seq experiments. Suppose we have RNA-Seq expression profiles (in the form of 
 counts)
 randomly selected from three experiments conducted in three different labs. For each experiment, 
-there are two treatments and two biological replicates for each treatment. We are not interested in 
-the specific levels of treatment, but focus
+there are two treatments and two biological replicates within each treatment. We are not interested 
+in the specific levels of treatment, but focus
 more on the overall variation of treatments. In this sense, the treatment effects are also
 considered as random. For a single gene, let $Y_{jkl}\sim \text{Poisson}(\mu_{jkl})$ be the read
 count for $j$th biological sample from $k$th treatment of $l$th experiment. The link function
@@ -577,7 +571,8 @@ that for the $i$th cluster
 \begin{equation}\label{eeq:clm.3.1}
 	L( \bm Y_i|\bm \beta, \bm \Sigma) = \int f(\bm y_i|\bm \beta, \bm u )\phi(\bm u|\bm\Sigma)d\bm u =
 	\int \frac{f(\bm y_i|\bm \beta, \bm u )\phi(\bm u|\bm\Sigma)}{\phi(\bm u|\hat{\bm
-			u}^{(n)},\hat{\bm \Omega}^{(n)} )}\phi(\bm u|\hat{\bm u}^{(n)},\hat{\bm \Omega}^{(n)} )d\bm u
+			u}^{(n)},\hat{\bm \Omega}^{(n)} )}\phi(\bm u|\hat{\bm u}^{(n)},\hat{\bm \Omega}^{(n)} 
+			)d\bm u.
 \end{equation}
 %[copied from SAS help] 
 Let $m$ be the number of quadrature points (i.e., the order of the Hermite
@@ -606,11 +601,10 @@ likelihood has the form of equation (\ref{eq:gh-approx}), a number of numerical 
 Newton-Raphson
 or Fisher's scoring) can be used to estimate $(\bm \beta,  \bm \Sigma)$. 
 
-It should be noted, however, as the number of dimension $Q$ increases, the computational burden for
-approximating equation (\ref{eq:gh-approx}) grows exponentially since the total number of nodes is 
-$m^Q$. 
-Therefore it is difficult to implement AGH procedure with more than three random effects
-\citep{bolker2009generalized}.
+It should be noted, however, that as the number of dimension $Q$ increases, the computational 
+burden for approximating equation (\ref{eq:gh-approx}) grows exponentially since the total number 
+of nodes is $m^Q$. Therefore it is difficult to implement AGH procedure with more than three random 
+effects \citep{bolker2009generalized}.
 
 
 \paragraph{Estimation based on linearization}\label{para:linearization}
@@ -647,8 +641,7 @@ The PQL procedure uses a first order Taylor expansion of $\bm \beta$ and $\bm u$
 where $\tilde{\bm \Omega}_{PQL}$ is an $n\times n$ diagonal matrix whose $(i, i)$ entry is 
 $\partial {g^{-1}(\bm \eta_i)}/\partial \bm \eta_i $ evaluated at $\tilde{\bm \eta}= \bm X\tilde{\bm
 	\beta} + \bm Z\tilde{\bm u}$. Multiplying both sides by $\bm \tilde{\bm\Omega}_{PQL}^{-1}$,
-equation
-(\ref{eq:linearization2}) can be rearranged as 
+we can rearrange equation (\ref{eq:linearization2}) as 
 \begin{equation}\label{eq:linearization3}
 	\bm {X\beta} + \bm {Zu} \approx \tilde{\bm \Omega}_{PQL}^{-1}[g^{-1}(\bm\eta)- g^{-1}(\tilde{\bm
 		\eta})]  + \bm{X}\tilde{\bm \beta} + \bm Z\tilde{\bm u}.
@@ -685,13 +678,13 @@ calculated. The estimate for $\bm \beta$ is given by
 \begin{equation}
 	\hat{\bm\beta} = (\bm X^T\hat{\bm W}^{-1} \bm X)^{-1}\bm X^T\hat{\bm W}^{-1}\bm X \tilde{\bm y},
 \end{equation}
-and the estimate for random effect is 
+and the estimate for the random effects is 
 \begin{equation}\label{se7}
 	\hat{\bm u} = \hat{\bm\Sigma } \bm Z \hat{\bm W}^{-1} (\tilde{\bm y}-\bm {X} \hat{\bm \beta}).
 \end{equation}
 Then the pseudo-response is updated and the procedure is repeated until convergence is reached for
 fixed effects and variance components.  Note that equation (\ref{se7}) estimates a vector of random
-effect. For this reason, PQL is also referred to as \textit{subject-specific} estimate procedure. 
+effects. For this reason, PQL is also referred to as \textit{subject-specific} estimate procedure. 
 
 \subparagraph*{Marginal Quasi-likelihood} 
 One of the motivation for MQL is that usually one is more interested in estimating the marginal
@@ -718,8 +711,8 @@ A linearization performed at $\bm \eta_0= \bm X \bm \beta_0$ leads to
 	g^{-1}(\bm \eta) \approx g^{-1} (\bm{X\beta_0}) + \tilde{\bm \Omega}_{MQL} (\bm \eta - \bm X\bm
 	\beta_0),
 \end{equation}
-and multiplying both sides by $\tilde{\bm \Omega}_{MQL} ^{-1}$, equation (\ref{se9.1}) then can be
-arranged to 
+and multiplying both sides by $\tilde{\bm \Omega}_{MQL} ^{-1}$, we can re-express equation 
+(\ref{se9.1}) as
 \begin{equation}
 \bm {X\beta} + \bm {Zu} \approx \tilde{\bm \Omega}_{MQL}^{-1}[g^{-1}(\bm\eta)- g^{-1}(\bm
 \eta_0)]  + \bm{X}\bm \beta_0. 
@@ -738,9 +731,9 @@ Note that the pseudo-response is not a function of $\bm u$ any more, so updating
 not require calculating the random effects $\bm u$. Accordingly, the MQL approach is also referred 
 to as \textit{population-averaged} estimate approach.
 
-\citet{breslow1995bias}  and \citet{pinheiro2006efficient} point out that PQL approach may lead to
-asymptotically biased estimates and hence to inconsistency. It is not recommended to use simple PQL
-method in practice. 
+\citet{breslow1995bias}  and \citet{pinheiro2006efficient} point out that the PQL approach may lead 
+to asymptotically biased estimates and hence to inconsistency. It is not recommended to use simple 
+PQL method in practice. 
 
 
 \paragraph{Bayes approach}

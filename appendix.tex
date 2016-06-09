@@ -2,7 +2,7 @@
 \renewcommand{\thesubsection}{\Alph{subsection}}  % rename the chapters
 
 \setcounter{table}{0}   % rename the tables
-\renewcommand{\thetable}{\ref{app:supp}.\arabic{table}}
+\renewcommand{\thetable}{C.\arabic{table}}
 
 \begin{appendices}
 
@@ -39,12 +39,12 @@
 	\text{Var}(\Delta_i|\bm G) & = E[(Z_i\delta_i)^2|\bm G]- [E(Z_i\delta_i|\bm G)]^2 \\
 	& = \text{Var}(Z_i|\bm G)[E(\delta_i)]^2 + \left[(EZ_i|\bm G)^2 + 
 	\text{Var}(Z_i|\bm G)\right]\text{Var}(\delta_i) \\
-	& =p_i\sigma_{\delta}^2 + p_i(1-p_i)\mu_{\delta}^2..
+	& =p_i\sigma_{\delta}^2 + p_i(1-p_i)\mu_{\delta}^2.
 	\end{aligned}
 	\end{equation}
 	If the gene-level test statistics $U_i$'s take the form of equation (\ref{eq:U}), then we have 
 	$E(U_i|\bm G) = E(\Delta_i + \eta_i|\bm G)  = p_i\mu_{\delta}$. Next, note that the covariance 
-	between two genes $i_1$ and $i_2$ is given by, 
+	between two genes $i_1$ and $i_2$ is given by 
 	\begin{equation}\label{eq:app1}
 	\begin{aligned}
 	\text{Cov}(U_{i_1}, U_{i_2}|\bm G) & =\cov\left[(\Delta_{i_1} + \eta_{i_1}, \Delta_{i_2} + 

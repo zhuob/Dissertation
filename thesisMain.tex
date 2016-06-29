@@ -39,6 +39,8 @@
 \usepackage{mathrsfs}
 \usepackage[square,numbers]{natbib}
 \usepackage{hyperref}
+%\usepackage{tocloft}
+%\usepackage{subfig}
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}  
 \usepackage{amsmath,bm}
@@ -65,6 +67,19 @@
 \usepackage{lscape}  % Vertical Display table
 \usepackage{chngcntr}  % Count Figure within chapter/section
 \usepackage{tablefootnote}  % for table at appendix
+
+
+
+\let\LaTeXStandardTableOfContents\tableofcontents
+
+\renewcommand{\tableofcontents}{%
+	\begingroup%
+	\renewcommand{\bfseries}{\relax}%
+	\LaTeXStandardTableOfContents%
+	\endgroup%
+}%
+
+%\chapterstyle{dash}
 
 
 %  the following command is about tables of contents and structure of the thesis
@@ -229,7 +244,7 @@
     \def\Major{Statistics}
     \def\HonorsType{} %Scholar or Associate
     \def\StudentEmail{zhuob@oregonstate.edu}
-    \def\CommencementMonth{June 2016}
+    \def\CommencementMonth{June 2017}
     
      %%Thesis Information
     \def\ThesisTitle{Higher-level Analysis of RNA-Seq Experiment: Multiple Data Sets and 
@@ -288,11 +303,13 @@
 
   %Begin Thesis Body
   \tableofcontents
-  \newpage 
+%  \newpage 
   \listoffigures %---------LIST OF FIGURES (Only If You Have Two Or More)
-
-  \clearpage
+%  \clearpage
   \listoftables %----------LIST OF TABLES (Only If You Have Two Or More)
+%  \listofappendices
+%  \listofappendixfigures
+%  \listofappendixtables
   \clearpage
  
 % \listofappendices

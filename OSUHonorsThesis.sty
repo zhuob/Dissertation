@@ -66,14 +66,14 @@
     \ThesisTitle \\[.05\textheight]
     {By \\[.02\textheight]  \StudentName}\\[0.167\textheight] 
 
-    A DISSERTATION \\[.04\textheight]
-    submitted to \\[.02\textheight]
-    Oregon State University \\[.02\textheight]
+    A DISSERTATION \\[.03\textheight]
+    submitted to \\[.03\textheight]
+    Oregon State University \\[.1\textheight]
  %   College of Science\\[.2\textheight]
 
     in partial fulfillment of\\
     the requirements for the\\
-    degree of\\[.05\textheight]
+    degree of\\[.04\textheight]
 
 	\ifdefined\SecondDegree
     	 of \Degree\ in \Major \\
@@ -86,10 +86,11 @@
            def   Honors Baccalaureate of \Degree\ in \Major\ and \SecondMajor\\
      %         (Honors \HonorsType)
         \else
-         \Degree\ in \Major\\
+%         \Degree\ in \Major\\
+	 \Degree\\ % in \Major\\
       %      (Honors \HonorsType)
-        \fi
-   \fi
+%        \fi
+%   \fi
 
     \vfill
 
@@ -115,14 +116,14 @@
   \begin{flushleft}
     \ifdefined\SecondDegree
         \uline{\StudentName}\ for the degree of 
-    	\uline{Doctor of Philosophy in \Major }
+	    	\uline{Doctor of Philosophy} in \uline{\Major }
         and \uline{Honors Baccalaureate of \SecondDegree\ in \SecondMajor}
     \else
         \ifdefined\SecondMajor
             \StudentName\ for the degree of 
         	\uline{Honors Baccalaureate of \Degree\ in \Major\ and \SecondMajor}
         \else
-             \uline{\StudentName} for the degree of \uline{\Degree\ in \Major}
+             \uline{\StudentName} for the degree of \uline{\Degree} in \uline{\Major}
         \fi
     \fi
     presented on \uline{\DatePresented}. 
@@ -135,7 +136,7 @@
     \hrulefill\\
   \end{flushleft}
   \begin{flushright}
-  	\Mentor\\[.03\textheight]
+  \centering	\Mentor\\[.03\textheight]
   \end{flushright}
 \end{singlespace}
 
@@ -180,14 +181,14 @@ Corresponding e-mail address: \StudentEmail
 \begin{singlespace}
   \begin{flushleft}
     \ifdefined\SecondDegree
-    \uline{Doctor of Philosophy of \Degree\ in \Major\ }
+    \uline{Doctor of Philosophy of \Degree}  \uline{\Major\ }
     and \uline{Honors Baccalaureate of \SecondDegree\ in \SecondMajor}
     \else
         \ifdefined\SecondMajor
                            
               {Doctor of Philosophy of \Degree\ in \Major\ and  \SecondMajor}
         \else
-        	\underline{ \Degree\ in \Major}
+        	\underline{ \Degree} % in \underline{\Major}
         \fi
     \fi
     dissertation of \uline{\StudentName}\ presented on \uline{\DatePresented} \\[.1\textheight]
@@ -214,7 +215,9 @@ Corresponding e-mail address: \StudentEmail
     Dean of the Graduate School \\[.09\textheight]
     \vfill
 
-    I understand that my project will become part of the permanent collection of Oregon State University libraries.  My signature below authorizes release of my dissertation to any reader upon request.\\[.05\textheight]
+    I understand that my dissertation will become part of the permanent collection of Oregon State 
+    University libraries.  My signature below authorizes release of my dissertation to any reader 
+    upon request.\\[.05\textheight]
 
     \hrulefill\\
     \centering\StudentName, Author
@@ -256,6 +259,62 @@ Corresponding e-mail address: \StudentEmail
 
 
 
+
+% There are these kinds of listings:
+% Table of contents (toc)
+% List of figures (lof)
+% List of tables (lot)
+% List of appendices (loap)
+% List of appendix tables (loat)
+% List of appendix figures (loaf)
+
+% A definition generator for listings. It generates two page styles (one for the
+% first page, one for the rest) and a command.
+% #1 : file extension name
+% #2 : full name (to appear as the heading of the listing)
+% #3 : short name (to appear as the heading on the top of the left column)
+% #4 : command name (to be used to make the listing)
+\newcommand{\definelisting}[4]{
+	% Page style for the first page. If twoside is set, the page is an
+	% oddpage. Otherwise, \evenhead is not used anyway.
+	\expandafter\newcommand\csname ps@#1a\endcsname{%
+		\renewcommand{\@oddhead}{%
+			\parbox{\textwidth}{%
+				\centering {\heading #2} \\ 
+				\underline{#3}\hfill\underline{Page}
+			}
+		}
+		\renewcommand{\@oddfoot}{}
+		\renewcommand{\@evenfoot}{}
+	}
+	% Page style for the following pages
+	\expandafter\newcommand\csname ps@#1b\endcsname{%
+		\renewcommand{\@oddhead}{%
+			\parbox{\textwidth}{%
+				\centering {\heading #2\ (Continued)} \\ 
+				\underline{#3}\hfill\underline{Page}
+			}
+		}
+		\renewcommand{\@evenhead}{\@oddhead}
+		\renewcommand{\@oddfoot}{}
+		\renewcommand{\@evenfoot}{}
+	}
+	% The command itself. I had to use \def rather than \newcommand because we
+	% might be redefining \tableofcontents.
+	\expandafter\def\csname #4\endcsname{%
+		\cleardoublepage
+		\pagestyle{#1b}
+		\thispagestyle{#1a}
+		{\let\footnote\@ignore\@starttoc{#1}}
+	}
+}
+
+\definelisting{toc}{TABLE OF CONTENTS}{}{tableofcontents}
+\definelisting{lof}{LIST OF FIGURES}{Figure}{listoffigures}
+\definelisting{lot}{LIST OF TABLES}{Table}{listoftables}
+\definelisting{loap}{LIST OF APPENDICES}{}{listofappendices}
+\definelisting{loaf}{LIST OF APPENDIX FIGURES}{Figure}{listofappendixfigures}
+\definelisting{loat}{LIST OF APPENDIX TABLES}{Table}{listofappendixtables}
 
 
 

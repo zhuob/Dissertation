@@ -220,7 +220,7 @@ and processing RNA-Seq data sets from Arabidopsis experiments.  In Section
 \ref{section:countNormalization}, we discuss count normalization methods and
 how to apply them to a subset of stably expressed genes.
 In Section \ref{subsection:OurMethod},  we introduce the generalized linear
-mixed model (GLMM, \citealt{mcculloch2001generalized}) for estimating three
+mixed model (GLMM, \citet{mcculloch2001generalized}) for estimating three
 variance components from RNA-Seq data: the \textit{between-sample},
 \textit{between-treatment} and \textit{between-experiment} variances.  We
 define the \textit{total variance} measure for expression stability as the sum
@@ -245,13 +245,14 @@ samples from \howmanyleafexperiment experiments;  the \textit{multi-tissue group
 samples from \howmanytissueexperiment experiments on multiple tissue types (shoot apical, root tip,
 primary root, inflorescences and siliques, hypocotyl, flower, carpels, aerial
 tissue, epidermis, seed).  Table \ref{table:TableSet3} summarizes the basic information about
-the three groups.
+the three groups (see Appendix 
+\ref{app:24experiments} for more details about the \howmanylab experiments).
 % lowly-expressed genes provide little information about expression level, and 
 \begin{table}[!ht]
 	\centering
 	\caption[Summary statistics for the three groups of Arabidopsis samples]{Summary statistics for 
 	the three groups of Arabidopsis samples.}
-	\begin{tabular}{lp{2.4cm}p{2.3cm}p{2cm}p{1.5cm}} \hline
+	\begin{tabular}{lp{3cm}p{3cm}p{2.5cm}p{2cm}} \hline
 		Group & \#  experiments & \# treatments  & \# samples & \# genes \\ \hline
 		seedling &   9 &  27 &  60 & 22207 \\ 
 		leaf &   5 &  28 &  60 & 20967 \\ 

@@ -3,7 +3,7 @@
 
 \vspace*{5cm}
 \begin{centering}
-	{\normalsize Bin Zhuo and Jiang Duo}\\[.04\textheight]
+	{\normalsize Bin Zhuo and Duo Jiang}\\[.04\textheight]
 \end{centering}	
 \vspace*{5cm}
 
@@ -104,18 +104,15 @@
 	% Those tests are parametric or rank-based procedures
 	%that assume the gene-level statistics to be independent and identically distributed, or gene
 	%permutation procedures that generate the same approximate null for the set-level statistics. 
-	For example, PAGE  \citep{kim2005page} conducts one-sample $z$-test by comparing the mean of 
-	gene-level
-	statistics (i.e., the mean of log fold changes) in the test set to a normal distribution under 
-	the
-	null. The $2\times 2$ contingency-table-based tests examine the significance of the test set by
-	dichotomizing the outcomes of DE analysis and cross-classifying the genes according to whether 
-	they
-	are indicated as DE and whether they are in the test set (see \cite{huang2009bioinformatics} 
-	for a
-	review and references therein). sigPathway \citep{tian2005discovering} and ``\gen" in the limma
-	package \citep{Smyth2004moderated} evaluate the set-level $p$-values by permuting gene labels.
-	However, tests assuming independence of genes may result in inflated false discovery rate
+	For example, the PAGE \citep{kim2005page} conducts one-sample $z$-test by comparing the mean of 
+	gene-level statistics (i.e., the mean of log fold changes) in the test set to a normal 
+	distribution under the null. The $2\times 2$ contingency-table-based tests examine the 
+	significance of the test set by dichotomizing the outcomes of DE analysis and cross-classifying 
+	the genes according to whether they are indicated as DE and whether they are in the test set 
+	(see \cite{huang2009bioinformatics} for a review and references therein). The sigPathway 
+	\citep{tian2005discovering} and ``\gen" in the limma package \citep{Smyth2004moderated} 
+	evaluate the set-level $p$-values by permuting gene labels. However, tests assuming 
+	independence of genes may result in inflated false discovery rate 
 	\citep{efron2007testing,gatti2010heading,goeman2007analyzing, 
 	wu2012camera,yaari2013quantitative},
 	as genes within a gene set are often co-expressed and function together.
@@ -129,10 +126,10 @@
 	computationally	inefficient, \citet{zhou2013empirical} proposed an analytic approximation to 
 	permutations for set-level score statistics, which preserves the essence of permutation gene 
 	set analysis with greatly reduced computational burden. However, an unavoidable problem arising 
-	from sample	permutation approach is that it implicitly alters the null hypothesis being 
+	from sample	permutation approach is that it implicitly alters the null hypotheses being 
 	tested and it is therefore difficult to characterize the null and the alternative hypotheses
 	\citep{goeman2007analyzing, khatri2012ten, wu2012camera}. Another attempt is to use set-level
-	statistic that directly includes between-gene correlation estimated from the data. For example, 
+	statistics that directly include between-gene correlation estimated from the data. For example, 
 	CAMERA \citep{wu2012camera} calculates a \textit{variance inflation factor} (VIF) from sample 
 	correlation (after the treatment effects removed) of observed data, and then incorporates it 
 	into their set-level statistics to account for between-gene correlations. QuSAGE 
@@ -186,6 +183,7 @@
 	
 	
 	\subsection{Methods}\label{section:methods}
+		
 	We consider a gene expression (e.g. RNA-Seq or microarray) experiment, in which we compare the 
 	expression levels of samples from two groups: a treatment group with $n_1$ samples referred to 
 	as ``cases" and a control group with $n_2$ samples referred to as ``controls" ($n_1,n_2\ge 3$). 
@@ -197,9 +195,20 @@
 	\citep{kanehisa2000kegg} or GO \citep{ashburner2000gene}. Our goal is to test whether this known
 	gene set is enriched with differential expression signals. Let $\bm G$ be an $m$-dimensional 
 	vector defining the gene set of interest, where $G_i=1$ if and only if the $i^{th}$ gene is in 
-	the set and $G_i=0$ otherwise. Our analysis will condition on $\bm G$ and test if $\bm G$ is 
-	associated with enhanced DE effects. In the following sections, we will first construct a 
-	hierarchical model for the gene expression data incorporating possible correlations among the 
+	the set and $G_i=0$ otherwise. In this paper, we assume that $\bm G$ is known once the gene set 
+	is given. Let $U_i$ be the gene-level test statistic for gene $i$. 
+	Our framework of gene-set test can be presented as 
+		\begin{equation}\label{eq:overview}
+		U_i = \beta_0 + \beta_1\text{G}_i  + \psi_i  + \eta_i, ~i = 1, \ldots, m,  
+		\end{equation}
+	where $\psi_i$ denotes the variation of $U_i$ attributable to DE, and $\eta_i$ random error 
+	induced by random errors from the expression levels of gene $i$. Under model 
+	(\ref{eq:overview}), testing the enrichment 
+	of a given gene set is equivalent to testing $H_0:\beta_1 = 0$. 
+		
+	 In the following sections, we will describe how $U_i$, $\psi_i$ and $\eta_i$ are modeled: we 
+	 first construct a hierarchical model for the gene expression data incorporating possible 
+	 correlations among the 
 	$m$ genes, from which we will derive a quasi-likelihood model for the gene-level DE statistics 
 	jointly for all the genes. Based on this model, we will then present our enrichment test, and 
 	discuss its connections with CAMERA. Finally, we will describe our simulation studies used to 
@@ -525,7 +534,7 @@
 		\begin{tabular}{rp{3.7cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}}
 			\hline
 			\multirow{2}{*}{Group} & 	Background & \multicolumn{5}{c}{DE prob. in test set 
-			($p_t$)}\\
+			($p_t$)}\\  \cline{3-7}
 			&DE prob. ($p_b$)&$S_0$ &$S_1$ &$S_2$ &$S_3$ &$S_4$\\
 		\hline
 			$A_1$ & 0\% & 0\%  & 5\% & 10\% & 15\% & 20\%\\ 
@@ -788,11 +797,10 @@
 	\begin{table}[!ht]
 		\centering
 		\caption[Recalibrated power for different methods]{Recalibrated power for different 
-		methods. The powers are 
-		summarized
-			under four alternatives $S_1$-$S_4$ in each of the group $A_1$ and $A_2$ simulations 
-			(see Table
-			\ref{table:simusetup} for detail). Results are based on \HowmanySimu~simulations.
+		methods. The $c(\alpha)$ is the $\alpha$ quantile of null distribution of $p$-values. The 
+		powers are calculated as the proportion of $p<c(\alpha)$ for each of the four alternatives 
+		$S_1$-$S_4$ and each of the group $A_1$ and $A_2$ simulations (see Table 
+		\ref{table:simusetup} for detail). Results are based on \HowmanySimu~simulations.
 		}\label{table:power}
 		%	\begin{tabular}{cl M{2.0cm}M{2.0cm}M{2.0cm}M{2.0cm}M{2.0cm}}
 		\begin{tabular}{cp{3cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}}

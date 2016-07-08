@@ -26,24 +26,24 @@ potential inconsistent conclusions.
 We investigate the relationship between correlation among test statistics and \popucor. For false 
 discovery control (FDR) procedures and gene-set tests, pooling DE test 
 statistics together is a frequently used idea and the correlation among test statistics needs to be 
-taken into account. The sample correlation of observed data are often used to approximate the 
+taken into account. The sample correlation of observed data is often used to approximate the 
 test statistics correlation. We show, however, that such an approximation is only valid under 
 limited settings. In particular, we derive a formula for correlation between test statistics when 
-they take a specific form, and as a special case, we present the exact expression of test 
-statistics correlation for equal-variance two sample $t$-test statistic under bivariate 
-normal assumption. We conclude that test statistics correlation is no more greater in absolute 
-value than \popucor~(normally distributed) in the context of 
+they take a specific form, and as a special case, we present the exact expression of test-statistic 
+correlation for equal-variance two sample $t$-test statistic under bivariate 
+normal assumption. We conclude that test-statistic correlation is weaker than \popucor~(normally 
+distributed) in the context of 
 equal-variance two-sample $t$-test.
 
 Competitive gene-set test is a widely used tool for interpreting high-throughput biological 
 data, such as gene expression and proteomics data. It aims at testing categories of genes for 
 enriched association signals in a list of genes inferred from genome-wide data. Most 
 conventional enrichment testing methods ignore or do not properly account for the widespread 
-correlations among genes, which, as we show, can result in inflated type I error rates and 
+correlations among genes, which, as we show, can result in inflated type I error rates and/or 
 power loss. We propose a new framework, \OurMethod, for gene-set test based on a mixed effects 
 quasi-likelihood model, where the data are not required to be Gaussian. Our method effectively 
-adjusts for completely unknown,	unstructured correlations among the genes. It uses a score test 
+adjusts for completely unknown,	unstructured correlations among genes. It uses a score test 
 approach and allows for analytical assessment of $p$-values. Compared to existing methods such 
 as GSEA and CAMERA, our method enjoys robust and substantially improved control over type I 
 error and maintains good power in a variety of correlation structure and association settings. 
-We also present two real data analysis to illustrate our approach.
+We also present two real data analyses to illustrate our approach.

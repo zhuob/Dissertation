@@ -49,14 +49,16 @@ correlation by using the observed-data correlation.
 
 The \OurMethod, a new gene set-test framework we proposed in Chapter \ref{chap3}, is motivated by 
 the observation (in Chapter \ref{chap2}) that correlation between test statistics may not equal 
-\popucor. \OurMethod~uses difference in mean as gene-level statistics whose correlation can be 
-estimated by the sample correlation of observed data, and works for gene-set test in two group 
-comparison experiment. It has the flexibility to allow for DE genes in the 
+\popucor. \OurMethod~models the covariance 
+of gene-level statistics by two variance components, one 
+attributable to correlations among samples after treatment effect 
+removed, and the other attributable to the heterogeneity of DE effects. It works for gene-set test 
+in two group comparison experiment. It has the flexibility to allow for DE genes in the 
 background set, and does not require the data to be normally distributed. It effectively adjusts 
 for completely unknown and unstructured correlations among genes. 
  We demonstrated by simulation study that \OurMethod~holds type I error size 
-correctly, and maintains good power for all correlation structures we examined. We apply 
-\OurMethod~to two real data sets and find meaningful gene sets that are otherwise overlooked by 
+correctly, and maintains good power for all correlation structures we examined. We applied
+\OurMethod~to two real data sets and found meaningful gene sets that are otherwise overlooked by 
 methods such as GSEA or CAMERA.
 
 

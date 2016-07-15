@@ -4,9 +4,9 @@
 \section{Conclusion}\label{ch:conclusion}
 
 \subsection{Summary of the dissertation}
-Detecting DE genes plays a central role in gene expression analysis. The 
+Detecting \DED~genes plays a central role in gene expression analysis. The 
 statistical questions we seek to address in this thesis help both ``pre" DE analysis---finding 
-stably expressed genes for RNA-Seq count normalization, and ``post" DE analysis---investigating 
+stably expressed genes as reference for DE detection, and ``post" DE analysis---investigating 
 correlation among DE test statistics and understanding the effect of treatments on sets of 
 genes (biological pathways or gene ontologies).
 
@@ -23,23 +23,23 @@ the background sample set and the reference gene set used for count
 normalization, the technology used for measuring gene expression, and the specific 
 numerical stability measure used. Because DE is measured by relative frequencies, we argue that DE 
 is a relative concept, and that making the reference gene set explicit can improve the 
-interpretability of DE results.  When comparing differential expression among multiple experiments, 
+interpretability of DE results.  When comparing DE among multiple experiments, 
 we suggest using a common set of genes as reference to avoid inconsistent conclusions. For count 
-normalization of Arabidopsis RNA-Seq data sets,  we recommend  using the top 1000 stably expressed 
-genes chosen from the appropriate reference sample (multi-tissue, leaf or seedling, etc.).
+normalization of RNA-Seq data sets,  we recommend  using the top 1000 stably expressed 
+genes chosen from the appropriate reference sample (e.g, multi-tissue, leaf or seedling, etc.).
 
-In Chapter \ref{chap2} we explored the relationship between test-statistic correlation $\rho_T$
+In Chapter \ref{chap2} we explored the relationship between test-statistic correlation $\rho_T(m)$
 and \popucor~$\rho$ (see Section \ref{subsec:generalsetup} for details about $\rho$ and 
-$\rho_T$). The test statistics investigated are of the form $T_X = \bm a^T\bm 
+$\rho_T(m)$). The test statistics investigated are of the form $T_X = \bm a^T\bm 
 X/S_X$. Under the assumption of independence between denominator and numerator of $T_X$, we show 
-that $\rho_T$ does not necessarily equal $\rho$. For normally distributed 
-random variables, we give an exact formula of $\rho_T$ when $T$ is the test statistic for 
+that $\rho_T(m)$ does not necessarily converge to $\rho$. For normally distributed 
+random variables, we give an exact formula of $\rho_T(m)$ when $T$ is the test statistic for 
 equal-variance two-sample $t$-test. The formula (see equation (\ref{eq:limitT})) suggests that 
-$\rho_T$ is a function of both $\rho$ and the strength of DE (signal-to-noise ratio), and we 
-conclude that $|\rho_T|\leq 
+$\rho_T(m)$ is a function of both $\rho$ and the strength of DE (signal-to-noise ratio), and we 
+conclude that $\lim\limits_{m\rightarrow\infty}|\rho_T(m)|\leq 
 |\rho|$ for two-sample $t$-test of normal data. In the context of gene expression analysis, the 
 two-sample $t$-test is a common choice for 
-detecting DE genes, and the sample correlation of observed data has been used to approximate 
+detecting \DED~genes, and the sample correlation of observed data has been used to approximate 
 test-statistic correlation \cite{barry2008statistical,efron2007correlation,wu2012camera}. Our 
 theoretical derivation shows, however, in the presence of DE, that correlation between test 
 statistics will be over-estimated (in absolute value) by the observed-data correlation. This will 
@@ -53,7 +53,7 @@ the observation (in Chapter \ref{chap2}) that correlation between test statistic
 of gene-level statistics by two variance components, one 
 attributable to correlations among samples after treatment effect 
 removed, and the other attributable to the heterogeneity of DE effects. It works for gene-set test 
-in two group comparison experiment. It has the flexibility to allow for DE genes in the 
+in two group comparison experiment. It has the flexibility to allow for \DED~genes in the 
 background set, and does not require the data to be normally distributed. It effectively adjusts 
 for completely unknown and unstructured correlations among genes. 
  We demonstrated by simulation study that \OurMethod~holds type I error size 
@@ -79,23 +79,27 @@ experiments. Therefore, it may be beneficial to build a prior distribution of th
 terms when analyzing a new data set. 
 
 The investigation in Chapter \ref{chap2} is just a first attempt towards understanding correlation 
-between  test statistics. Our results suggest that test statistics correlation may not be 
-approximated by observed-data correlation. In the future, we are interested in finding analytical 
-expressions of correlation for test statistics of different hypothesis testing procedures, and as a 
-result, improving the accuracy of FDP estimation based on the work of \citet{efron2007correlation}. 
+between  test statistics. Our results suggest that test-statistic correlation may not be 
+approximated by sample correlation of observed data. In the future, we are interested in finding 
+analytical expressions of test-statistic correlations under different hypothesis testing 
+procedures, and as a result, to improve the accuracy of FDP estimation based on the work of 
+\citet{efron2007correlation}. 
 
+%(Need modification) 
 In Chapter \ref{chap3}, we showed that \OurMethod~adequately accounts for correlation among test 
-statistics. However, everything comes at a price. 
-It is important to choose appropriate DE measure so that correlations between test statistics can 
-be estimated from the observed data. Our strategy is to use linear combination of the data (e.g., 
-difference in mean under two group comparison, as we did in Chapter \ref{chap3}) as gene level test 
-statistics, which may not be suitable for all cases. In many gene expression experiments, 
+statistics. However, everything comes at a price. Currently, \OurMethod~only allows for two group 
+comparison, which may not be suitable for all cases.
+%It is important to choose appropriate DE measure so that correlations between test statistics can 
+%be estimated from the observed data. Our strategy is to use linear combination of the data (e.g., 
+%difference in mean under two group comparison, as we did in Chapter \ref{chap3}) as gene level 
+%test statistics, which may not be suitable for all cases.
+In many gene expression experiments, 
 researchers  might use more complicated design to study factors of interest. When the gene-level 
-test statistics are derived from such a design based statistical analysis (e.g., generalized 
-linear models), it is often difficult to estimate correlation among test statistics from data. In 
+test statistics are derived from such a design based statistical analyses (e.g., generalized 
+linear models), it becomes more difficult to model the correlation among test statistics. In 
 the future, we can either generalize \OurMethod~to accommodate complicated design structures, or 
-develop techniques that can estimate correlation between test statistics under 
-more general statistical models.  
+develop techniques that can handle correlation between test statistics under 
+more general statistical frameworks.  
 
 
 

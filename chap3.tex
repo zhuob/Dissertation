@@ -20,7 +20,8 @@
 	effects quasi-likelihood model, where the data are not required to be Gaussian. Our method 
 	effectively adjusts for completely unknown,	unstructured correlations among genes. It uses a 
 	score test approach and allows for analytical assessment of $p$-values. Compared to existing 
-	methods such as GSEA and CAMERA, our method enjoys robust and substantially improved control 
+	methods such as GSEA and CAMERA, our method 
+	enjoys robust and substantially improved control 
 	over type I error and maintains good power in a variety of correlation structure and 
 	association settings. We also present two real data analyses to illustrate our approach.
 	\end{abstract}
@@ -42,11 +43,13 @@
 	
 	%	\textbf{What is enrichment analysis? Why would people care about that?}\\
 	\textit{Gene-set tests} (also called enrichment 
-	analysis in some literature) aim to evaluate  the association between a pre-defined gene set, 
+	analysis in some literature) aim to evaluate  the association between the expression levels of 
+	genes in a pre-defined set, 
 	referred to as the test set, and experimental or environmental factors of interest.
     It examines whether the test set is enriched (or depleted) with differential expression (DE) 
-    signals, where the DE signal of a gene can be quantified by comparing this gene's expression 
-    values among the factors of interest. The test set could be a known pathway or given by a 
+    signals, where the DE signal of a gene can be quantified by comparing the gene's expression 
+    levels across treatment groups for the factor of interest. The test set could be a known 
+    pathway or given by a 
     functional annotation term from a database such as KEGG\citep{kanehisa2000kegg} or GO 
     \citep{ashburner2000gene}.
 	%	A key task of gene expression analysis involves the detection of differentially expressed 
@@ -63,9 +66,9 @@
 	test. A self-contained test examines the DE signals of genes in the test set without reference 
 	to other genes in the genome 	
 	\citep{goeman2005testing,goeman2004global,huang2013gene,tsai2009multivariate,wu2010roast}. A 
-	competitive test compares DE signals of genes in the test set to those not in the test set 
-	\citep{tian2005discovering,wu2012camera,yaari2013quantitative}. Many methods, regardless of the 
-	type of test, perform a three-stage analysis
+	competitive test compares DE signals of genes in the test set to those of genes not in the test 
+	set \citep{tian2005discovering,wu2012camera,yaari2013quantitative}. Many methods, regardless of 
+	the type of test, perform a three-stage analysis
 	\citep{khatri2012ten}: at the first stage, a \textit{gene-level statistic} is calculated for 
 	each gene in the whole genome to measure the association between the expression profiles and the
 	experimental design variables; such gene-level statistics include, among others,
@@ -130,25 +133,32 @@
 	does not require an explicit understanding of the underlying correlation structure among genes 
 	and thus protects the test against such correlations. Since permuting sample labels is 
 	computationally	inefficient, \citet{zhou2013empirical} proposed an analytic approximation to 
-	permutations for set-level score statistics, which preserves the essence of permutation gene 
-	set analysis with greatly reduced computational burden. However, permuting sample labels in 
-	these methods inevitably alters the null and alternative hypotheses being tested, and therefore 
-	confuses the competitive test with the self-contained test, making the results hard to interpret
-	\citep{goeman2007analyzing, khatri2012ten, wu2012camera}. Another attempt is to use set-level
-	statistics that directly include between-gene correlations estimated from the data. For 
-	example, CAMERA \citep{wu2012camera} calculates a \textit{variance inflation factor} (VIF) from 
-	sample correlations (after the treatment effects removed) of observed data, and then 
+	permutations for set-level score statistics, which preserves the essence of permutation 
+	gene-set analysis with greatly reduced computational burden. However, permuting sample labels 
+	in these methods inevitably alters the null and alternative hypotheses being tested, and 
+	therefore confuses the competitive test with the self-contained test, making the results hard 
+	to interpret \citep{goeman2007analyzing, khatri2012ten, wu2012camera}. Another attempt is to 
+	use set-level statistics that directly include between-gene correlations estimated from the 
+	data. For example, CAMERA \citep{wu2012camera} calculates a \textit{variance inflation factor} 
+	(VIF) from sample correlations (after the treatment effects removed) of observed data, and then 
 	incorporates it into their set-level statistics to account for between-gene correlations. 
 	QuSAGE \citep{yaari2013quantitative}, which is a recent	extension to CAMERA but quantifies 
-	gene-set activity with a probability density function, also used a similar VIF to handle 
+	gene-set activity with a probability density function, also uses a similar VIF to handle 
 	between-gene correlations. However, the VIF approach may be problematic in two respects: first 
 	and most importantly, it does not properly model the heterogeneity among genes in 
-	terms of the presence and magnitude of DE effects. Second, the VIF quantifies the strength of 
+	terms of the presence and magnitude of DE effects. 
+%	Do you have a more precise description of this, like which part of the model or what parameter 
+%	was not misspecified? To discuss the methodological pitfalls in CAMERA, we have to be very 
+%	specific and precise. What I mean by this is, just as an illustrative example, some statement 
+%	like "CAMERA makes the assumption that the parameter XX follows XX distribution, which 
+%	effectively requires all genes to be non-DE, and as a result does not properly control type 1 
+%	error when DE is present."	
+	Second, the VIF quantifies the strength of 
 	correlation among test statistics (e.g., 
 	$t$-statistics), but is approximated from sample correlation of observed 
 	data. Such approximation assumes that test-statistic correlations are almost the same as sample 
 	correlations of observed data, which might be violated when a fraction of 
-	genes are  truly DE (\thepapertobefinished). We will show that the VIF approach can lead to 
+	genes are  truly \DED~(\thepapertobefinished). We will show that the VIF approach can lead to 
 	severely compromised type I error and power in gene-set testing. 
 	
 %	[However, the VIF approach does not properly model the heterogeneity among genes in terms of 
@@ -180,7 +190,7 @@
 	``\textbf{M}ixed-effects \textbf{E}nrichment \textbf{A}nalysis with \textbf{C}orrelation 
 	\textbf{A}ccounted for" 
 	(abbreviated to ``\OurMethod"). Our idea is motivated by the discrepancy between correlations
-	among expression levels and those among gene-level statistics caused by the presence of DE 
+	among expression levels and those among gene-level statistics caused by the presence of \DED~ 
 	genes (see Chapter \ref{chap2}). 
 	%To tackle such discrepancy, we use differences in mean as gene-level statistics for a 
 	%two group comparison experiment. 
@@ -192,7 +202,8 @@
 	the distribution of the DE effects across genes to be Gaussian. Our method effectively 
 	adjusts for completely unknown,	unstructured correlations among the genes. \OurMethod~uses a 
 	score test approach and allows for analytical assessment of $p$-values. Compared to existing 
-	methods including GSEA and CAMERA, \OurMethod~enjoys robust and improved control over type I 
+	methods including GSEA \citep{subramanian2005gene} and CAMERA \citep{wu2012camera}, 
+	\OurMethod~enjoys robust and improved control over type I 
 	error and maintains good power in a	variety of correlation structure and association settings. 
 	
 	%	\textbf{What is the plan of this paper?} \\
@@ -211,8 +222,8 @@
 	expression levels of samples from two groups: a treatment group with $n_1$ samples referred to 
 	as ``cases" and a control group with $n_2$ samples referred to as ``controls" ($n_1,n_2\ge 3$). 
 	Suppose the expression levels of a set of $m$ genes are observed for each sample. An unknown 
-	subset of these genes are DE between cases and controls, with varying sign and magnitude of DE 
-	effects. The genes are also allowed to have (negatively or positively) correlated expression 
+	subset of these genes are \DED~between cases and controls, with varying sign and magnitude of 
+	DE effects. The genes are also allowed to have (negatively or positively) correlated expression 
 	levels. In enrichment analysis, we are interested in a pre-defined set of genes, for example, 
 	from a known pathway or given by a functional annotation term from a database such as KEGG
 	\citep{kanehisa2000kegg} or GO \citep{ashburner2000gene}. Our goal is to test whether this known
@@ -255,7 +266,7 @@
 	levels, where ``baseline" refers to the	average among controls. Thirdly, for any given gene, 
 	its mean expression level in the treatment group can be either higher, lower or the same 
 	compared to the control group, depending on whether the gene is up-regulated, down-regulated, 
-	or not DE. For the genes that are differentially expressed, their DE effects are modeled 
+	or not \DED. For the genes that are \DED, their DE effects are modeled 
 	additively and are allowed to have heterogeneous signs and magnitudes. Finally, given a gene, 
 	and its DE effect, the expression level is allowed to vary independently across samples, which 
 	captures measurement error and sample-level variability.
@@ -268,7 +279,7 @@
 	level of sample $j$ at gene	$i$. Let $\mu_i$ ($1\le i\le m$) be the baseline expression 
 	level for gene $i$. The quantities $\mu_i$'s are treated as nuisance parameters and as we will 
 	see later do not contribute to our analysis. Let $\bm \Delta=(\Delta_1, \cdots, \Delta_m)^T$ be 
-	a vector for the additive DE effects for the genes. Gene $i$ is not DE if $\Delta_i=0$, 
+	a vector for the additive DE effects for the genes. Gene $i$ is not \DED~if $\Delta_i=0$, 
 	up-regulated if $\Delta_i >0 $ and down-regulated if $\Delta_i<0$. We model $\bm \Delta$ as a 
 	random effect, for which we will detail our assumptions later. Given $\mu_i$ and $\Delta_i$, 
 	the mean expression level for the control group and the treatment group are $\mu_i$ and 
@@ -316,12 +327,12 @@
 	impose any specific distributional assumptions such as normality on the DE effects $\bm 
 	\Delta$. For example, 
 	the distribution of a given $\Delta_i$ can put positive mass on zero, which allows for the 
-	highly likely event that some of the genes are not DE. To further motivate our general 
+	highly likely event that some of the genes are not \DED. To further motivate our general 
 	framework for $\bm \Delta$, we present a simple model included by equation (\ref{eq:Delta}) as 
-	a special case. Suppose the $m$ genes are independently sampled to be either DE or not. The 
-	probability for gene $i$ to be DE is $p_t$ if $G_i=1$, or $p_b$ if $G_i=0$. For DE genes, their 
-	DE effects are sampled independently from a common distribution with mean $\mu_\delta$ and 
-	variance $\sigma^2_\delta$. Under these	assumptions, 
+	a special case. Suppose the $m$ genes are independently sampled to be either \DED~or not. The 
+	probability for gene $i$ to be \DED~is $p_t$ if $G_i=1$, or $p_b$ if $G_i=0$. For \DED~genes, 
+	their DE effects are sampled independently from a common distribution with mean $\mu_\delta$ 
+	and variance $\sigma^2_\delta$. Under these	assumptions, 
 	\begin{equation}
 	\label{eq:DeltaBinom}
 	E(\Delta_i|\bm G) = p_i\mu_{\delta},\;\; \text{Var}(\Delta_i|\bm G)= p_i\sigma_{\delta}^2 +
@@ -364,45 +375,41 @@
 	
 	We note that by letting $\Delta_i = \beta_0 + \beta_1 G_i + \psi_i$, equation 
 	(\ref{eq:representationofU}) is equivalent to model (\ref{eq:overview}) whose mean 
-	and variance are given by equations (\ref{eq:U_mean}) and (\ref{eq:U_var}). The random effect 
+	and variance are given by equations (\ref{eq:U_mean}) and (\ref{eq:U_var}). The random effects 
 	$\psi_i$'s capture the heterogeneity of the DE effects that are conditional on whether gene $i$ 
 	belongs to the test set ($G_i=1$) or not ($G_i= 0$).
 	
 	
 	\paragraph{The set-level test statistic}\label{subsection:MEQL}
-	For a competitive gene set test, it is often unclear what the hypothesized null is and what is
+	For a competitive gene-set test, it is often unclear what the hypothesized null is and what is
 	being tested \citep{barry2008statistical,wu2012camera}. In our approach, to detect patterns of 
 	the DE signals in the gene set of interest that stand out compared with genes not in the set, 
 	we test $H_0: \mathscr{D}_1=\mathscr{D}_2$ against $H_1: \mathscr{D}_1\ne\mathscr{D}_2$. For 
 	example, for the special scenario given by equation (\ref{eq:DeltaBinom}), this amounts to 
 	testing $p_{b}=p_{t}$ against $p_{b}\ne p_{t}$.
-	To construct the test statistic, we focus on the part of the alternative space where
+	To construct the set-level test statistic, we focus on the part of the alternative space where
 	$E(\mathscr{D}_1)\ne E(\mathscr{D}_2$), or equivalently $\beta_1\ne 0$. We first consider the 
-	less
-	interesting case with uncorrelated genes, in which $\bm C$ equals $\bm I$, an $m$-dimensional
-	identity matrix. Under the quasi-likelihood model for $\bm U$ given in Section
+	less interesting case with uncorrelated genes, in which $\bm C$ equals $\bm I$, an 
+	$m$-dimensional identity matrix. Under the quasi-likelihood model for $\bm U$ given in Section
 	\ref{subsection:UModel},  the quasi-score statistic for $\beta_1$ has the form $S \propto \bm
 	G^T(\bm U-\hat\beta_0\bm 1_m)$, where $\hat\beta_0=\overline{U}$ is an estimate for $\beta_0$ 
-	and
-	$\bm 1_m$ is a $m$-dimensional vector of 1's. To perform a quasi-score test, one would divide 
-	$S^2$
-	by its estimated variance under $H_0$ and the assumption that $\bm C=\bm I$. The resulting test
-	statistic is 
+	and	$\bm 1_m$ is a $m$-dimensional vector of 1's. To perform a quasi-score test, one would 
+	divide $S^2$ by its estimated variance under $H_0$ and the assumption that $\bm C=\bm I$. The 
+	resulting test	statistic is 
 	\begin{equation}
 	T_{\text{u}} = \dfrac{S^2}{\widehat{\mbox{Var}}_{0, \bm C=\bm I}(S|\bm G)} = \dfrac{[\bm G^T(\bm
 		U-\hat\beta_0\bm 1_m)]^2}{\bm G^T(\bm I-\bm H)\bm G}, 
 	\end{equation}
 	where $\bm H = \dfrac{1}{m}\bm 1_m\bm 1_m^T$. The subscript ``u" stands for ``uncorrelated 
-	genes".
-	For the case of interest when between-gene correlation is present, $\bm C$ is a non-trivial
-	correlation matrix. We will again form our test statistic based on $S$. However, for the
-	denominator of the statistic, the null variance of $S$ will be evaluated under the 
+	genes".	For the case of interest when between-gene correlation is present, $\bm C$ is a 
+	non-trivial	correlation matrix. We will again form our test statistic based on $S$. However, 
+	for the	denominator of the statistic, the null variance of $S$ will be evaluated under the 
 	quasi-likelihood
 	model with non-trivial $\bm C$. By equation (\ref{eq:U_var}), the variance of $S$ is given by
 	$\mbox{Var}(S|\bm G) = \bm G^T(\bm I-\bm H)\Sigma(\bm I-\bm H)\bm G$. Note that $H_0:
 	\mathscr{D}_1=\mathscr{D}_2$ implies $\sigma_1^2=\sigma_2^2$. Thus, under $H_0$,
 	$\Sigma:=\mbox{Var}_{0}(\bm U|\bm G)=\sigma_0^2\bm C+\sigma_1^2\bm I$, where 
-	$\sigma_0=1/n_1+1/n_2$
+	$\sigma_0^2=1/n_1+1/n_2$
 	is known and $\sigma_1^2$ is an unknown parameter. To estimate $\sigma_1^2$ under $H_0$, we 
 	observe
 	that $\mbox{Var}_{0}(U_i)=\sigma_0^2+\sigma_1^2$ and use
@@ -431,10 +438,11 @@
 	which case $\bm C$ is a high-dimensional parameter that cannot be efficiently estimated by $\hat
 	{\bm C}$. Interestingly, however, we find that the the test statistic $T$ relies not on
 	the accurate estimation of the entire $\bm C$, but only on three parameters involving $\bm C$, 
-	which can be much more realistically estimated by a moderate sample size. To demonstrate this, 
-	let $m_1$ and $m_2$ be the size of the tested set and the background set, respectively 
-	($m_1+m_2=m$). Let $\rho_1$ be the average correlation between two genes in the tested set, 
-	$\rho_2$ be the average correlation between two background genes, and $\rho_3$ be the average 
+	which can be much more realistically estimated given a moderate sample size. To demonstrate 
+	this, let $m_1$ and $m_2$ be the size of the tested set and the background set, respectively 
+	($m_1+m_2=m$). Let also $\rho_1$ be the average correlation between two genes in the tested 
+	set, $\rho_2$  the average correlation between two background genes, and $\rho_3$ the 
+	average 
 	correlation between a tested gene and a background gene. Then, $\rho_1$ is the mean of the 
 	off-diagonal entries in the $m_1\times m_1$ sub-matrix of $\bm C$ made up of rows and columns 
 	corresponding to the test set, $\rho_2$ is that in the $m_2\times m_2$ sub-matrix corresponding 
@@ -452,40 +460,53 @@
 	Therefore, the \OurMethod~test statistic depends on $\bm C$ only through $\rho_1$, $\rho_2$ and 
 	$\rho_3$. 
 	
-%	Model (\ref{eq:overview})  and equation (\ref{eq:stat_denom1}) also help reveal the 
-%	connections between CAMERA and our method. 
-%%	First, compared to the model (\ref{eq:overview}), CAMERA does not have the random effect term 
-%%$\psi_i$, which means CAMERA .
-%	%We note that, under our framework, CAMERA effectively assumes that $\rho_2=\rho_3=0$ (i.e, 
-%	%between-gene correlations are present only among genes in the test set), and that 
-%	%$\sigma_1^2=\sigma_2^2=0$ 
-%	%(i.e, the $\psi_i$ is absorbed into the fixed terms $\beta_0$ and $\beta_1$).
-%	When the CAMERA approach is considered % under our framework 
-%	with 
-%	$\mbox{Var}(\epsilon_{ij})=1$ and equation (\ref{eq:U}) as the gene-level statistics, its 
-%	set-level test 
-%	statistic can be shown to be equivalent to equation (\ref{eq:meqleastat}) but using the 
-%	following as the denominator
-%	\begin{equation}\label{eq:stat_denom2}
-%	c_1(1-\dfrac{1}{m_1})\rho_1 + c_1(\dfrac{1}{m_1}+\dfrac{1}{m_2}).
-%	\end{equation}
-%% Both assumptions are likely violated in reality. 
-%	To explore how violation of them affects the performance of CAMERA, note that when 
-%	$m_1$ and $m_2$ are large, the first term in equation (\ref{eq:stat_denom2}) is approximately 
-%	proportional to $\rho_1+\rho_2-2\rho_3$. To gain insights into the type I error of CAMERA, we 
-%	consider the following hypothetical scenarios where only the first assumption is 
-%	violated, that is, we allow at least one of $\rho_2$ and $\rho_3$ to be nonzero: (i) if 
-%	$\rho_2>0$ but $\rho_3=0$, CAMERA would under-estimate the denominator (because 
-%	$\rho_1+\rho_2-2\rho_3 > \rho_1$) and therefore 
-%	would have inflated type I error ; (ii) if 
-%	$\rho_2=\rho_3>0$, CAMERA would be too conservative 
-%	in controlling type I error ($\rho_1+\rho_2-2\rho_3 < \rho_1$); (iii) if $\rho_2>0$ but 
-%	$\rho_3< 0$, CAMERA would also produce 
-%	inflated type I error ($\rho_1+\rho_2-2\rho_3 > \rho_1$). These trends will be confirmed and 
-%	illustrated using type I error simulations (see Section \ref{subsection:typeIerror}). On the 
-%	other hand, if there 
-%	are DE genes in both the test set and the background set (this corresponds to violation of the 
-%	second assumption), CAMERA does not fit in the framework of \OurMethod. 
+	\paragraph{Connection with CAMERA}
+	Model (\ref{eq:overview})  and equation (\ref{eq:stat_denom1}) also help reveal the 
+	connections between CAMERA and our method (we use \CMT~to illustrate). 	
+	The test statistic for \CMT~can be viewed as a score test derived from our model with the DE 
+	random effect $\phi_i$ omitted. 
+%	First, compared to the model (\ref{eq:overview}), CAMERA does not have the random effect term 
+%	$\psi_i$, which means CAMERA .
+	Under our framework, \CMT~effectively assumes that 
+	\begin{enumerate}
+		\item Between-gene correlations are present only among genes 
+		in the test set, which means  $\rho_2=\rho_3=0$;
+		\item  $\psi_i=0$ for both genes in the test set and those in the background set, which 
+		amounts to assuming that  
+		$\sigma_1^2=\sigma_2^2=0$.
+	\end{enumerate}
+	When the CAMERA approach is considered % under our framework 
+	with 
+	$\mbox{Var}(\epsilon_{ij})=1$ and equation (\ref{eq:U}) as the gene-level statistics, its 
+	set-level test 
+	statistic can be shown to be equivalent to equation (\ref{eq:meqleastat}) but using the 
+	following as the denominator
+	\begin{equation}\label{eq:stat_denom2}
+	c_1(1-\dfrac{1}{m_1})\rho_1 + c_1(\dfrac{1}{m_1}+\dfrac{1}{m_2}).
+	\end{equation}
+	 As a results, CAMERA does not properly model the contribution of between-gene correlations 
+	 outside the test set, as well as non-zero,
+	 heterogeneous DE effects on the variance of the distribution of gene-level
+	 statistics. 
+	 
+% Both assumptions are likely violated in reality. 
+%	To explore how violation of them affects the performance of CAMERA, note that
+	To gain insights into the type I error performance of \CMT, we 
+	consider the following hypothetical scenarios where only the first assumption of \CMT~is 
+	violated, that is, we allow at least one of $\rho_2$ and $\rho_3$ to be nonzero. Note that when 
+	$m_1$ and $m_2$ are large, the first term in equation (\ref{eq:stat_denom1}) is approximately 
+	proportional to $\rho_1+\rho_2-2\rho_3$. We claim that (i) if 
+	$\rho_2>0$ but $\rho_3=0$, \CMT~would under-estimate the denominator (because 
+	$\rho_1+\rho_2-2\rho_3 > \rho_1$) and therefore 
+	would have inflated type I error ; (ii) if 
+	$\rho_2=\rho_3>0$, \CMT~would be too conservative 
+	in controlling type I error ($\rho_1+\rho_2-2\rho_3 < \rho_1$); (iii) if $\rho_2>0$ but 
+	$\rho_3< 0$, \CMT~would also produce 
+	inflated type I error ($\rho_1+\rho_2-2\rho_3 > \rho_1$). These trends will be confirmed and 
+	illustrated using type I error simulations (see Section \ref{subsection:typeIerror}). On the 
+	other hand, if there 
+	are DE genes in both the test set and the background set (this corresponds to violation of the 
+	second assumption), the test statistic of \CMT~is not comparable to that of \OurMethod. 
 
 	
 	
@@ -537,11 +558,12 @@
 	
 	The simulations run as follows: first, we consider an entire gene set containing $m=500$ genes,
 	of which $m_1 = 100$ genes are in the test set, and the
-	remaining $m_2=400$ genes in the background set; second, we sample genes to be DE with 
+	remaining $m_2=400$ genes in the background set; second, we sample genes to be \DED~with 
 	probability $p_t$ in the test set and with probability $p_b$ in the background set, and for 
-	sampled DE genes, we simulate the DE effects $\bm \Delta$ from  a normal distribution $N(2, 1)$ 
-	(except in Table \ref{table:power} we use $N(1, 0.5)$ to report calibrated power) and for 
-	non-DE genes we set $\Delta_i= 0$ ; third, we set the ``true" mean expression values $\bm \mu_1 
+	sampled \DED~genes, we simulate the DE effects $\bm \Delta$ from  a normal distribution $N(2, 
+	1)$ (except in Table \ref{table:power} we use $N(1, 0.5)$ to report calibrated power) and for 
+	non-\DED~genes we set $\Delta_i= 0$ ; third, we set the ``true" mean expression values $\bm 
+	\mu_1 
 	= \bm 0_m$ and $\bm \mu_2 = \bm \Delta$, respectively, for the control and treatment groups; 
 	fourth, we simulate $n_1$ samples from $\text{MVN}(\bm \mu_1, \bm \Sigma)$ for the control 
 	group and $n_2$ samples from $\text{MVN}(\bm \mu_2, \bm \Sigma)$ for
@@ -550,13 +572,13 @@
 	
 	Further assumptions on $p_t$ and $p_b$ will complete our generating model used in the type I 
 	error and power simulations. %\underline{(REF methods part about DE and no DE ....)}
-	We have mentioned that the test-statistic correlations may not equal their sample 
-	correlations of observed data when at least one gene is truly DE (\thepapertobefinished). 
-	Therefore, if there are DE genes in the entire gene set, 
-	approaches assuming	almost equality of correlations among gene-level statistics and those 
-	among expression values may not perform well. For each of (\aaCase)-(\fCase) correlation 
+	We have mentioned that the test-statistic correlations may not be approximated by their sample 
+	correlations of observed data when at least one gene is truly \DED~(\thepapertobefinished). 
+	Therefore, if there are \DED~genes in the entire genome, 
+	approaches assuming	almost equality between test-statistic correlations and sample correlations 
+	of observed-data may not perform well. For each of (\aaCase)-(\fCase) correlation 
 	structures, we conduct two groups of simulations: genes in the background set are allowed to be 
-	DE in group $A_2$ but not in group $A_1$.  In both type I error and power 
+	\DED~in group $A_2$ but not in group $A_1$.  In both type I error and power 
 	simulations, we set the DE probability to be $0\%(S_0)$ in group $A_1$ and $10\%(S_0)$ in group 
 	$A_2$ for genes in the background set. In the type I error simulation, we have $p_t = p_b$ 
 	under the null. In the power simulation, we considered four different scenarios for the 
@@ -572,8 +594,8 @@
 		\caption[DE probability configurations in type I error and power simulations]{DE 
 		probability configurations in type I error and power simulations. $S_0$ is for
 			type I error simulation. $S_1$-$S_4$ represent the four scenarios considered in power 
-			simulations. $p_b$ and $p_t$ are the DE probability for genes in the background set and 
-			that in the test set, respectively.}		
+			simulations. $p_b$ and $p_t$ are the DE probabilities for genes in the background set 
+			and that in the test set, respectively.}		
 		\begin{tabular}{rp{3.7cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}p{1.5cm}}
 			\hline
 			\multirow{2}{*}{Group} & 	Background & \multicolumn{5}{c}{DE prob. in test set 
@@ -605,20 +627,22 @@
 	\genr~is a rank-based method assuming between-gene independence, and is recommended by 
 	\citet{tarca2013comparison} over a class of independence-assuming methods. \gent~is a 
 	parametric version of \genr, and in this simulation we use the moderated $t$-statistics as the 
-	gene level statistics. 
+	gene-level statistics. 
 	%	 The \gent~is slightly different from its original version of \cite{tian2005discovering} in
 	%	that it uses moderated $t$-statistics rather than the ordinary $t$-statistics as gene-level
 	%	statistics. \genr is also known as the rank version of \gent~\citep{wu2012camera}. 
 	QuSAGE generates from $t$-test a probability density function (PDF) for each gene, combines the 
 	individual PDFs using convolution, and quantifies enrichment of the test set by the convoluted 
-	PDF. 
+	PDF that has incorporated the VIF to account for between-gene correlations. 
 	
 	
 	The software implementation is described as follows. The GSEA is modified from the original 
 	R-GSEA script (\url{http://software.broadinstitute.org/gsea/index.jsp}) to accommodate single 
 	gene-set test. CAMERA and \genr~are implemented in the \verb|limma| package 
-	\citep{smyth2005limma} in the Bioconductor project \citep{gentleman2004bioconductor}. QuSAGE is 
-	available in the Bioconductor package of the same name, and \gent~is implemented by ourselves. 
+	\citep{smyth2005limma} in the Bioconductor project \citep{gentleman2004bioconductor}, and 
+	\gent~is implemented by ourselves---these three methods use moderated-$t$ as gene-level 
+	statistics. QuSAGE is 
+	available in the Bioconductor package of the same name and we use the default options. 
 	
 
 	
@@ -663,7 +687,7 @@
 	enriched if DE probabilities are the same for genes in the test set and for those in the 
 	background set (i.e., $p_t =0\%$ for group $A_1$ and $p_t = 10\%$ for group $A_2$), in which 
 	case we	examine the type I error rate. As to power, we set DE probability according to each of 
-	the alternative scenarios $S_1$-$S_4$ (see Table \ref{table:simusetup}) and calculate the 
+	the alternative scenarios $S_1$--$S_4$ (see Table \ref{table:simusetup}) and calculate the 
 	proportion of data sets for which a test would reject at a given level $\alpha$. The results 
 	are based on \HowmanySimu~simulated data sets. 
 	
@@ -728,9 +752,9 @@
 	type I errors correctly for correlation structures (\aaCase) and (\aCase), yet they are too 
 	conservative for the case of (\cCase) and anti-conservative for correlation structures (\eCase) 
 	and (\fCase). \gent~and \genr~procedures have well-calibrated type I error for correlation 
-	structures (\aaCase) and (\cCase), but are anti-conservative the case of (\aCase), (\eCase) and 
-	(\fCase). QuSAGE has good type I error control for only (\aCase), and is too conservative for 
-	(\aaCase), (\eCase) and	(\fCase), and anti-conservative for (\cCase).
+	structures (\aaCase) and (\cCase), but are anti-conservative for the case of (\aCase), (\eCase) 
+	and (\fCase). QuSAGE has good type I error control for only (\aCase), and is too conservative 
+	for (\aaCase), (\eCase) and	(\fCase), and anti-conservative for (\cCase).
 	
 	In group $A_2$ simulations (the right column of Figure \ref{fig:typeIerror}),  
 	\OurMethod~continues to hold the size of type I error rate, whereas GSEA is skewed towards 
@@ -754,15 +778,16 @@
 	%gene-level statistic, and the correlations between such statistics are exactly the same as 
 	%correlations between the samples (\thepapertobefinished). 
 	GSEA evaluates the enrichment score
-	of a test set by generating its null distribution from sample permutation. When there are no DE 
-	genes such as in the case of group $A_1$ simulations, GSEA performs extremely well since 
-	permuting sample labels won't change the underlying correlation structure. When DE genes exist, 
+	of a test set by generating its null distribution from sample permutation. When there are no 
+	\DED~genes such as in the case of group $A_1$ simulations, GSEA performs extremely well since 
+	permuting sample labels won't change the underlying correlation structure. When \DED~genes 
+	exist, 
 	however, sample	permutation will destroy the between-gene correlation structure, which 
 	explains the complete failure of GSEA in controlling type I error for the case of group $A_2$ 
 	simulations. As we've mentioned in the Introduction part, the VIF approach does not properly 
 	model the heterogeneity among genes in terms of the presence and magnitude of DE effects, and 
 	the VIF may be over-estimated (for moderated $t$-statistic in CAMERA)  when a fraction of genes 
-	are DE (\thepapertobefinished). Therefore, the 
+	are \DED~(\thepapertobefinished). Therefore, the 
 	performances of VIF related methods---QuSAGE and two versions of
 	CAMERA---are subject to the underlying DE effects. 
 %	Moreover, the performance of 
@@ -861,7 +886,7 @@
 		methods under correlation structure (\aaCase) in which genes are simulated to be 
 		independent. The $c(\alpha)$ is the $\alpha$ quantile of null distribution of $p$-values. 
 		The powers are calculated as the proportion of $p<c(\alpha)$ for each of the four 
-		alternatives $S_1$-$S_4$ and each of the group $A_1$ and $A_2$ simulations (see Table 
+		alternatives $S_1$--$S_4$ and each of the group $A_1$ and $A_2$ simulations (see Table 
 		\ref{table:simusetup} for detail). Results are based on \HowmanySimu~simulations.
 		}\label{table:power}
 		%	\begin{tabular}{cl M{2.0cm}M{2.0cm}M{2.0cm}M{2.0cm}M{2.0cm}}
@@ -891,7 +916,7 @@
 	
 	
 	Figure \ref{fig:power} shows for \OurMethod, the variations in power according to different
-	correlation structures across four alternative scenarios $S_1$-$S_4$. For each correlation 
+	correlation structures across four alternative scenarios $S_1$--$S_4$. For each correlation 
 	structure and each alternative, we report the power (without recalibration) at a significance 
 	level of 0.05. The top is the power for group $A_1$, and the bottom for group $A_2$.  The 
 	powers under correlation structures (\aaCase) and (\cCase) are very similar, and are among the 
@@ -946,8 +971,9 @@
 	(\url{http://www.ncbi.nlm.nih.gov/geo/}). For each gene, we adjust for two covariates---age at 
 	death (DeathAge) and RNA Integrity Number (RIN), as also done by \citet{labadorf2015rna}. We 
 	follow their strategy of treating the two covariates as categorical. Briefly, DeathAge is 
-	binned into intervals 0-45, 46-60, 61-75, 76-90 and	90+, and RIN is dichotomized as  $>$ or 
-	$\leq$ 7. We regress the normalized expression levels on AgeDeath and RIN and use the resulting 
+	binned into intervals 0-45, 46-60, 61-75, 76-90 and	90+, and RIN is dichotomized as  $>$ (coded 
+	as 1) or $\leq$ 7 (coded as 0). We regress the normalized expression levels on AgeDeath and RIN 
+	and use the resulting 
 	residuals as the \textit{covariate-adjusted expression levels}.
 	
 	We perform enrichment analysis on the covariate-adjusted data using the MsigDB
@@ -1126,7 +1152,8 @@
 	comparison ``\text{male} VS \text{female}," they expected to find gene sets on chromosome Y, 
 	not on chromosome X. We run enrichment analysis with the four tests (\OurMethod, GSEA,\CMT and 
 	\genr). In Table \ref{table:gender}, we summarize all the gene sets that are called significant 
-	at FDR level $0.05$. Unanimously, three gene sets---``chrY," ``chrYq11" and ``chrYp11"---are 
+	at FDR level $0.05$ by at least one of the four test procedures. Unanimously, three gene 
+	sets---``chrY," ``chrYq11" and ``chrYp11"---are 
 	found to be enriched by all of the four methods. It is interesting to note that only 
 	\OurMethod~is able to identify another Y band, ``chrYp22," as enriched. In fact, these four 
 	gene sets are the only four pathways containing at least 3 genes in  C1 and corresponding to 
@@ -1164,20 +1191,20 @@
 	different correlation structures.  
 	
 	% What we propose
-	Under competitive gene-set test framework, a number of methods have been
+	Under the competitive gene-set test framework, a number of methods have been
 	proposed to account for correlation among genes. One approach is to evaluate the set-level 
 	statistic by permuting sample labels to generate the null distribution, as adopted by the 
-	widely used GSEA \citep{subramanian2005gene}. However, sample permutation method has been 
-	criticized for altering the null hypotheses being tested \citep{goeman2007analyzing, 
+	widely used procedure GSEA \citep{subramanian2005gene}. However, sample permutation method has 
+	been criticized for altering the null hypotheses being tested \citep{goeman2007analyzing, 
 	khatri2012ten}. Instead, CAMERA \citep{wu2012camera} proposed to correct for the correlations 
 	among genes by estimating a VIF	directly from the data. Incorporating VIF into set-level test 
 	statistics has also been used by \citet{yaari2013quantitative} in their QuSAGE procedure where 
-	they quantify the test set activity by a probability density function. The 
+	they quantify the gene	 set activity by a probability density function. The 
 	problems with this VIF approach are that it does not properly model the heterogeneity among 
 	genes in terms of the presence and magnitude of DE effect, and that it is intended to account 
 	for test-statistic correlations but is estimated from sample correlations of observed data. We 
 	have argued (in Chapter \ref{chap2}) that the correlations among gene-level statistics may not 
-	be approximated by the sample correlation of observed data due to the presence of DE genes. 
+	be approximated by the sample correlation of observed data due to the presence of \DED~genes. 
 	Such problems will 
 	undermine the performances of CAMERA and QuSAGE. In contrast, \OurMethod~models the covariance 
 	of gene-level statistics by two variance components, one 
@@ -1198,16 +1225,17 @@
 	all correlation structures considered, whereas all other methods may fail in one or more 
 	situations. \OurMethod~is also among the best in terms of power performance even under 
 	independent correlation structure. In the real data analyses, we run enrichment analysis using 
-	four methods---\OurMethod, \CMT, GSEA and \genr~on two data sets.
+	four methods---\OurMethod, \CMT, GSEA and \genr---on two data sets.
 	The $p$-values of \OurMethod~are smaller than those produced by 
-	 GSEA and CAMERA (which are intended to adjust for between-gene correlations), but 
-	 larger than those of \genr~(which assumes independence between genes).
-	 \OurMethod~is able to identify a moderate size of enriched gene sets, some of which are 
-	 insightful in the corresponding studies yet are not revealed by other three methods.
+	 GSEA and CAMERA that are intended to adjust for between-gene correlations, but 
+	 larger than those of \genr~that assumes independence between genes.
+	 \OurMethod~is able to identify a moderate size of enriched gene sets, many of which are 
+	 confirmed by independent studies yet are not revealed by other three methods.
 	
 	Currently, \OurMethod~only supports enrichment test for two-group comparisons. In
 	many gene expression experiments, however, researchers might use more complex design to study
-	different factors of interest, in which case a linear model would be more appropriate. Our
+	different factors of interest, in which case a (generalized) linear model would be more 
+	appropriate. Our
 	future work will focus on generalizing \OurMethod~to allow for more complicated design 
 	structures. 
 	

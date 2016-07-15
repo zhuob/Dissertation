@@ -49,7 +49,7 @@
 Between-gene correlations are commonly observed in gene expression 
 data \citep{efron2012large1, gatti2010heading, 
 	huang2013gene,qiu2005effects,storey2003positive}.
-One key task of expression analysis is to detect differentially expressed (DE) genes whose 
+One key task of expression analysis is to detect differentially expressed genes whose 
 expression levels are associated with experimental or environmental variables under study. 
 In such a task, a test statistic is calculated for each gene to quantify the magnitude of DE. 
 The test statistics may come from two-sample comparison or regression models for more complex 
@@ -73,7 +73,7 @@ have positive regression dependency \citep{benjamini2001control}.
 \citet{efron2007correlation} showed in a simulation study that for a nominal FDR of 
 $0.1$, the actual FDR can easily vary by a factor of 10 when correlation between test 
 statistics exists. 
-In a gene-set analysis, one tests for over-abundance of DE genes in a
+In a gene-set analysis, one tests for over-abundance of \DED~genes in a
 specified gene set (e.g., molecular pathways or gene ontologies) \citep{goeman2007analyzing}. 
 The correlation among DE test statistics, if not addressed appropriately, will undermine 
 the validity of the gene-set test \citep{gatti2010heading, wu2012camera}. 
@@ -96,14 +96,13 @@ of correlation among observed data, and then calculated the \textit{false discov
 (FDP) conditioning on this dispersion variate. \citet{wu2012camera} estimated a \textit{variance 
 	inflation factor} (VIF) from the sample correlation of observed data and 
 incorporated it into their parametric/rank-based gene-set test procedures. The same VIF was also 
-used by \citet{yaari2013quantitative} in their gene-set test. 
+used by \citet{yaari2013quantitative} in their gene-set test that quantifies enrichment status of a 
+gene set by a probability density function. 
 
 It is yet unclear when and to what extent the test-statistic correlations can be approximated 
-by sample correlations of observed
-data. 
-\citet{barry2008statistical} showed by Monte Carlo simulation of gene
-expression data that a nearly linear relationship holds between test-statistic correlation and 
-sample correlation of observed data for
+by sample correlations of observed data. \citet{barry2008statistical} showed by Monte Carlo 
+simulation of gene expression data that a nearly linear relationship holds between test-statistic 
+correlation and sample correlation of observed data for
 several forms of test statistics they examined. This Monte Carlo
 simulation results were cited by \citet{wu2012camera} and
 \citet{yaari2013quantitative} as a justification for estimating their
@@ -116,16 +115,14 @@ distribution of sample correlation from observed data.
 Some gene-set analysis methods based on sample-permutation implicitly
 assume that the joint distribution of test statistics will not change
 under sample permutation. Our results will reveal that such assumptions
-are invalid.  
-The key issue is, as also pointed out by  \citet{efron2012large1}, that sample permutation 
-method has an
-extra assumption (called ``subset pivotality"), which states that the test statistics always follow 
-the distribution they have under complete null that no gene is DE.
+are invalid. The key issue is, as also pointed out by  \citet{efron2012large1}, that sample 
+permutation method has an extra assumption (called ``subset pivotality"), which states that the 
+test statistics always follow the distribution they have under complete null that no gene is \DED.
 We will show that that the test-statistic correlation depends on
 correlation between gene expression levels and also on DE status.
 Permutation of biological samples will change the DE status and thus
 alternate the correlations among  (and thus the joint distribution of) the
-test statistics. As a consequence, in the presence of DE genes, the
+test statistics. As a consequence, in the presence of \DED~genes, the
 GSEA \citep{subramanian2005gene} procedure will not provide a valid null distribution for 
 gene-set enrichment test. In a separate paper, we showed that several
 gene-set tests will give inflated or overly conservative type I errors in the presence of DE test
@@ -443,7 +440,7 @@ corresponds to the statistic for two-sample $z$-test. Therefore, according to Co
 test 
 statistics.
 
-The two-sample $t$-statistic is also a commonly used statistic in differential expression 
+The two-sample $t$-statistic is also a commonly used statistic in DE 
 analysis. In the case of two sample $t$-test with equal variance, with the contrast $\bm a$ 
 defined in equation (\ref{eq:contrast}), the test statistic for $X$ is 
 \begin{equation}\label{eq:tx}
@@ -549,8 +546,9 @@ We have the following observations:
 
 We note that $|\lim\limits_{n_1 + n_2 \rightarrow \infty} \rho_T(n_1, n_2)| \leq |\rho|$ when test 
 statistics are derived from two sample $t$ test 
-with equal variance. In other words, $T_X$ and $T_Y$ are always ``no more correlated" than $X$ 
-and $Y$ are. It's also interesting to note that when both genes are DE, $\lim\limits_{n_1 + n_2 
+with equal variance. In other words, the correlation between $T_X$ and $T_Y$ are always weaker
+ than that between $X$ 
+and $Y$. It's also interesting to note that when both genes are \DED, $\lim\limits_{n_1 + n_2 
 \rightarrow \infty} \rho_T(n_1, n_2)=0$ at $\rho 
 =-\frac{\sigma_X\sigma_Y}{\beta\Delta_X\Delta_Y} $ provided that
 $\frac{\sigma_X\sigma_Y}{\beta\Delta_X\Delta_Y} \in (-1, 1)$. Figure \ref{fig:ct} shows the 
@@ -579,7 +577,7 @@ is always at the center, where both $\delta_X$ and $\delta_Y$ are 0 (i.e., $\Del
 In addition, if $n_1/n_2 \rightarrow 0$ or $\infty$, then $\beta = 0$ and we have $\lim\limits_{n_1 
 + n_2 \rightarrow \infty} \rho_T(n_1, n_2) = 
 \rho$. That is, when sample size of one group is not proportional to that of the other, 
-$\cor(T_X, T_Y)$ will converge to $\rho$ regardless of whether the tests are under the null or 
+$\rho_T(n_1, n_2)$ will converge to $\rho$ regardless of whether the tests are under the null or 
 not. 	
 %	 When $\bm \Delta = \bm 0$ then $\rho_T = \rho$; but when $\bm \Delta \neq \bm 0$, then 
 %$\rho_T \neq \rho$ in general. % In the next section, we will discuss about it in further 
@@ -686,16 +684,16 @@ correlation $\rho$ when sample size is large ($n_1 = n_2 = 1000$), but smaller (
 value) than $\rho$ when sample size is small ($n_1 = n_2 = 3$).
 In cases b)---f) where there is at least one true alternative, the estimate
 $r_\text{statistics}$ can be very 
-different from $\rho$. In case b) where only one gene is DE, 
+different from $\rho$. In case b) where only one gene is \DED, 
 the magnitude of $r_\text{statistics}$ is proportional to, and smaller in absolute value than 
 $\rho$.
 % and according to equation (\ref{eq:ttestcor}), the magnitude of $r_\text{statistics}$ has to 
 %do with the signal-to-noise ratio $\Delta/\sigma$
 It is more interesting to note that $r_\text{statistics}$ is not monotone with respect to 
-$\rho$ when both genes are DE. If genes are DE towards the same direction as in the case of 
+$\rho$ when both genes are \DED. If genes are \DED~towards the same direction as in the case of 
 e),  $r_\text{statistics}$ first decreases until it reaches the minimum (a negative value), and 
 then gradually increases to 1, as 
-$\rho$ grows from $-1$ to $1$. When genes are DE towards opposite directions like the case f), 
+$\rho$ grows from $-1$ to $1$. When genes are \DED~towards opposite directions like the case f), 
 however, the trend is reversed from that of e): $r_\text{statistics}$ increases from $-1$ to 
 its maximum (a positive value), and then decreases. 
 This set of simulation results is reflected in the test statistics correlation formula of 
@@ -796,7 +794,7 @@ therefore $E(\frac{U_X}{S_X} \cdot\frac{U_Y}{S_Y})$ can be expressed as
 $E(U_XU_Y)E(S_X^{-1}S_Y^{-1})$. We can apply Theorem \ref{thm:teststatcor} to calculate the 
 correlation between $T_X$ and $T_Y$ under two sample $t$-test for equal variance. 
 
-\textbf{Proof of theorem \ref{thm:tstat}} \\
+\paragraph*{Proof of Theorem \ref{thm:tstat}} \\
 First note that by Lemma  \ref{lemmaIndep} we have
 \begin{align*}
 \cov(T_X, T_Y) &= E(T_XT_Y) - E(T_X)E(T_Y) \\
@@ -874,7 +872,7 @@ $\var(\frac{U_i}{S_i})$ for $i =X, Y$.
 	\end{aligned}
 	\end{equation}
 \end{enumerate}
-Finally,  the test statistics correlation (\ref{eq:ttestcor}) is obtained by plugging
+Finally,  the test-statistic correlation (\ref{eq:ttestcor}) is obtained by plugging
 equations (\ref{eq1}--\ref{eq3}) into equation (\ref{eq:Tcorrelation}).
 
 \begin{lemma}\label{lemmaLimit}
@@ -1118,9 +1116,9 @@ correlation $\rho$.
 
 In two group comparison setting, we conclude that $\rho_T(m) = \rho$ when $S_X$ (or $S_Y$) is 
 constant with respect to $\bm X$ (or $\bm Y$). That is, $\rho_T(m) = \rho$ under linear 
-transformation of $\bm X$ and $\bm Y$, which is the case for two sample $z$-test. However, when 
-$S_X$ (or $S_Y$) is a function of $\bm X$ (or $\bm Y$), as is the case of two
-sample $t$-test, this equality may not hold. For two sample $t$-test, we prove that 
+transformation of $\bm X$ and $\bm Y$, which is the case for two-sample $z$-test. However, when 
+$S_X$ (or $S_Y$) is a function of $\bm X$ (or $\bm Y$), as is the case of two-sample $t$-test, this 
+equality may not hold. For two-sample $t$-test, we prove that 
 $\lim\limits_{m\rightarrow\infty}\rho_T(m)=\rho$ only if the null in equation (\ref{eq:hypotheses}) 
 is true for all the tests 
 considered, and that $|\lim\limits_{m\rightarrow\infty}\rho_T(m)|\leq |\rho|$ otherwise. In the 
@@ -1137,10 +1135,10 @@ In gene expression analysis, the two-sample $t$-test \citep{barry2008statistical
 $t$-test \citep{wu2012camera} are used to calculate test statistics for DE detection, and the 
 sample correlation (after treatment effects 
 nullified) are used to account for correlation between those test statistics.
-Our study shows that, however, for DE genes, $\rho_T(m)$ may be 
+Our study shows that, however, for \DED~genes, $\rho_T(m)$ may be 
 overestimated when
 two genes are positively correlated, and underestimated when they are negatively correlated. If 
-there are true DE genes whose expression 
+there are true \DED~genes whose expression 
 levels are correlated in either way, the VIF may not be accurately estimated in 
 \citet{wu2012camera}, resulting in biased test
 for their enrichment analysis as we will see in Chapter \ref{chap3}. Our results also indicate 
@@ -1158,11 +1156,12 @@ The test statistic may take different forms, depending on many factors such as t
 the data (RNA-Seq or microarray), the 
 experimental design structure, and the statistical hypothesis to be tested. The independence 
 assumption between $\bm a^T\bm X$ and $S_X$ are 
-unlikely to hold unless the statistic is derived from two sample $t$-test for normally 
+unlikely to hold unless the statistic is derived from two-sample $t$-test for normally 
 distributed random variables. Therefore, the 
 application of Theorem \ref{thm:teststatcor} is somewhat limited. Yet one goal of this study is 
-to raise awareness that the equality of $\lim\limits_{m\rightarrow\infty}\rho_T(m)$ 
-and $\rho$ should not be taken for granted. In the future, we will explore the relationship 
+to raise awareness that the approximation of $\rho_T(m)$ by \samplecor~(after treatment effect 
+removed) should not be taken for 
+granted. In the future, we will explore the relationship 
 between $\rho_T(m)$ and $\rho$ for more general cases and for other types of statistics. 
 
 The R codes for reproducing results in this paper are available at Github: 

@@ -40,7 +40,7 @@ data is highly desirable to account for various sources of bias between samples
 \citep{anders2010differential,dillies2013comprehensive,hansen2012removing, risso2014nat,
 	risso2011gc,robinson2010scaling}.
 Many of the current normalization methods, for example, TMM \citep{robinson2010scaling} and DESeq
-\citep{anders2010differential} normalizations, assume that the majority of genes are not DE within
+\citep{anders2010differential} normalizations, assume that the majority of genes are not \DED~within
 the experiment under investigation. However, this assumption could be violated in some experiments
 where over $50\%$ of the genes' expression levels are altered by the treatments
 \citep{loven2012revisiting, wu2013use}. The consequence with such assumption can be alleviated if
@@ -90,11 +90,11 @@ approximate the sample correlation between two test statistic values computed fr
 % To construct correlation structure for test statistics, the sample correlations (after any 
 %treatment effects removed) are often used. 
 \citet{efron2007correlation} used this idea to approximate the 
-distribution of test statistics correlation, and uses the resulting distribution 
+distribution of test-statistic correlation, and uses the resulting distribution 
 to  derive the \textit{false discovery proportion} in a multiple hypothesis testing procedure. 
 \citet{barry2008statistical}, \citet{wu2012camera} and
 \citet{yaari2013quantitative} also used 
-correlation of observed data to summarize test statistics correlation in their
+correlation of observed data to summarize test-statistic correlation in their
 gene-set test procedures to account for correlation among test statistics.
 However, it has only been shown by simulation under limited settings that the correlations among 
 test statistics are almost the same as the correlations among underlying observed data 
@@ -105,14 +105,14 @@ statistics can be approximated by the correlation of observed data.
 % This investigation will help us understand the validity of approximating test
 % statistics correlation by sample correlation. 
 
-\subsubsection{Accounting for correlations of test statistics in competitive gene set test}
+\subsubsection{Accounting for correlations of test statistics in competitive gene-set test}
 
 DE analysis evaluates each individual gene separately. Single-gene analysis
 may fail to provide insights into biological mechanisms when multiple genes
 function together.  Gene-set analysis is a commonly-used technique that
 provides a higher-level interpretation of the DE test results. For a given set
-of genes, a gene-set test will evaluate whether there is an overabundance of DE
-genes in the set as compared to DE genes in a background set (such a
+of genes, a gene-set test will evaluate whether there is an overabundance of \DED~
+genes in the set as compared to those in the background set (such a
 gene-set test is sometimes called a ``competitive test" 
 \citep{goeman2007analyzing}). Commonly considered gene sets are gene pathways, genes assigned to a 
 common ontology term, and so on.
@@ -225,15 +225,15 @@ obtained in which each row represents a genomic feature unit and each column cor
 biological
 sample. 
 
-In this dissertation, we assemble an in-house pipeline to process RNA-Seq data sets based on the R 
+In this dissertation, we assembled an in-house pipeline to process RNA-Seq data sets based on the R 
 \citep{Rpackage} platform. This pipeline, modified from a standard procedure given by 
 \citet{anders2013count}, is designed to work for sequencing data available at the \textit{National 
 Center for Biotechnology Information} (NCBI, \url{http://www.ncbi.nlm.nih.gov/}). It uses the SRA 
 (Sequence Read Archive) Toolkit \citep{leinonen2010sequence} to convert SRA files to FASTQ files, 
 the \verb|Subread| aligner \citep{liao2013subread} to map reads to the reference genome, and then 
 the \verb|featureCounts| \citep{liao2013featurecounts} to summarize counts (see Figure 
-\ref{fig:flowchart} for the work flow). We will use this pipeline to process multiple RNA-Seq data 
-sets that are needed in Chapter \ref{chap1}.
+\ref{fig:flowchart} for the work flow). We used this pipeline to process multiple RNA-Seq data 
+sets that are needed for finding stably expressed genes in Chapter \ref{chap1}.
 \begin{figure}[!ht]
 	\centering
 	\includegraphics[width=0.7\linewidth]{Figures/flowchart.pdf}
@@ -533,7 +533,7 @@ joint likelihood of $(\bm Y, \bm u)$ and then integrating out the random term $\
 	L(\bm Y|\bm\beta, \bm \Sigma) = \int f(\bm y|\bm \beta, \bm u)\phi(\bm u|\bm \Sigma)d \bm u.
 \end{equation}
 A major challenge in estimating GLMMs is the integration in equation (\ref{eq:joint-likelihood})
-over the $n$-dimensional distribution of $\bm u$. Numerical approximation are usually used in
+over the $n$-dimensional distribution of $\bm u$. Numerical approximation is usually used in
 evaluating the integral. In this part we will discuss the \textit{Gauss-Hermite} (GH) quadrature
 which is recognized as a higher order Laplace approximation \citep{liu1994note}.
 Gauss-Hermite quadrature is used for integrals of the form 

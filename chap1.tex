@@ -65,7 +65,7 @@ biological samples, experimental or environmental conditions, and experiments
 (labs).  
 
 A reference set of stably-expressed genes will be useful for count
-normalization.  A key task of RNA-Seq analysis is to detect DE genes under
+normalization.  A key task of RNA-Seq analysis is to detect \DED~genes under
 various experimental or environmental conditions. Count normalization is
 needed to adjust for differences in sequencing depths or library sizes (total
 numbers of mapped reads for each biological sample) due to chance variation in
@@ -77,7 +77,7 @@ increased or decreased relative read frequencies of truly differentially express
 Many existing normalization methods, such as the trimmed
 mean of M-values normalization method (TMM) \citep{robinson2010scaling} and
 Anders and Huber's normalization \citep{anders2010differential}, assume that the
-majority of the genes within an experiment are not DE, and examine the sample
+majority of the genes within an experiment are not \DED, and examine the sample
 distribution of the fold changes between samples.
 % There are two obvious
 % difficulties when using such a normalization method: 1) There is great
@@ -336,8 +336,8 @@ It breaks each short read into a series of overlapping segments called
 subreads and uses the subreads to vote on the optimal genome location of the
 original read. The subreads are shorter and can be mapped to the genome much
 faster.
-Compared to other aligners such as Bowite 2 \citep{langmead2012fast} or BWA
-\citep{li2009fast}, Subread aligner is both faster and more accurate
+Compared to other aligners such as \verb|Bowite 2| \citep{langmead2012fast} or \verb|BWA|
+\citep{li2009fast}, \verb|Subread| aligner is both faster and more accurate
 \citep{liao2013subread}. We compared results from the above
 pipeline to results from a pipeline described in \citet{anders2013count} over several RNA-Seq 
 experiment data, and Rsubread
@@ -381,8 +381,8 @@ attention before being incorporated in the studies that we intend to do.
 As explained in the introduction, count normalization is needed when analyzing RNA-Seq data to
 1) adjust for differences in sequencing depths or
 library sizes; 2) to adjust for the apparent changes in relative read
-frequencies of non-DE genes that occur as a consequence of changes in relative read frequencies of 
-truly DE genes.
+frequencies of non-\DED~genes that occur as a consequence of changes in relative read frequencies 
+of truly \DED~genes.
 
 For the second type of adjustment, we follow Anders and Huber's method
 \citep{anders2010differential} for 
@@ -411,7 +411,7 @@ computed as $y_{ij}/{N_j R_j}$, which we will call the \textit{normalized relati
 for gene $i$ in sample $j$. The assumption made here is that the
 median fold change between normalized relative frequencies in two samples should be 1. In
 other words, this normalization method assumes that the majority of genes are
-not DE. The NBPSeq package \citep{di2014package} has an inbuilt function for
+not \DED. The \verb|NBPSeq| package \citep{di2014package} has an inbuilt function for
 this procedure and it will be used for count normalization in this paper. With
 the estimates from equation~(\ref{eq:norm3}), we see that the median fold
 change in normalized relative frequencies between each sample and the pseudo-reference
@@ -434,7 +434,7 @@ to 1 in each sample $j$.
 Other normalization methods may make different assumptions
 than Anders and Huber's, but some assumptions of a similar nature seem
 unavoidable.  For example, the TMM method of \citet{robinson2010scaling} is
-based on a similar principle: assuming the majority of the genes are not DE.
+based on a similar principle: assuming the majority of the genes are not \DED.
 The TMM method can be applied to a subset of genes selected based on an
 initial screening of mean expression level and fold changes. In TMM method,
 one can also specify certain quantile (instead of the median) of the fold
@@ -990,7 +990,7 @@ in each sample and the mean is computed over all samples.
 	%stable.)
 	Our total variance measure $\hat\sigma^2$ is estimated from normalized data.
 	The basic assumption in the normalization step is that majority of genes are
-	not DE. In formula, it means for any stably-expressed gene $i_1$, its expression
+	not \DED. In formula, it means for any stably-expressed gene $i_1$, its expression
 	level as measured by the relative frequency should be stable across all
 	samples,
 	\begin{equation}\label{eq:DESeq} 
@@ -1108,7 +1108,7 @@ in each sample and the mean is computed over all samples.
 	more variation in the relative percentages of total variance explained by the
 	between-sample and between-treatment variance components. In principle, the
 	between-treatment variation will be greater when there is a higher proportion
-	of DE genes or when the samples are more homogeneous. In practice, the
+	of \DED~genes or when the samples are more homogeneous. In practice, the
 	between-sample variance depends greatly on what samples are used as biological
 	replicates. 
 	
@@ -1241,7 +1241,7 @@ in each sample and the mean is computed over all samples.
 						that the DE behavior of gene 3 differs in the two experiments. If the
 						two experiments are separately normalized using genes 1--3 as
 						reference in experiment 1, but using genes 3--5 as reference in
-						experiment 2, we may conclude that gene 3 is not DE in either group.
+						experiment 2, we may conclude that gene 3 is not \DED~in either group.
 					}\label{table:reference}
 					\begin{tabular}{cccccc} \hline
 						&  \multicolumn{2}{c}{Exp. 1} & & \multicolumn{2}{c}{Exp. 2} \\
@@ -1295,13 +1295,13 @@ in each sample and the mean is computed over all samples.
 			count normalization in the two experiments, for example, we use genes 1--3 as reference 
 			in experiment
 			1, but use genes 3--5 as reference in experiment 2, we may conclude that gene
-			3 is not DE in either experiment. If we use a common reference gene
+			3 is not \DED~in either experiment. If we use a common reference gene
 			set---either genes 1--3 or genes 3--5---for normalization, however, we will be
 			able to discover, in either case, that the DE behavior of gene 3 is different
 			in the two experiments. Note that the DE conclusion in both experiments will
 			depend on the reference genes used: if genes 1--3 are used as reference, gene
-			3 is not DE in experiment 1, but will be DE in experiment 2; if genes 3--5 are
-			used as reference, gene 3 will be considered DE in experiment 1, but not DE in
+			3 is not \DED~in experiment 1, but will be \DED~in experiment 2; if genes 3--5 are
+			used as reference, gene 3 will be considered \DED~in experiment 1, but not in
 			experiment 2. The point is, in either case, we will notice that the DE
 			behavior of gene 3 is different between the two experiments. This information
 			will be lost if one uses different reference sets to assess DE in the two
@@ -1518,9 +1518,9 @@ in each sample and the mean is computed over all samples.
 			 discussions. This article is part of doctor dissertation written by BZ under the 
 			 supervision of YD. 
 			
-			\subsection*{Supplemental Material}The online version of this article offers 
-			supplementary material,
-			available to authorized users.
+%			\subsection*{Supplemental Material}The online version of this article offers 
+%			supplementary material,
+%			available to authorized users.
 			
 			
 			\newpage
